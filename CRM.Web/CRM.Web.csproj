@@ -260,10 +260,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UserProfile.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Account\UserProfile.he.designer.cs">
+    <Compile Include="App_GlobalResources\Account\UserProfile.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>UserProfile.he.resx</DependentUpon>
+      <DependentUpon>UserProfile.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Article\Article.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2436,9 +2436,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Account\UserProfile.he.resx">
+    <EmbeddedResource Include="App_GlobalResources\Account\UserProfile.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UserProfile.he.designer.cs</LastGenOutput>
+      <LastGenOutput>UserProfile.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
