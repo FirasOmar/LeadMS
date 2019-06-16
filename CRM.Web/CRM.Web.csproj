@@ -230,30 +230,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ForgotPassowrd.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Account\ForgotPassowrd.he.designer.cs">
+    <Compile Include="App_GlobalResources\Account\ForgotPassowrd.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ForgotPassowrd.he.resx</DependentUpon>
+      <DependentUpon>ForgotPassowrd.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Account\Login.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Login.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Account\Login.he.designer.cs">
+    <Compile Include="App_GlobalResources\Account\Login.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Login.he.resx</DependentUpon>
+      <DependentUpon>Login.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Account\Register.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Register.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Account\Register.he.designer.cs">
+    <Compile Include="App_GlobalResources\Account\Register.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Register.he.resx</DependentUpon>
+      <DependentUpon>Register.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Account\UserProfile.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2400,9 +2400,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Account\ForgotPassowrd.he.resx">
+    <EmbeddedResource Include="App_GlobalResources\Account\ForgotPassowrd.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ForgotPassowrd.he.designer.cs</LastGenOutput>
+      <LastGenOutput>ForgotPassowrd.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -2412,9 +2412,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Account\Login.he.resx">
+    <EmbeddedResource Include="App_GlobalResources\Account\Login.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Login.he.designer.cs</LastGenOutput>
+      <LastGenOutput>Login.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -2424,9 +2424,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Account\Register.he.resx">
+    <EmbeddedResource Include="App_GlobalResources\Account\Register.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Register.he.designer.cs</LastGenOutput>
+      <LastGenOutput>Register.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

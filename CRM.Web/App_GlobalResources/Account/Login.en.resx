@@ -118,39 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DontHaveAccount" xml:space="preserve">
-    <value>אין לך חשבון?</value>
+    <value>Dont Have Account?</value>
   </data>
   <data name="ErrorInvalidLoginAttempt" xml:space="preserve">
-    <value>שגיאה בעת כניסה, נא לבדוק את הסיסמה והדואר האלקטרוני.</value>
+    <value>Invalid Login Attempt</value>
   </data>
   <data name="ErrorInvalidPassword" xml:space="preserve">
-    <value>הסיסמה צריכה להכיל 6 אותיות לפחות. למשל P@ssw0rd1</value>
+    <value>Invalid Password</value>
   </data>
   <data name="ErrorPasswordNotMatch" xml:space="preserve">
-    <value>הסיסמה אינה תואמת</value>
+    <value>Password Not Match</value>
   </data>
   <data name="ForgotPasswordLink" xml:space="preserve">
-    <value>שכחת את הסיסמה?</value>
+    <value>Forget Password </value>
   </data>
   <data name="LoginBtn" xml:space="preserve">
-    <value>כניסה</value>
+    <value>Login</value>
   </data>
   <data name="RegisterLink" xml:space="preserve">
-    <value>הרשמה</value>
+    <value>Register</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>כניסה</value>
+    <value>Login</value>
   </data>
   <data name="TxtAccountDeActivated" xml:space="preserve">
-    <value>חשבון זה אינו פעיל, נא לפנות למנהל המערכת</value>
+    <value>Account Deactivated</value>
   </data>
   <data name="TxtEmail" xml:space="preserve">
-    <value>דואר אלקטרוני </value>
+    <value>Email</value>
   </data>
   <data name="TxtPassword" xml:space="preserve">
-    <value>סיסמה</value>
+    <value>Password</value>
   </data>
   <data name="TxtRememberMe" xml:space="preserve">
-    <value>זכור אותי</value>
+    <value>Remember me</value>
   </data>
 </root>

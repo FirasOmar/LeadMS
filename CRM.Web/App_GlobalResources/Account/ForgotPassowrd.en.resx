@@ -117,91 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BtnRegister" xml:space="preserve">
-    <value>הרשמה</value>
+  <data name="ForgotPasswordConfirmationMessage" xml:space="preserve">
+    <value>Link to change password has been sent</value>
   </data>
-  <data name="BtnSave" xml:space="preserve">
-    <value>שמור</value>
+  <data name="ForgotPasswordConfirmationTitle" xml:space="preserve">
+    <value>Link Sent</value>
   </data>
-  <data name="ForgetPasswordLink" xml:space="preserve">
-    <value>שכחתי את הסיסמה</value>
-  </data>
-  <data name="LblEmailAndPassword" xml:space="preserve">
-    <value>דואר וסיסמה</value>
-  </data>
-  <data name="LblInformation" xml:space="preserve">
-    <value>מידע כללי</value>
-  </data>
-  <data name="LoginLink" xml:space="preserve">
-    <value>כניסה</value>
-  </data>
-  <data name="ProfileTitle" xml:space="preserve">
-    <value>דף אישי</value>
+  <data name="SendBtn" xml:space="preserve">
+    <value>Send</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>הרשמה באתר</value>
-  </data>
-  <data name="TxtAddress" xml:space="preserve">
-    <value>כתובת</value>
-  </data>
-  <data name="TxtBirthDay" xml:space="preserve">
-    <value>תאריך לידה</value>
-  </data>
-  <data name="TxtCityId" xml:space="preserve">
-    <value>יישוב</value>
-  </data>
-  <data name="TxtConfirmPassword" xml:space="preserve">
-    <value>אישור סיסמה</value>
+    <value>Forget Password</value>
   </data>
   <data name="TxtEmail" xml:space="preserve">
-    <value>דואר אלקטרוני</value>
+    <value>Email</value>
   </data>
-  <data name="TxtFax" xml:space="preserve">
-    <value>פקס</value>
-  </data>
-  <data name="TxtFullName" xml:space="preserve">
-    <value>שם מלא</value>
-  </data>
-  <data name="TxtGenderLookupId" xml:space="preserve">
-    <value>מין</value>
-  </data>
-  <data name="TxtIdNumber" xml:space="preserve">
-    <value>מספר תעודת זהות</value>
-  </data>
-  <data name="TxtLastLogin" xml:space="preserve">
-    <value>נראה לאחרונה ב</value>
-  </data>
-  <data name="TxtMartialStatusLookupId" xml:space="preserve">
-    <value>מצב חברתי</value>
-  </data>
-  <data name="TxtMobile" xml:space="preserve">
-    <value>מספר נייד</value>
-  </data>
-  <data name="TxtPassword" xml:space="preserve">
-    <value>סיסמה</value>
-  </data>
-  <data name="TxtPhoneNumber" xml:space="preserve">
-    <value>מספר טלפון</value>
-  </data>
-  <data name="TxtProfileInfo" xml:space="preserve">
-    <value>מידע אישי</value>
-  </data>
-  <data name="TxtProfilePath" xml:space="preserve">
-    <value>תמונה אישית</value>
-  </data>
-  <data name="TxtProvinceId" xml:space="preserve">
-    <value>אזור</value>
-  </data>
-  <data name="TxtRegionId" xml:space="preserve">
-    <value>אזור</value>
-  </data>
-  <data name="TxtStatus" xml:space="preserve">
-    <value>סטטוס</value>
-  </data>
-  <data name="TxtUserForms" xml:space="preserve">
-    <value>מסמכים שהוגשו</value>
-  </data>
-  <data name="TxtUsername" xml:space="preserve">
-    <value>שם משתמש</value>
+  <data name="TxtPleaseEnterEmail" xml:space="preserve">
+    <value>Please Enter Email</value>
   </data>
 </root>

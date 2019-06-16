@@ -74,6 +74,7 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            var currentLanguageId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Manage");
             if (!ModelState.IsValid)
@@ -161,6 +162,7 @@ namespace CRM.Web.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Manage");
             //ViewBag.ProvinceId = new SelectList(LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.Province, Request.Cookies["_culture"]), "Id", "Name");

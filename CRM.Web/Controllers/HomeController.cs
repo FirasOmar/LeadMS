@@ -34,6 +34,7 @@ namespace CRM.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly CrmSystemEntities _db = new CrmSystemEntities();
+        [CustomAuthentication(PageName = "Home", PermissionKey = "View")]
         public ActionResult Index(int? campaignNo)
         {
             int NewLeads;
