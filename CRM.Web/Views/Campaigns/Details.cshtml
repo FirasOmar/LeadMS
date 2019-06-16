@@ -1,0 +1,127 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Core
+@using CRM.Web.Models
+
+
+@*@model CRM.DataEntity.Models.Lead*@
+@model CRM.Web.Models.CampaignViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<style type="text/css">
+    .successMsg {
+        color: forestgreen;
+    }
+</style>
+@{
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+    var align = "";
+    // var mob = "";
+}
+@if (websiteCulture == "ar")
+{
+
+    align = "left";
+
+}
+else
+{
+
+    align = "right";
+
+}
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title d-flex">@Resources.Campaign.CampaignDetails</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+            <div class="card-box text-center">
+              
+                <h4 class="mb-0">@Model.Name</h4>
+
+                <div class=" mt-3">
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Campaign.StartDate :</strong> <span class="ml-2">
+                            @Model.StartDate.Value.ToShortDateString()
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Campaign.EndDate :</strong> <span class="ml-2">
+                            @Model.EndDate.Value.ToShortDateString()
+                        </span>
+                    </p>
+                   
+
+                </div>
+            </div> <!-- end card-box -->
+        </div>
+        <!-- Tabs Section -->
+        <div class="col-lg-8 col-xl-8">
+            <div class="card-box">
+                <ul class="nav nav-pills navtab-bg nav-justified">
+                    <li class="nav-item">
+                        <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                            @Resources.Campaign.CampaignDetails
+                        </a>
+                    </li>
+                   
+                </ul>
+                <div class="tab-content">
+
+                    <!-- setting tab -->
+                    <div class="tab-pane active" id="settings">
+                        @using (Html.BeginForm("Edit", "Campaigns", new { id = Model.Id }, FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(r => r.Id)
+
+                            <h4 class="successMsg" @*style="display:none;"*@> @ViewBag.message</h4>
+
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Name, new { @for = "Name", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @required = "true" })
+                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.StartDate, new { @for = "StartDate", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
+                                    @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.EndDate, new { @for = "EndDate", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type="Date"})
+                                    @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+                                </div>
+                            
+                            </div>
+
+                            <div class="form-group col-lg-12" style="text-align:@align">
+                                <button type="submit" class="btn btn-primary">@Resources.Home.Save</button>
+                                @*<button class="btn btn-secondary" type="button" onclick="window.location='@Url.Action("Index", "Home")'">@Resources.Home.Back</button>*@
+                            </div>
+                        }
+                    </div>
+                   
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

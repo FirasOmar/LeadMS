@@ -1,0 +1,32 @@
+﻿@model CRM.Web.Models.ReportViewModel
+@{
+    ViewBag.Title = Resources.Reports.CasesSeverityByCategory;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src=@Url.Content("~/Scripts/Chart.js")></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+            </header>
+            <div class="col-md-12">
+                <h5>@Resources.Reports.CasesSeverityByCategory</h5>
+                <canvas id="PieChart" width="300" height="300"></canvas>
+                <script type="text/javascript">
+                    var ctx = document.getElementById("PieChart").getContext("2d");
+
+                    var data = JSON.parse('@Html.Raw(Model.Data)');
+                    var options = JSON.parse('{}');
+                    var PieChartApartement_chart = new Chart(ctx).Pie(data, options);
+                </script>
+            </div>
+
+        </div>
+    </section>
+</main>

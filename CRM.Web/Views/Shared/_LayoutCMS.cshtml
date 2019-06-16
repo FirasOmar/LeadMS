@@ -1,0 +1,285 @@
+﻿@using CRM.Core
+@using CRM.Web.Helpers
+@{
+    var currentUrl = Request.Url.AbsoluteUri;
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <title>CMS - Pages</title>
+    <link href="~/Content/assets/autocomplete/css/chosen.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/Content/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/assets/css/main.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/assets/css/smsm.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    <link rel="icon" type="image/png" href="~/Content/assets/img/logo.png" />
+    <style>
+        .d-flex {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        @@media (min-width: 992px) {
+            .section-title:before {
+                top: -5px;
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+    @if (websiteCulture != "ar")
+    {
+        <link rel="stylesheet" type="text/css" href="~/Content/assets/css/smsmHebrew.css">
+        <link href="https://fonts.googleapis.com/css?family=Assistant" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Assistant', sans-serif;
+            }
+        </style>
+    }
+</head>
+<body>
+    <div class="cms-wrapper">
+        <aside class="sidebar">
+            <button class="sidebar-close d-lg-none"><i class="fa fa-times-circle"></i></button>
+            <div class="sidebar-header">
+                <div class="text-center">
+                    <a href="#" class="sidebar-logo mb-2"><img class="mb-2" src="~/Content/assets/img/logo@2x.png" alt=""> <span>@Resources.Layout.WebsiteName</span></a>
+                    <a href="@Url.Action("Index", "Home")" class="d-block text-white">@Resources.Layout.GoToHome</a>
+                    <div class="siteCMS-Sidebar__top">
+                        <div class="flex-wrap">
+                            <ul class="lang">
+                                @if (websiteCulture == "ar")
+                                {
+                                    <li class="active"><a href="@Url.Action("SetCulture", "Home", new {culture = "ar", currentUrl})">عربي</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action("SetCulture", "Home", new {culture = "ar", currentUrl})">عربي</a></li>
+                                }
+                                @if (websiteCulture == "he")
+                                {
+                                    <li class="active"><a href="@Url.Action("SetCulture", "Home", new {culture = "he", currentUrl})">עברית</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action("SetCulture", "Home", new {culture = "he", currentUrl})">עברית</a></li>
+                                }
+
+                            </ul>
+                        </div>
+
+                    </div>
+                    @if (Request.IsAuthenticated)
+                    {
+                        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <a href="javascript:document.getElementById('logoutForm').submit()" class="logout text-white">
+                                <i class="fa fa-sign-out-alt"></i>
+                                <span>@Resources.Layout.LinkLogOff</span>
+                            </a>
+                        }
+
+                    }
+                    else
+                    {
+                        <a class="btn btn-secondary ml-2" href="@Url.Action("Login", "Account")"> @Resources.Layout.LinkLogin</a>
+
+                    }
+                </div>
+            </div>
+            @*<nav>
+                <ul class="new-sidebar-nav">
+                    @{
+                        var userPages = MenuHelper.GetUserControlPanelPages(User);
+                    }
+                    @if (userPages.Count > 0)
+                    {
+                        var controllerName = string.Empty; var actionName = string.Empty;
+                        var label = string.Empty;
+                        var reportPagesNames = new List<string> { "Reports", "ClosedCasesReport", "FullCaseReport", "CasesDaysByCategory", "PercentageOfResolvedCase", "CasesSlaByCategory","CasesSentAsEmail" };
+
+                        var KnowledgeSharePages = userPages.Where(t => t == "Article" || t == "SMSTemplate").ToList();
+
+                        var reportsPages = userPages.Where(t => reportPagesNames.Contains(t)).ToList();
+
+                        var contactUsPage = userPages.Where(t => t == "ContactUs").ToList();
+
+                        if (KnowledgeSharePages.Count() > 0)
+                        {
+                            foreach (var x in KnowledgeSharePages)
+                            {
+                                userPages.Remove(x);
+                            }
+                        }
+                        if (reportsPages.Count() > 0)
+                        {
+                            foreach (var x in reportsPages)
+                            {
+                                userPages.Remove(x);
+                            }
+                        }
+                        if(contactUsPage.Count > 0)
+                        {
+                            foreach (var x in contactUsPage)
+                            {
+                                userPages.Remove(x);
+                            }
+                        }
+
+                        foreach (var pageName in userPages)
+                        {
+                            MenuHelper.GetControlPanelControllerAndAction(pageName, ref controllerName, ref actionName, out label);
+                            if (controllerName.IsNotNullOrEmpty() && actionName.IsNotNullOrEmpty() && label.IsNotNullOrEmpty())
+                            {
+                                <li>
+                                    <a href="@Url.Action(actionName, controllerName)">@label</a>
+                                </li>
+                            }
+                        }
+                        if (KnowledgeSharePages.Count() > 0)
+                        {
+                            <li class="has-ul">
+                                <a>@Resources.Layout.KnowledgeShare</a>
+                                <ul class="sub-ul">
+                                    @foreach (var pageName in KnowledgeSharePages)
+                                    {
+                                        MenuHelper.GetControlPanelControllerAndAction(pageName, ref controllerName, ref actionName, out label);
+                                        if (controllerName.IsNotNullOrEmpty() && actionName.IsNotNullOrEmpty() && label.IsNotNullOrEmpty())
+                                        {
+                                            <li>
+                                                <a href="@Url.Action(actionName, controllerName)">@label</a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        if (reportsPages.Count > 0)
+                        {
+                            <li class="has-ul">
+                                <a>@Resources.Layout.Reports</a>
+                                <ul class="sub-ul">
+                                    @foreach (var pageName in reportsPages)
+                                    {
+                                        MenuHelper.GetControlPanelControllerAndAction(pageName, ref controllerName, ref actionName, out label);
+                                        <li>
+                                            <a href="@Url.Action(actionName, controllerName)">@label</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        if (contactUsPage.Count > 0)
+                        {
+                            foreach (var pageName in contactUsPage)
+                            {
+                                MenuHelper.GetControlPanelControllerAndAction(pageName, ref controllerName, ref actionName, out label);
+                                <li>
+                                    <a href="@Url.Action(actionName, controllerName)">@label</a>
+                                </li>
+                            }
+                        }
+                    }*@
+                    @*@if (User.IsInRole(Constants.Roles.Administrator))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "UserProfile")">@Resources.Layout.LinkUsers</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Sla")">@Resources.Layout.LinkSla</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "StateTransitions")">@Resources.Layout.LinkStateTransitionsConfigration</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "StateHistory")">@Resources.Layout.LinkStateHistory</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Permissions")">@Resources.Layout.LinkPermission</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "RolePermissions")">@Resources.Layout.LinkRolePermissions</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "MasterLookups")">@Resources.Layout.LinkLookup</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "SystemSettings")">@Resources.Layout.TxtSystemSetting</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Department")">@Resources.Layout.LinkDepartment</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "SMS")">@Resources.Layout.SMSTemplates</a>
+                            </li>
+                            <li class="has-ul">
+                                <a>@Resources.Layout.KnowledgeShare</a>
+                                <ul class="sub-ul">
+                                    <li>
+                                        <a href="@Url.Action("Index","Category")">@Resources.Layout.Category</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index","Article")">@Resources.Layout.Article</a>
+                                    </li>
+                                </ul>
+                            </li>
+                                <li class="has-ul">
+                                    <a>@Resources.Layout.Reports</a>
+                                    <ul class="sub-ul">
+                                        <li>
+                                            <a href="@Url.Action("Index", "Reports")">@Resources.Layout.ReportCharts</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("FullCasesReport", "Reports")">@Resources.Reports.CasesReport</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("CasesDaysByCategory", "Reports")">@Resources.Layout.CaseByCategoryReport</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("CasesSlaByCategory", "Reports")">@Resources.Layout.CasesSlaByCategory</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("ClosedCasesReport", "Reports")">@Resources.Layout.ClosedCasesReport</a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("PercentageOfResolvedCase", "Reports", new {fromDate = DateTime.Now.Date.AddDays(-30).Date, toDate = DateTime.Now.Date, categoryId = 27 })">@Resources.Layout.PercentageOfResolvedCase</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                        }
+
+                        <li>
+                            <a href="@Url.Action("Index", "ContactUs")">@Resources.Layout.TxtContactUs</a>
+                        </li>*@
+                @*</ul>
+
+
+
+            </nav>*@
+        </aside>
+        @RenderBody()
+    </div>
+    @Html.Partial("_CMSFooter")
+    <div class="sidebar-overlay">
+    </div>
+    <script src="~/Content/assets/autocomplete/js/chosen.jquery.js"></script>
+    <script src="~/Content/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+    <script src="~/Scripts/script-custom-editor.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+    <script src="~/Content/assets/js/smsm.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="~/Content/assets/js/app.js"></script>
+
+</body>
+</html>

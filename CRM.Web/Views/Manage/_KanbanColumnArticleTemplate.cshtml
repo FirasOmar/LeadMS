@@ -1,0 +1,36 @@
+﻿@model List<CRM.Web.Models.CaseViewModel>
+@using CRM.Web.Helpers
+@using CRM.Core.SystemEnums
+
+
+@foreach (var value in Model)
+{
+    <article class="kanban-entry grab" id="Case@(value.Id)" data-case-Id="@value.Id" draggable="true">
+        <div class="kanban-entry-inner">
+            <div class="kanban-label">
+                <h2><a href="#">@value.Title</a>&nbsp; (@value.CategoryName)</h2>
+                <b>
+                    @value.CreatedOn.ToString().AsDateTime().ToString("dd/MM/yyyy")
+                </b>
+                <p><strong>@value.AssigneeName</strong>&nbsp; (@value.PriorityName)</p>
+                <p>
+                    <a href="#" onclick="EditCase(@value.Id)" class="btn btn-default btnEditCase disabled" title="@Resources.SystemCases.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                    <a href="#" onclick="Delete(@value.Id)" class="btn btn-default btnDeleteCase disabled" title="@Resources.SystemCases.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                    <a href="@Url.Action("Details", new { id = value.Id })" class="btn btn-default btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                    @{
+                        var articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Detailes, value.CategoryId.GetValueOrDefault());
+                        if (articleId > 0 && value.TypeId == (int)GeneralEnums.CasesType.Complaints)
+                        {
+                            <a onmouseover="ArticleDescriptionData('@(articleId)', this)"
+                               data-toggle="tooltip" data-placement="left" title="" class="btn btn-default"
+                               target="_blank" href="@Url.Action("Index","ArticleDescription", new { articleId = articleId })">
+                                <i class="fa fa-book"></i>
+                            </a>
+                        }
+                    }
+                </p>
+            </div>
+        </div>
+    </article>
+                        }
+

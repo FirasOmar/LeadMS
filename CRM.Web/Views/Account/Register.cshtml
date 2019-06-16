@@ -1,0 +1,172 @@
+﻿@using System.Runtime.Versioning
+@model CRM.Web.Models.RegisterViewModel
+@{
+    ViewBag.Title = Resources.Register.Title;
+}
+
+<section class="section">
+    <div class="container">
+        @*<header class="section-header justify-content-between flex-wrap">
+            <div class="d-flex">
+                <h2 class="section-title">@Resources.Register.Title</h2>
+            </div>
+        </header>*@
+        <div class="row">
+            <div class="col-md-4">
+                <div class="d-flex">
+                    <h2 class="section-title">@Resources.Register.Title</h2>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            <div class="row mb-4">
+                <div class="col-lg-3 cms-col-header">
+                    <h2>@Resources.Register.LblInformation </h2>
+                </div>
+                <div class="col-lg-9">
+
+
+                    <div class="row">
+
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required", onInput = "PreventEnterChartecherName()" })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        </div>                        
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                            @Html.DropDownList("GenderLookupId", null, new { @class = "form-control", required = "required" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                            @Html.DropDownList("PrefferdLanguage", null, new { @class = "form-control", required = "required" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-lg-3 cms-col-header">
+                    <h2>@Resources.Register.LblEmailAndPassword</h2>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.Email, new { @for = "Email" })
+                            @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                       
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.Password, new { @for = "Password" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required", placeholder = "(e.g. P@ssw0rd1)" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @for = "ConfirmPassword" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="form-group col-lg-12">
+                            <button type="submit" class="btn btn-primary pull-right">@Resources.Register.BtnRegister</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div> 
+
+</section>
+
+<script type="text/javascript">
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function checkLengthIdNumber() {
+
+
+        var fieldLength = $("#IdNumber").val().length;
+        if (fieldLength <= 9) {
+            return true;
+        }
+        else {
+            var str = $("#IdNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#IdNumber").val(str);
+        }
+    }
+
+
+    function checkLengthPhone() {
+
+        var fieldLength = $("#PhoneNumber").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#PhoneNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#PhoneNumber").val(str);
+        }
+    }
+
+    function checkLengthMobile() {
+
+
+        var fieldLength = $("#Mobile").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#Mobile").val();
+            str = str.substring(0, str.length - 1);
+            $("#Mobile").val(str);
+        }
+    }
+    function PreventEnterSpecialAddress() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+        str = $("#Address").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#Address").val();
+                str = str.substring(0, str.length - 1);
+                $("#Address").val(str);
+            }
+        }
+
+    }
+
+
+    function PreventEnterChartecherName() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#FullName").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#FullName").val();
+                str = str.substring(0, str.length - 1);
+                $("#FullName").val(str);
+            }
+        }
+
+    }
+</script>

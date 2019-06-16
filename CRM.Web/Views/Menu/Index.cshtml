@@ -1,0 +1,581 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@*@model PagedList.IPagedList<CRM.Web.Models.MenuViewModel>*@
+@model IEnumerable<CRM.Web.Models.MenuViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.Menu.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+    int imageNo = (int)GeneralEnums.FileEnum.Image;
+}
+
+
+
+<style>
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<div class="col-md-12 center">
+    <div class="card card-nav-tabs">
+        <div class="card-header" data-background-color="purple">
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <span class="nav-tabs-title pull-right">@Resources.Menu.Title</span>
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="active">
+                            <a id="btnArabic" data-toggle="tab">
+                                <i class="material-icons">code</i> @Resources.Menu.ArabicContent
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a id="btnHebrew" data-toggle="tab">
+                                <i class="material-icons">code</i> @Resources.Menu.HebrewContent
+                                <div class="ripple-container"></div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card-content admintable">
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+
+            <div id="CreateMenu" style="display: none" class="row">
+                <h4>@Resources.Menu.TxtAddNewMenu</h4>
+                <hr />
+                <form method="post" onsubmit="CreateMenu()">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label">@Resources.Menu.TxtTitle</label>
+                            <input class="form-control" type="text" required name="Title" id="Title" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group label-floating is-empty">
+                            <label class="control-label">@Resources.Menu.TxtDescription</label>
+                            <input class="form-control" type="text" required name="Description" id="Description" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtParentId</label>
+                            @Html.DropDownList("ParentId", null, string.Empty, new { @class = "form-control chosen-select" })
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtSortOrder</label>
+                            <input class="form-control" type="number" name="SortOrder" id="SortOrder" required />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtPageUrl</label>
+                            <input class="form-control" type="text" name="PageUrl" id="PageUrl" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtStatus</label>
+                            @Html.DropDownList("Status", null, new { @class = "form-control chosen-select" })
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pull-right">
+                        <div class="form-group is-empty">
+                            <input type="submit" id="btnCreate" value="@Resources.Menu.BtnAdd" class="btn btn-primary savebtn disabled" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="row" style="display: none" id="EditMenu">
+                <h4>@Resources.Menu.TxtUpdateMenu</h4>
+                <hr />
+                <form method="post" onsubmit="SaveMenu()">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" id="IdEdit" name="IdEdit" />
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtTitle</label>
+                            <input class="form-control" type="text" name="Title" id="TitleEdit" required />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtDescription</label>
+                            <input class="form-control" type="text" required name="Description" id="DescriptionEdit" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtParentId</label>
+                            @Html.DropDownList("ParentIdEdit", null, new { @class = "form-control chosen-select" })
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+                    
+
+
+
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtSortOrder</label>
+                            <input class="form-control" type="number" name="SortOrderEdit" required id="SortOrderEdit" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6  pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtPageUrl</label>
+                            <input class="form-control" type="text" name="PageUrlEdit" id="PageUrlEdit" />
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group is-empty">
+                            <label class="control-label">@Resources.Menu.TxtStatus</label>
+                            @Html.DropDownList("StatusEdit", null, new { @class = "form-control chosen-select", required = "required" })
+                            <span class="material-input"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group is-empty">
+                            <input type="submit" value="@Resources.Menu.BtnSave" id="btnSaveEdit" class="btn btn-primary savebtn" />
+                            <input type="button" value="@Resources.Menu.BtnCancel" id="btnCancel" class="btn btn-danger savebtn" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <button id="btnCreateMenu" type="button" onclick="ShowCreateForm()" rel="tooltip" title="@Resources.Menu.TxtAddNewMenu" class="btn btn-primary btn-xs disabled">
+                <i class="material-icons">add</i>
+            </button>
+            <hr />
+            @using (Html.BeginForm())
+            {
+                @*@Html.Hidden("resetTo", 1)*@
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    @Html.TextBox("searchText", null, new { @class = "form-control", placeholder = Resources.Layout.TxtSearchFor })
+                </div>
+                <div class="col-md-2">
+                    <input class="btn btn-success" type="submit" value="@Resources.Layout.BtnSearch" />
+                </div>
+                <div class="clearfix"></div>
+                <hr />
+            }
+            <table id="tableMenus" class="table">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).SortOrder)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).ParentId)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model.Where(r => r.ParentId == null).OrderBy(r => r.SortOrder))
+                    {
+                        <tr class="parentMenu" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SortOrder)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.Raw(item.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ParentName)
+                            </td>
+                            <td>
+                                <button type="button" onclick="EditMenu(@item.Id)" rel="tooltip" title="@Resources.Menu.BtnEdit" class="btn btn-primary btn-simple btn-xs btnEditMenu disabled">
+                                    <i class="material-icons">edit</i>
+                                </button>
+                                <button type="button" onclick="Delete(@item.Id)" rel="tooltip" title="@Resources.Menu.BtnDelete" class="btn btn-danger btn-simple btn-xs btnDeleteMenu disabled">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </td>
+                        </tr>
+                        foreach (var subItem in Model.Where(r => r.ParentId == item.Id).OrderBy(r => r.SortOrder))
+                        {
+                            <tr id="TableData">
+                                <td>
+                                    @Html.DisplayFor(modelItem => subItem.SortOrder)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => subItem.Title)
+                                </td>
+                                <td>
+                                    @Html.Raw(subItem.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => subItem.ParentName)
+                                </td>
+                                <td>
+                                    <button type="button" onclick="EditMenu(@subItem.Id)" rel="tooltip" title="@Resources.Menu.BtnEdit" class="btn btn-primary btn-simple btn-xs btnEditMenu disabled">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    <button type="button" onclick="Delete(@subItem.Id)" rel="tooltip" title="@Resources.Menu.BtnDelete" class="btn btn-danger btn-simple btn-xs btnDeleteMenu disabled">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+
+            @*@if (Model.PageCount > 0)
+                {
+                    <div class="row center-text">
+                        @Resources.Layout.TxtPaginationPage @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) @Resources.Layout.TxtPaginationFrom @Model.PageCount ، @Resources.Layout.TxtPaginationItemNo: @Model.TotalItemCount
+
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+                    </div>
+                }*@
+
+            <div class="center-text">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var permission = {};
+    $("#btnHebrew").click(function () {
+        $("#LanguageId").val(2);
+        EditMenu($("#IdEdit").val());
+    });
+    $("#btnArabic").click(function () {
+        $("#LanguageId").val(1);
+        EditMenu($("#IdEdit").val());
+    });
+
+    $("#btnHebrewEdit").click(function () {
+        $("#LanguageId").val(2);
+        EditMenu($("#IdEdit").val());
+    });
+    $("#btnArabicEdit").click(function () {
+        $("#LanguageId").val(1);
+        EditMenu($("#IdEdit").val());
+    });
+    $("#EditMenu").hide();
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateMenu").show();
+        $("#btnCreateMenu").hide();
+    }
+    function CreateMenu() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.ParentId = $("#ParentId").val();
+        obj.Status = $("#Status").val();
+        obj.Description = $("#Description").val();
+        obj.SortOrder = $("#SortOrder").val();
+        obj.Icon = $("#iconHidden").val();
+        obj.PageId = $("#PageId").val();
+        obj.PageUrl = $("#PageUrl").val();
+        obj.Title = $("#Title").val();
+        obj.LanguageId = $("#LanguageId").val();
+        //------------------------------------
+        obj.AddCategory = $("#AddCategory").is(":checked");
+        obj.CategoryParentId = $("#CategoryParentId").val();
+        obj.MainImageUrl = $("#CategoryImageUrl").val();
+
+        $.post("/Menu/AddMenu",
+            { menu: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function EditMenu(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var languageId = $("#LanguageId").val();
+        $.get("/Menu/EditMenu", { id: id, languageId: languageId }, function (data) {
+            if (data != null) {
+                $("#CreateMenu").hide();
+                $("#EditMenu").show();
+                $("#btnCreateMenu").hide();
+
+                $("#ParentIdEdit").val(data.ParentId);
+                $("#ParentUrlEdit").val(data.ParentUrl);
+                $('#ParentIdEdit').trigger("chosen:updated");
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#DescriptionEdit").val(data.Description);
+                $("#SortOrderEdit").val(data.SortOrder);
+                $("#iconHiddenEdit").val(data.Icon);
+                $("#PageIdEdit").val(data.PageId);
+                $('#PageIdEdit').trigger("chosen:updated");
+                $("#TitleEdit").val(data.Title);
+                //$("#LanguageId").val(data.LanguageId);
+                $("#IdEdit").val(id);
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+
+                var cc = data.Icon;
+                $('.txt').text($("#viewIconEdit #" + data.Icon + " span").text());
+                $("#viewIconEdit #" + data.Icon).addClass('selected');
+
+            }
+        });
+    }
+
+
+
+    function SaveMenu() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.ParentId = $("#ParentIdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.Description = $("#DescriptionEdit").val();
+        obj.SortOrder = $("#SortOrderEdit").val();
+        obj.Icon = $("#iconHiddenEdit").val();
+        obj.PageId = $("#PageIdEdit").val();
+        obj.PageUrl = $("#PageUrlEdit").val();
+        obj.Title = $("#TitleEdit").val();
+        obj.LanguageId = $("#LanguageId").val();
+        $.post("/Menu/EditMenu",
+            { menu: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function ShowHideCategoryFields(element) {
+        if (element.checked) {
+            $(".category-field").show();
+        } else {
+            $(".category-field").hide();
+        }
+
+    }
+
+    $("#btnCancel").click(function () {
+        $("#CreateMenu").show();
+        $("#EditMenu").hide();
+    });
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.Menu.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/Menu/DeleteMenu", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+    $('#MainImageUrl').on('change', function (e) {
+        var files = e.target.files;
+        if (files.length > 0) {
+            //if (this.value.lastIndexOf('.pdf') === -1) {
+            //    alert('Only pdf files are allowed!');
+            //    this.value = '';
+            //    return;
+            //}
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@imageNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        $("#CategoryImageUrl").val(result[0].FileUrl);
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Menu", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateMenu").removeClass("disabled");
+                        $("#btnCreate").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditMenu").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteMenu").removeClass("disabled");
+                    }                 
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+</script>
+
+<script>
+    var sel = $('.sel'),
+        txt = $('.txt'),
+        options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+</script>

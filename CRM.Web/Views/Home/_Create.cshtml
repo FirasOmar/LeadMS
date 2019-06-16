@@ -1,0 +1,120 @@
+﻿@model CRM.Web.Models.LeadViewModel
+@using CRM.Web.Helpers
+<style>
+    .form-horizontal {
+        width: 100%;
+    }
+
+    form {
+        width: 100%;
+    }
+</style>
+@{
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var campaigns = LookupHelper.GetCampaigns(Request.Cookies["_culture"]);
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @*<h4>Lead</h4>
+        <hr />*@
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "Lead_Name form-control", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "Lead_Address form-control" } })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "Lead_Email form-control ", TextMode = "Email" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone_Number, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EditorFor(model => model.Phone_Number, new { htmlAttributes = new { @class = "Lead_Mobile form-control", @required = "true" } })
+            @Html.ValidationMessageFor(model => model.Phone_Number, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EnumDropDownListFor(model => model.Status,@*ViewData["StatusList"] as List<SelectListItem>,*@                                                 /**/
+                                                                                                                                                                                /**/
+                                                                                                                                                                                /**/
+                                                                                                                                                                                new { @class = "Lead_Status form-control LeadStatusSelectList" })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label d-flex" })
+        <div class="">
+            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "Lead_Notes form-control" } })
+            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.CampaignId, new { @for = "CampaignId", @class = "d-flex" })
+        <div class="">
+            @Html.DropDownList("CampaignId", new SelectList(campaigns, "Id", "Name"), Resources.Campaign.SelectCampaign, new { @class = "form-control chosen-select", @required = "true" })
+            @Html.ValidationMessageFor(m => m.CampaignId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AssigneeId, new { @for = "AssigneeId", @class = "d-flex" })
+        <div class="">
+            @Html.DropDownList("AssigneeId", new SelectList(users, "Id", "FullName"), Resources.Campaign.SelectUser, new { @class = "form-control chosen-select" })
+            @Html.ValidationMessageFor(m => m.AssigneeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="modal-footer d-flex">
+        <input type="submit" value="@Resources.Home.Create" class="btn btn-primary" />
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resources.Home.Close</button>
+    </div>
+</div>
+}
+<script>
+
+    $(".LeadStatusSelectList").find("option").eq(0).remove();
+</script>
+<script type="text/javascript">
+    //$(document).ready({
+
+    //    SaveLead() {
+    //        var selectedStatus = $(".Lead_Status").children("option:selected").val();
+    //        $.ajax(
+    //            {
+    //                type: "POST", //HTTP POST Method
+    //                url: "Home/Create", // Controller/View
+    //                data: { //Passing data
+    //                    Name: $(".Lead_Name").val(), //Reading text box values using Jquery
+    //                    Phone_Number: $(".Lead_Mobile").val(),
+    //                    Status: selectedStatus,
+    //                    Address: $(".Lead_Address").val(),
+    //                    Email: $(".Lead_Email").val(),
+    //                    Notes: $(".Lead_Notes").val()              
+    //                }
+
+    //            });
+
+    //    }
+    //});
+</script>

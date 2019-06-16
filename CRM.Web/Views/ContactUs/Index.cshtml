@@ -1,0 +1,262 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.ContactUsViewModel>
+@using CRM.Core.SystemEnums
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.ContactUs.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+
+            <div class="row" style="display: none" id="EditContactUs">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.ContactUs.TxtUpdateContactUs</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveContactUs()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="NameEdit">@Resources.ContactUs.TxtName</label>
+                                <input class="form-control" type="text" required name="NameEdit" id="NameEdit" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="EmailEdit">@Resources.ContactUs.TxtEmail</label>
+                                <input class="form-control" type="email" required name="EmailEdit" id="EmailEdit" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="AddressEdit">@Resources.ContactUs.TxtAddress</label>
+                                <input class="form-control" type="text" required name="AddressEdit" id="AddressEdit" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="MobileEdit">@Resources.ContactUs.TxtPhone</label>
+                                <input class="form-control" type="text" required name="MobileEdit" id="MobileEdit" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="StatusEdit">@Resources.ContactUs.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="MessageEdit">@Resources.ContactUs.TxtMessage</label>
+                                <input class="form-control" type="text" required name="MessageEdit" id="MessageEdit" />
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group col-lg-12">
+                            <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.ContactUs.BtnSave</button>
+                            <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.ContactUs.BtnCancel"  />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="tableContactUs" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Address)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Message)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Mobile)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).InsertDate)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                <tr id="TableData">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Message)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mobile)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InsertDate)
+                    </td>
+                    <td>
+                        <a href="#" onclick="EditContactUs(@item.Id)" class="btnEditContactUs disabled" title="@Resources.ContactUs.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                        <a href="#" onclick="Delete(@item.Id)" class="btnDeleteContactUs disabled" title="@Resources.ContactUs.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                    </td>
+                </tr>
+                    }
+
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+
+
+    $("#EditContactUs").hide();
+    var permission = {};
+    function EditContactUs(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        $.get("/ContactUs/EditContactUs", { id: id }, function (data) {
+            if (data != null) {
+
+                $("#EditContactUs").show();
+
+                $("#NameEdit").val(data.Name);
+                $("#EmailEdit").val(data.Email);
+                $("#AddressEdit").val(data.Address);
+                $("#MessageEdit").val(data.Message);
+                $("#MobileEdit").val(data.Mobile);
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#IdEdit").val(id);
+
+            }
+        });
+        $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+    }
+
+
+
+    function SaveContactUs() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Name = $("#NameEdit").val();
+        obj.Email = $("#EmailEdit").val();
+        obj.Address = $("#AddressEdit").val();
+        obj.Message = $("#MessageEdit").val();
+        obj.Mobile = $("#MobileEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        $.post("/ContactUs/EditContactUs",
+            { contactUsViewModel: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    $("#btnCancel").click(function () {
+        $("#EditContactUs").hide();
+    });
+
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("Are you sure!");
+        if (confirmed === true) {
+            $.post("/ContactUs/DeleteContactUs", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+
+
+    @{
+        int pageId = (int) GeneralEnums.PageEnum.ContactUs;
+    }
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=ContactUs", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditContactUs").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteContactUs").removeClass("disabled");
+                    }
+
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateContactUs").hide();
+        $("#EditContactUs").hide();
+
+        $("#tableDepartments").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+    });
+</script>
+

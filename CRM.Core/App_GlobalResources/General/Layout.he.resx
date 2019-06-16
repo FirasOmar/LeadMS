@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessibilityBlackWhite" xml:space="preserve">
+    <value>שחור לבן</value>
+  </data>
+  <data name="AccessibilityContrast" xml:space="preserve">
+    <value>ניגודיות</value>
+  </data>
+  <data name="AccessibilityMaximize" xml:space="preserve">
+    <value>הגדלה +</value>
+  </data>
+  <data name="AccessibilityMinimize" xml:space="preserve">
+    <value>הקטנה -</value>
+  </data>
+  <data name="AccessibilityOriginalSize" xml:space="preserve">
+    <value>הגודל המקורי</value>
+  </data>
+  <data name="Article" xml:space="preserve">
+    <value>מאמרים</value>
+  </data>
+  <data name="BtnExcel" xml:space="preserve">
+    <value>יצוא</value>
+  </data>
+  <data name="BtnSearch" xml:space="preserve">
+    <value>חיפוש</value>
+  </data>
+  <data name="CaseByCategoryReport" xml:space="preserve">
+    <value>פניות לפי קטגוריה</value>
+  </data>
+  <data name="CaseByStateReport" xml:space="preserve">
+    <value>פניות לפי סטטוס</value>
+  </data>
+  <data name="CasesDaysByCategoryReport" xml:space="preserve">
+    <value>דו"ח במספר הימים לכל תלונה עד סגירתה</value>
+  </data>
+  <data name="CasesPriorityByCategoryReport" xml:space="preserve">
+    <value>מיון לפי חשיבות</value>
+  </data>
+  <data name="CasesReport" xml:space="preserve">
+    <value>דוחות פניות</value>
+  </data>
+  <data name="CasesSeverityByCategoryReport" xml:space="preserve">
+    <value>מיון סטטוס לפי חומרה</value>
+  </data>
+  <data name="CasesSlaByCategory" xml:space="preserve">
+    <value>רמת השירות</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>קטגוריה</value>
+  </data>
+  <data name="ClosedCasesReport" xml:space="preserve">
+    <value>פניות סגורות</value>
+  </data>
+  <data name="Complaints" xml:space="preserve">
+    <value>פניות</value>
+  </data>
+  <data name="CreatedVsResolvedCasesPerWeekReport" xml:space="preserve">
+    <value>פניות שנפתחו ונסגרו תוך שבוע</value>
+  </data>
+  <data name="Emergency" xml:space="preserve">
+    <value>חירום</value>
+  </data>
+  <data name="Froms" xml:space="preserve">
+    <value>טפסים</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>משרות</value>
+  </data>
+  <data name="KnowledgeShare" xml:space="preserve">
+    <value>שיתוף מידע</value>
+  </data>
+  <data name="LinkArchiving" xml:space="preserve">
+    <value>ניהול קבצים</value>
+  </data>
+  <data name="LinkCategories" xml:space="preserve">
+    <value>קטיגוריות</value>
+  </data>
+  <data name="LinkCms" xml:space="preserve">
+    <value>ניהול תוכן האתר</value>
+  </data>
+  <data name="LinkComplaints" xml:space="preserve">
+    <value>פניות </value>
+  </data>
+  <data name="LinkContact" xml:space="preserve">
+    <value>צור קשר</value>
+  </data>
+  <data name="LinkControlPanel" xml:space="preserve">
+    <value>לוח בקרה</value>
+  </data>
+  <data name="LinkDepartment" xml:space="preserve">
+    <value>מחלקות</value>
+  </data>
+  <data name="LinkEmergency" xml:space="preserve">
+    <value>חירום</value>
+  </data>
+  <data name="LinkEvents" xml:space="preserve">
+    <value>אירועים</value>
+  </data>
+  <data name="LinkFormQuestionTypes" xml:space="preserve">
+    <value>סוגי השאלות</value>
+  </data>
+  <data name="LinkForms" xml:space="preserve">
+    <value>טפסים</value>
+  </data>
+  <data name="LinkGallery" xml:space="preserve">
+    <value>גלריית תמונות</value>
+  </data>
+  <data name="LinkHome" xml:space="preserve">
+    <value>ראשי</value>
+  </data>
+  <data name="LinkJobs" xml:space="preserve">
+    <value>משרות</value>
+  </data>
+  <data name="LinkLogin" xml:space="preserve">
+    <value>כניסה</value>
+  </data>
+  <data name="LinkLogOff" xml:space="preserve">
+    <value>יציאה</value>
+  </data>
+  <data name="LinkLookup" xml:space="preserve">
+    <value>הגדרות</value>
+  </data>
+  <data name="LinkManageCase" xml:space="preserve">
+    <value>פניות</value>
+  </data>
+  <data name="LinkManageHome" xml:space="preserve">
+    <value>עריכת דף ראשי</value>
+  </data>
+  <data name="LinkMenu" xml:space="preserve">
+    <value>טבלה</value>
+  </data>
+  <data name="LinkPages" xml:space="preserve">
+    <value>עמודים</value>
+  </data>
+  <data name="LinkPermission" xml:space="preserve">
+    <value>סמכויות</value>
+  </data>
+  <data name="LinkRolePermissions" xml:space="preserve">
+    <value>סמכויות תפקיד</value>
+  </data>
+  <data name="LinkServices" xml:space="preserve">
+    <value>שירותים</value>
+  </data>
+  <data name="LinkSla" xml:space="preserve">
+    <value>רמת שירות</value>
+  </data>
+  <data name="LinkSlider" xml:space="preserve">
+    <value>סליידר</value>
+  </data>
+  <data name="LinkStateHistory" xml:space="preserve">
+    <value>היסטורית תנועות</value>
+  </data>
+  <data name="LinkStateTransitionsConfigration" xml:space="preserve">
+    <value>עריכות שינוי סטטוס</value>
+  </data>
+  <data name="LinkUserProfileFields" xml:space="preserve">
+    <value>שדות דף אישי</value>
+  </data>
+  <data name="LinkUsers" xml:space="preserve">
+    <value>משתמשים</value>
+  </data>
+  <data name="PercentageOfResolvedCase" xml:space="preserve">
+    <value>אחוז מצבים פתורים</value>
+  </data>
+  <data name="PersonInformation" xml:space="preserve">
+    <value>מידע על אזרח</value>
+  </data>
+  <data name="ReportCharts" xml:space="preserve">
+    <value>גרפים</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>דוחות</value>
+  </data>
+  <data name="SMSTemplates" xml:space="preserve">
+    <value>תבניות הודעה</value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>הגדרות מערכת</value>
+  </data>
+  <data name="Tenders" xml:space="preserve">
+    <value>מכרזים</value>
+  </data>
+  <data name="TxtContactUs" xml:space="preserve">
+    <value>דף ליצירת קשר</value>
+  </data>
+  <data name="TxtEmergency" xml:space="preserve">
+    <value>חירום</value>
+  </data>
+  <data name="TxtFaqs" xml:space="preserve">
+    <value>שאלות נפוצות</value>
+  </data>
+  <data name="TxtJobs" xml:space="preserve">
+    <value>מועמדים למשרות</value>
+  </data>
+  <data name="TxtLoaderImage" xml:space="preserve">
+    <value>העלאת תמונה/קובץ</value>
+  </data>
+  <data name="TxtManage" xml:space="preserve">
+    <value>עריכה</value>
+  </data>
+  <data name="TxtNameOfTheRequest" xml:space="preserve">
+    <value>שם בקשה</value>
+  </data>
+  <data name="TxtNewsLetter" xml:space="preserve">
+    <value>ניוזלטר</value>
+  </data>
+  <data name="TxtPaginationFrom" xml:space="preserve">
+    <value>מ...</value>
+  </data>
+  <data name="TxtPaginationItemNo" xml:space="preserve">
+    <value>מספר אלמנטים</value>
+  </data>
+  <data name="TxtPaginationPage" xml:space="preserve">
+    <value>דף</value>
+  </data>
+  <data name="TxtSearch" xml:space="preserve">
+    <value>חיפוש</value>
+  </data>
+  <data name="TxtSearchFor" xml:space="preserve">
+    <value>חיפוש אחרי...</value>
+  </data>
+  <data name="TxtSmsm" xml:space="preserve">
+    <value>סמסם</value>
+  </data>
+  <data name="TxtSubmissionOfTheApplication" xml:space="preserve">
+    <value>הגשת בקשה</value>
+  </data>
+  <data name="TxtSystemSetting" xml:space="preserve">
+    <value>הגדרות אתר</value>
+  </data>
+  <data name="TxtWelcome" xml:space="preserve">
+    <value>שלום</value>
+  </data>
+  <data name="WebsiteName" xml:space="preserve">
+    <value>מערכת פניות</value>
+  </data>
+  <data name="PersonalAccount" xml:space="preserve">
+    <value>צפה בפרופיל</value>
+  </data>
+  <data name="GoToHome" xml:space="preserve">
+    <value>חזרה לדף ראשי</value>
+  </data>
+  <data name="CasesSentByEmail" xml:space="preserve">
+    <value>מקרים שנשלחו בדוא"ל</value>
+  </data>
+</root>

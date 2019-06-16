@@ -1,0 +1,44 @@
+<svg id="house" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.102 64.102">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f05540;
+      }
+
+      .cls-2 {
+        fill: #f3705a;
+      }
+
+      .cls-3 {
+        fill: #ffd15c;
+      }
+
+      .cls-4 {
+        fill: #f7b64c;
+      }
+
+      .cls-5 {
+        fill: #415a6b;
+      }
+
+      .cls-6 {
+        fill: #344a5e;
+      }
+
+      .cls-7 {
+        fill: #8ad7f8;
+      }
+    </style>
+  </defs>
+  <rect id="Rectangle_46" data-name="Rectangle 46" class="cls-1" width="7.345" height="12.82" transform="translate(47.943 9.215)"/>
+  <rect id="Rectangle_47" data-name="Rectangle 47" class="cls-2" width="12.954" height="6.944" transform="translate(45.138 2.671)"/>
+  <path id="Path_50" data-name="Path 50" class="cls-3" d="M44.8,93.375v29.514H97.15V93.375L70.975,67.2h0C60.825,77.483,55.083,83.225,44.8,93.375Z" transform="translate(-39.191 -58.787)"/>
+  <path id="Path_51" data-name="Path 51" class="cls-4" d="M97.283,93.375,71.108,67.2c-5.208,5.075-9.215,9.081-13.221,13.087L44.8,93.375v6.01L70.975,73.209,97.15,99.384v.8h0V93.375h.133Z" transform="translate(-39.191 -58.787)"/>
+  <path id="Path_52" data-name="Path 52" class="cls-5" d="M106.425,348.7H90.667V333.213a7.894,7.894,0,0,1,7.879-7.879h0a7.894,7.894,0,0,1,7.879,7.879Z" transform="translate(-79.316 -284.602)"/>
+  <rect id="Rectangle_48" data-name="Rectangle 48" class="cls-6" width="20.566" height="18.029" transform="translate(31.784 40.731)"/>
+  <g id="Group_42" data-name="Group 42" transform="translate(33.921 42.868)">
+    <rect id="Rectangle_49" data-name="Rectangle 49" class="cls-7" width="7.078" height="13.755"/>
+    <rect id="Rectangle_50" data-name="Rectangle 50" class="cls-7" width="7.078" height="13.755" transform="translate(9.215)"/>
+  </g>
+  <path id="Path_53" data-name="Path 53" class="cls-2" d="M62.9,29.113,34.989,1.2a4.357,4.357,0,0,0-6.01,0L1.2,29.113a4.357,4.357,0,0,0,0,6.01,4.357,4.357,0,0,0,6.01,0L32.051,10.283,56.89,35.122a4.249,4.249,0,0,0,6.01-6.01Z"/>
+</svg>

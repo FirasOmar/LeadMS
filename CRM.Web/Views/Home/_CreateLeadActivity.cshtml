@@ -1,0 +1,58 @@
+﻿@model CRM.Web.Models.LeadActivityViewModel
+@{
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+    var align = "";
+    // var mob = "";
+
+    //var Lead_Id =(int)ViewBag.Lead_ID;
+}
+@if (websiteCulture == "ar")
+{
+
+    align = "left";
+
+}
+else
+{
+
+    align = "right";
+
+}
+@using (Html.BeginForm("CreateLeadActivity", "Home", FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden"  id="Lead_ID" name="Lead_ID" />
+    <div class="row">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group col-lg-6">
+            @Html.LabelFor(model => model.Activity_Type, htmlAttributes: new { @class = "d-flex" })
+            @Html.EnumDropDownListFor(model => model.Activity_Type, new {   @class = "form-control ActivityTypeSelectList", @required = "true" })
+            @Html.ValidationMessageFor(model => model.Activity_Type, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-lg-6">
+            @Html.LabelFor(model => model.Activity_Status, htmlAttributes: new { @class = "d-flex" })
+            @Html.EnumDropDownListFor(model => model.Activity_Status,null, htmlAttributes: new { @class = "form-control ActivityStatusSelectList", @required = "true"  })
+            @Html.ValidationMessageFor(model => model.Activity_Status, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-lg-6">
+            @Html.LabelFor(model => model.Activity_Date, htmlAttributes: new { @class = "d-flex" })
+            @Html.EditorFor(model => model.Activity_Date, new { htmlAttributes = new { @class = "form-control", @required = "true",@type="Date" } })
+            @Html.ValidationMessageFor(model => model.Activity_Date, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-lg-6">
+            @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "d-flex" })
+
+            @Html.TextAreaFor(model => model.Notes, new { @class = "form-control", type = "TextArea"  })
+            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-lg-12" style="text-align:@align">
+            <button type="submit" class="btn btn-primary">@Resources.Home.Save</button>
+            @*<input type="submit" value="Create" class="btn btn-secondary" />*@
+
+        </div>
+    </div>
+}
+<script>
+    $(".ActivityTypeSelectList").find("option").eq(0).remove();
+    $(".ActivityStatusSelectList").find("option").eq(0).remove();
+</script>

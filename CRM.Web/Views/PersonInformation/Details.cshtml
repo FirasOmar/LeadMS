@@ -1,0 +1,428 @@
+﻿@using CRM.Core.SystemEnums
+@model CRM.Web.Models.CitizenProfileViewModel
+@{
+    ViewBag.Title = Model.FullName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int imageNo = (int)GeneralEnums.FileEnum.ProfileImage;
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Profile</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+            <div class="card-box text-center">
+                @if (!string.IsNullOrWhiteSpace(Model.ProfilePath))
+                {
+                    <img class="rounded-circle avatar-lg img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
+                }
+                else
+                {
+                    <img class="rounded-circle avatar-lg img-thumbnail" src="~/Content/assets/img/profile.png" />
+                }
+                <h4 class="mb-0">@Model.FullName</h4>
+                <p class="text-muted">@Model.Address</p>
+                <div class="text-left mt-3">
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.UserProfile.PrefferdLanguage :</strong> <span class="ml-2">
+                            @Model.PrefferdLanguageName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtEmail :</strong> <span class="ml-2">
+                            @Model.Email
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtIdNumber :</strong><span class="ml-2">
+                            @Model.IdNumber
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtMobile :</strong><span class="ml-2">
+                            @Model.Mobile
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtPhoneNumber :</strong><span class="ml-2">
+                            @Model.PhoneNumber
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtGenderLookupId :</strong> <span class="ml-2">
+                            @Model.GenderLookupName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtMartialStatusLookupId :</strong> <span class="ml-2">
+                            @Model.MartialStatusLookupName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtAddress :</strong> <span class="ml-2">
+                            @Model.Address
+                        </span>
+                    </p>
+                </div>
+            </div> <!-- end card-box -->
+        </div>
+        <!-- Tabs Section -->
+        <div class="col-lg-8 col-xl-8">
+            <div class="card-box">
+                <ul class="nav nav-pills navtab-bg nav-justified">
+                    <li class="nav-item">
+                        <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                            اعدادات الحساب
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#activities" data-toggle="tab" aria-expanded="false" class="nav-link">
+                            Latest Activity
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="nestedtab tab-pane" id="activities">
+
+                        <ul class="nav nav-tabs">
+                            @if (Model?.Cases?.GroupBy(r => r.TypeId) != null)
+                            {
+                                var count1 = 0;
+                                foreach (var type in Model?.Cases.Where(r => r.TypeId != null).GroupBy(r => r.TypeId))
+                                {
+                                    var active = "";
+                                    if (count1 == 0)
+                                    {
+                                        // active = "active";
+
+                                    }
+
+                                    var title = Resources.Layout.LinkComplaints;
+                                    switch (type.Key)
+                                    {
+                                        case (int)GeneralEnums.CasesType.Complaints:
+                                            title = Resources.Layout.LinkComplaints;
+                                            break;
+                                        case (int)GeneralEnums.CasesType.Emergency:
+                                            title = Resources.Layout.TxtEmergency;
+                                            break;
+                                        case (int)GeneralEnums.CasesType.Jobs:
+                                            title = Resources.Layout.TxtJobs;
+                                            break;
+                                        case (int)GeneralEnums.CasesType.Tenders:
+                                            title = Resources.Layout.Tenders;
+                                            break;
+                                        case (int)GeneralEnums.CasesType.Froms:
+                                            title = Resources.Layout.LinkForms;
+                                            break;
+                                    }
+                                    <li class="nav-item @active">
+                                        <a class="nav-link" id="ComplaintBtn_@type.Key" onclick="ShowSectionComplaint(@type.Key)">@title</a>
+                                    </li>
+                                    count1++;
+                                }
+                            }
+
+                        </ul>
+
+                        @if (Model?.Cases?.GroupBy(r => r.TypeId) != null)
+                        {
+                            var count = 0;
+                            foreach (var type in Model.Cases.Where(r => r.TypeId != null).GroupBy(r => r.TypeId))
+                            {
+                                var style = "display: none";
+                                if (count == 0)
+                                {
+                                    style = "";
+                                }
+                                <div class="inbox-widget slimscroll" id="sectionComplaints_@type.Key" style="@style; max-height: 300px;">
+                                    @foreach (var item in type.ToList())
+                                    {
+                                        <div class="inbox-item">
+                                            <p class="inbox-item-author">@item.Title</p>
+                                            <p class="inbox-item-text">@Html.Raw(item.Description) </p>
+                                            <i class="fe-clock"></i>@item.CreatedOn
+                                            <span class="badge badge-pill badge-warning">@item.FlowStatusName</span>
+                                            <p class="inbox-item-date">
+                                                <a href="@Url.Action("Details", "ManageCases", new {id = item.Id})" class="btn btn-sm btn-link text-primary font-13"><i class="fe-eye"></i></a>
+                                            </p>
+                                        </div><hr style="margin:0px;">
+                                    }
+                                </div>
+                                count++;
+                            }
+                        }
+                    </div>
+                    <!-- setting tab -->
+                    <div class="tab-pane active" id="settings">
+                        @using (Html.BeginForm("Details", "PersonInformation", new { id = Model.Id }, FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(r => r.Id)
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                                    @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.IdNumber, new { @for = "IdNumber" })
+                                    @Html.TextBoxFor(m => m.IdNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthIdNumber()" })
+                                    @Html.ValidationMessageFor(m => m.IdNumber, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.PhoneNumber, new { @for = "PhoneNumber" })
+                                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthPhone()" })
+                                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Mobile, new { @for = "Mobile" })
+                                    @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
+                                    @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.BirthDay, new { @for = "BirthDay" })
+                                    @Html.TextBoxFor(m => m.BirthDay, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
+                                    @Html.ValidationMessageFor(m => m.BirthDay, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                                    @Html.DropDownList("GenderLookupId", null, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.MartialStatusLookupId, new { @for = "MartialStatusLookupId" })
+                                    @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.HiddenFor(m => m.ProfilePath)
+                                    <label for="MainImageUrlEdit">
+                                        @Resources.Register.TxtProfilePath
+                                    </label>
+                                    <input name="MainImageUrl" id="MainImageUrlEdit" type="file" onchange="previewFile()" class="form-control-file">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary">@Resources.Register.BtnSave</button>
+                                <button class="btn btn-secondary" onclick="HideManageProfile()">إلغاء</button>
+                            </div>
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>                    
+    </div>
+</div>            
+
+<script>
+    $(".nestedtab li:first a").addClass("active");
+
+    function ShowManageProfile() {
+        $('#userProfileEdit').show();
+        $('#sectionProfile').hide();
+        $('#divtab').hide();
+        $('.div-sec').hide();
+        $('#sectionComplaints').hide();
+        $('#sectionForms').hide();
+    }
+
+    function HideManageProfile() {
+        $('#userProfileEdit').hide();
+        $('#sectionProfile').show();
+        $('#divtab').show();
+        $('.div-sec').show();
+        $('#sectionForms').show();
+        $('#sectionComplaints').hide();
+
+
+        $("#userFormBtn").addClass("active");
+        $("#ComplaintBtn").removeClass("active");
+
+    }
+
+    function ShowSectionComplaint() {
+        $('#sectionComplaints').show();
+        $('#sectionForms').hide();
+
+        $("#ComplaintBtn").addClass("active");
+        $("#userFormBtn").removeClass("active");
+    }
+    function ShowSectionForm() {
+        $('#sectionComplaints').hide();
+        $('#sectionForms').show();
+
+        $("#userFormBtn").addClass("active");
+        $("#ComplaintBtn").removeClass("active");
+
+    }
+
+
+    $('#MainImageUrlEdit').on('change', function (e) {
+        var files = e.target.files;
+        if (files.length > 0) {
+
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@imageNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        $("#ProfilePath").val(result[0].FileUrl);
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function checkLengthIdNumber() {
+
+
+        var fieldLength = $("#IdNumber").val().length;
+        if (fieldLength <= 9) {
+            return true;
+        }
+        else {
+            var str = $("#IdNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#IdNumber").val(str);
+        }
+    }
+
+
+    function checkLengthPhone() {
+
+        var fieldLength = $("#PhoneNumber").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#PhoneNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#PhoneNumber").val(str);
+        }
+    }
+
+    function checkLengthMobile() {
+
+
+        var fieldLength = $("#Mobile").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#Mobile").val();
+            str = str.substring(0, str.length - 1);
+            $("#Mobile").val(str);
+        }
+    }
+    function PreventEnterSpecialAddress() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+        str = $("#Address").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#Address").val();
+                str = str.substring(0, str.length - 1);
+                $("#Address").val(str);
+            }
+        }
+
+    }
+
+
+    function PreventEnterChartecherName() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#FullName").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#FullName").val();
+                str = str.substring(0, str.length - 1);
+                $("#FullName").val(str);
+            }
+        }
+
+    }
+                </script>
+
+
+                <script type="text/javascript">
+                    function ShowSectionForm() {
+                        $('[id^="sectionComplaints_"]').hide();
+                        $('#sectionForms').show();
+
+                        $("#userFormBtn").addClass("active");
+                        $('[id^="ComplaintBtn_"]').removeClass("active");
+
+                    }
+                    function ShowSectionComplaint(id) {
+                        $('[id^="sectionComplaints_"]').hide();
+                        $('#sectionComplaints_' + id).show();
+                        $('#sectionForms').hide();
+                        $('[id^="ComplaintBtn_"]').removeClass("active");
+
+                        $("#ComplaintBtn_" + id).addClass("active");
+                        $("#userFormBtn").removeClass("active");
+                    }
+                    $(function () {
+                        $.get("/api/accountpermission/IsAccessAllowed?page=Cases", function (data) {
+                            if (data != null) {
+                                if (data.HasAccess === true) {
+                                    permission = data;
+
+                                    if (data.AllowedPermissonsList.includes("Assign")) {
+                                        $(".assign-state").removeClass("disabled");
+                                    }
+                                }
+                            }
+                        }).fail(function (data) {
+                            alert("Error while validating user permission");
+                        });
+                    });
+                </script>

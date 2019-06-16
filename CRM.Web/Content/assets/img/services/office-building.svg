@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72.073 70.872">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #4398d1;
+      }
+
+      .cls-2 {
+        fill: #3f8fc4;
+      }
+
+      .cls-3 {
+        fill: #87ced9;
+      }
+
+      .cls-4 {
+        fill: #61acc9;
+      }
+
+      .cls-5 {
+        fill: #88b337;
+      }
+
+      .cls-6 {
+        fill: #79a125;
+      }
+
+      .cls-7 {
+        fill: #e0d2c1;
+      }
+    </style>
+  </defs>
+  <g id="office-building" transform="translate(0 -4.267)">
+    <rect id="Rectangle_23" data-name="Rectangle 23" class="cls-1" width="33.634" height="64.866" transform="translate(19.219 9.072)"/>
+    <path id="Path_47" data-name="Path 47" class="cls-2" d="M136.533,143.09v18.018h33.634v-55.39Z" transform="translate(-117.314 -87.171)"/>
+    <rect id="Rectangle_24" data-name="Rectangle 24" class="cls-1" width="24.024" height="4.805" transform="translate(24.024 4.267)"/>
+    <rect id="Rectangle_25" data-name="Rectangle 25" class="cls-2" width="24.024" height="2.402" transform="translate(24.024 6.669)"/>
+    <g id="Group_41" data-name="Group 41" transform="translate(24.024 15.078)">
+      <rect id="Rectangle_26" data-name="Rectangle 26" class="cls-3" width="4.805" height="4.805" transform="translate(0 0)"/>
+      <rect id="Rectangle_27" data-name="Rectangle 27" class="cls-3" width="4.805" height="4.805" transform="translate(9.61 0)"/>
+      <rect id="Rectangle_28" data-name="Rectangle 28" class="cls-3" width="4.805" height="4.805" transform="translate(19.219 0)"/>
+      <rect id="Rectangle_29" data-name="Rectangle 29" class="cls-3" width="4.805" height="4.805" transform="translate(0 9.61)"/>
+      <rect id="Rectangle_30" data-name="Rectangle 30" class="cls-3" width="4.805" height="4.805" transform="translate(9.61 9.61)"/>
+      <rect id="Rectangle_31" data-name="Rectangle 31" class="cls-3" width="4.805" height="4.805" transform="translate(19.219 9.61)"/>
+      <rect id="Rectangle_32" data-name="Rectangle 32" class="cls-3" width="4.805" height="4.805" transform="translate(0 19.219)"/>
+      <rect id="Rectangle_33" data-name="Rectangle 33" class="cls-3" width="4.805" height="4.805" transform="translate(9.61 19.219)"/>
+      <rect id="Rectangle_34" data-name="Rectangle 34" class="cls-3" width="4.805" height="4.805" transform="translate(19.219 19.219)"/>
+      <rect id="Rectangle_35" data-name="Rectangle 35" class="cls-3" width="4.805" height="4.805" transform="translate(0 28.829)"/>
+      <rect id="Rectangle_36" data-name="Rectangle 36" class="cls-3" width="4.805" height="4.805" transform="translate(9.61 28.829)"/>
+      <rect id="Rectangle_37" data-name="Rectangle 37" class="cls-3" width="4.805" height="4.805" transform="translate(19.219 28.829)"/>
+      <rect id="Rectangle_38" data-name="Rectangle 38" class="cls-3" width="4.805" height="4.805" transform="translate(0 38.439)"/>
+      <rect id="Rectangle_39" data-name="Rectangle 39" class="cls-3" width="4.805" height="4.805" transform="translate(9.61 38.439)"/>
+      <rect id="Rectangle_40" data-name="Rectangle 40" class="cls-3" width="4.805" height="4.805" transform="translate(19.219 38.439)"/>
+      <rect id="Rectangle_41" data-name="Rectangle 41" class="cls-3" width="14.415" height="9.61" transform="translate(4.805 49.25)"/>
+    </g>
+    <rect id="Rectangle_42" data-name="Rectangle 42" class="cls-4" width="2.402" height="9.61" transform="translate(34.835 64.328)"/>
+    <path id="Path_48" data-name="Path 48" class="cls-5" d="M19.1,326.272a4.845,4.845,0,0,0,.092-2.715,4.76,4.76,0,0,0-3.5-3.456A4.808,4.808,0,0,0,9.9,326.029a6.941,6.941,0,0,1-.565,5.349,6.006,6.006,0,1,0,10.5.177A6.757,6.757,0,0,1,19.1,326.272Z" transform="translate(-7.327 -271.255)"/>
+    <rect id="Rectangle_43" data-name="Rectangle 43" class="cls-6" width="2.402" height="21.622" transform="translate(6.006 53.517)"/>
+    <path id="Path_49" data-name="Path 49" class="cls-5" d="M428.7,326.272a4.845,4.845,0,0,0,.092-2.715,4.76,4.76,0,0,0-3.5-3.456,4.808,4.808,0,0,0-5.793,5.928,6.943,6.943,0,0,1-.565,5.354,6.006,6.006,0,1,0,10.5.177A6.759,6.759,0,0,1,428.7,326.272Z" transform="translate(-359.268 -271.255)"/>
+    <rect id="Rectangle_44" data-name="Rectangle 44" class="cls-6" width="2.402" height="21.622" transform="translate(63.665 53.517)"/>
+    <rect id="Rectangle_45" data-name="Rectangle 45" class="cls-7" width="72.073" height="2.402" transform="translate(0 72.737)"/>
+  </g>
+</svg>

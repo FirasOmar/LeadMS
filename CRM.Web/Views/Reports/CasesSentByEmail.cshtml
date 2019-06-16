@@ -1,0 +1,123 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.Reports.CasesSentByEmailViewModel>
+@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.Layout.CasesSentByEmail;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title </h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+                </div>
+            </header>
+
+            @using (Html.BeginForm())
+            {
+                @Html.Hidden("resetTo", 1)
+                <div class="form-group col-lg-3 float-right">
+                    @Html.TextBox("fromDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.FromDate })
+                </div>
+                <div class="form-group col-lg-3 float-right">
+                    @Html.TextBox("toDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.ToDate })
+                </div>
+                <div class="form-group col-lg-3 float-right">
+                    @Html.DropDownList("createdById", new SelectList(users, "Id", "FullName"), Resources.SystemCases.TxtCreatedBy, new { @class = "form-control General-Search-txt chosen-select" })
+                </div>
+                <div class="form-group col-lg-2 float-right">
+                    <input class="btn btn-success" type="submit" value="@Resources.Layout.BtnSearch" />
+                </div>
+              
+                <div class="clearfix"></div>
+                <hr />
+            }
+
+            <table class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th> @Resources.Reports.TxtCreatedOn</th>
+                        <th> @Resources.Reports.TxtCreatedBy </th>
+                        <th> @Resources.Reports.EmailDescription </th>
+                        <th> @Resources.Reports.SendTo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr id="TableData">
+                            <td>
+                                @item.CreatedOn.ToString().AsDateTime().ToString("dd/MM/yyyy")
+                            </td>
+                            <td>
+                                @item.CreatedByProfile.FullName
+                            </td>
+                            <td>
+                                @item.EmailDescription
+                            </td>
+                            <td>
+                                @{ 
+                                    var sentToList = item.SentTo.Split(',').ToList();
+                                }
+                                @foreach(var data in sentToList)
+                                {
+                                    <p>@data</p>
+                                }
+                            </td>
+                            <td>
+                                <a href="@item.FilePath" target="_blank" class="btn btn-default btnDetails disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                            </td>
+                        </tr> 
+                    }
+                </tbody>
+            </table>
+
+
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("CasesSentByEmail", new { page, ViewBag.fromDate, ViewBag.toDate }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+<script type="text/javascript">
+
+    $(".datepicker").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=CasesSentAsEmail", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+
+                    if (data.AllowedPermissonsList.includes("View")) {
+                        $(".btnDetails").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+</script>

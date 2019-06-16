@@ -1,0 +1,84 @@
+﻿@model CRM.Web.Models.RolePermissionsViewModel
+
+@if (Model != null)
+{
+    <form>
+        <div class="form-group col-lg-6">
+            <label for="NewRoleId">@Resources.RolePermissions.TxtRoleId</label>
+            <input class="form-control" type="text" disabled required value="@Model.Id" name="NewRoleId" id="NewRoleId" />
+        </div>
+        
+        <div class="form-group col-lg-6">
+            <label for="NewRoleName">@Resources.RolePermissions.TxtRoleName</label>
+            <input class="form-control" type="text" required value="@Model.RoleName" name="NewRoleName" id="NewRoleName" />
+        </div>
+        
+        <div class="form-group col-lg-6">
+            <label for="NewRoleFriendlyName">@Resources.RolePermissions.TxtRoleFriendlyName</label>
+            <input class="form-control" type="text" required value="@Model.RoleFriendlyName" name="NewRoleFriendlyName" id="NewRoleFriendlyName" />
+        </div>
+        
+        <div class="form-group col-lg-6">
+            <label for="NewRoleDescription">@Resources.RolePermissions.TxtRoleDescription</label>
+            <input class="form-control" type="text" required value="@Model.RoleDescription" name="NewRoleDescription" id="NewRoleDescription" />
+        </div>
+        
+    </form>
+    <div class="col-md-12">
+        <input type="hidden" id="PermissionsList" name="PermissionsList" />
+        @foreach (var permissionGroup in Model.PermissionGroups)
+        {
+        <div style="margin: 0;padding-bottom: 3px !important" class="form-group is-empty">
+            <span>
+                <strong><label id="@permissionGroup.PageName" style="color:black;font-size:15px;" class="control-label">@permissionGroup.PageName</label></strong>
+            </span>
+            <br />
+            <span class="material-input">
+                @foreach (var permissions in permissionGroup.PermissionsKey)
+                    {
+                <span style="margin-left: 20px; display: inline-block">
+                    @if (permissions.Value.IsSelected)
+                        {
+                        <input style="margin-left: 5px" checked type="checkbox" id="@permissions.Key" value="@permissions.Value.IsSelected" class="option control-label"><label for="@permissions.Key">@permissions.Value.PermissionKey</label>
+                        }
+                        else
+                        {
+                        <input style="margin-left: 5px" type="checkbox" id="@permissions.Key" value="@permissions.Value.IsSelected" class="option control-label"><label for="@permissions.Key">@permissions.Value.PermissionKey</label>
+                        }
+                </span>
+                }
+            </span>
+        </div>
+        }
+    </div>
+}
+<script>
+    var pagePermissions = [];
+    $(document).ready(function () {
+        $('.option').each(function () {
+            if ($(this).is(":checked")) {
+                var id = this.id;
+                pagePermissions.push(id);
+            }
+        });
+    });
+    $('.option').click(function () {
+        var id = this.id;
+        if ($(this).is(":checked")) {
+            if (!pagePermissions.includes(id)) {
+                pagePermissions.push(id);
+            }
+        } else {
+            if (pagePermissions.includes(id)) {
+                remove(pagePermissions, id);
+            }
+        }
+        $("#PermissionsList").val(pagePermissions);
+    });
+    function remove(array, element) {
+        var index = array.indexOf(element);
+        if (index !== -1) {
+            array.splice(index, 1);
+        }
+    }
+</script>

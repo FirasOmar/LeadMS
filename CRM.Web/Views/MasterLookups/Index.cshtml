@@ -1,0 +1,658 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.MasterLookupViewModel>
+@using CRM.Core.SystemEnums
+@{
+    ViewBag.Title = Resources.MasterLookup.TitlePage;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main id="MasterLookupMain">
+    <section class="section">
+        <div class="container-fluid">
+
+            <header class="section-header justify-content-between flex-wrap" id="MasterheaderIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.MasterLookup.TitlePage</h2>
+                </div>
+                <div class="header-form" id="divMasterAddNew_Search">
+                    <a id="btnCreateMaster" onclick="ShowCreateMasterForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.MasterLookup.TxtAddNewMasterLookup</a>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="MasterheaderEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.MasterLookup.TxtUpdateLookup</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.MasterLookup.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.MasterLookup.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="MasterheaderCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.MasterLookup.TxtAddNewMasterLookup</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.MasterLookup.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.MasterLookup.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+
+            <div id="CreateMaster" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.MasterLookup.TxtAddNewMasterLookup</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateMaster()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.MasterLookup.TxtName</label>
+                                <input class="form-control" type="text" required name="Name" id="Name" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.MasterLookup.TxtStatus</label>
+                                @Html.DropDownList("Status", null, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.MasterLookup.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnMasterCancel_Add">@Resources.MasterLookup.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="display: none" id="EditMaster">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.MasterLookup.TxtUpdateLookup</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveMaster()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.MasterLookup.TxtName</label>
+                                <input class="form-control" type="text" required name="NameEdit" id="NameEdit" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.MasterLookup.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.MasterLookup.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnMasterCancel_Edit" value="@Resources.MasterLookup.BtnCancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="tableMasters" class="c-table mb-4">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Name)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td data-title="@Html.DisplayNameFor(model => model.ElementAt(0).Name)">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+
+                                <a onclick="EditMaster(@item.Id)" class="btnEditMaster disabled" title="@Resources.MasterLookup.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                <a onclick="DeleteMaster(@item.Id)" class="btnDeleteMaster disabled" title="@Resources.MasterLookup.BtnEdit"><i class="fa fa-trash mr-2 text-danger text-b"></i></a>
+                                <a onclick="ShowDetailsLookup(@item.Id,'@item.Name')" class="btnDeleteMaster disabled" title="@Resources.MasterLookup.BtnViewDetailsLookup"><i class="fa fa-eye text-success"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<main id="detailsLookup" style="display:none">
+    <section class="section">
+        <div class="container-fluid">
+
+            <header class="section-header justify-content-between flex-wrap" id="DetailsheaderIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">
+                        @Resources.DetailsLookup.TxtDetailsLookup
+                        <span id="masterLookupName"></span>
+                        <a onclick="ExitFromLookupDetails()" title="الرجوع للتعريفات الرئيسية"><i class="fas fa-sign-out-alt"></i></a>
+                    </h2>
+
+
+                </div>
+                <div class="header-form" id="divDetailsAddNew_Search">
+
+                    <a id="btnCreateDetails" style="display: none" onclick="ShowCreateDetailsForm()" class="btn btn-primary ml-2" href="#">@Resources.DetailsLookup.TxtAddNewDetailsLookup</a>
+                    <div class="divSearch">
+                        @Html.Hidden("resetTo", 1)
+                        @Html.TextBox("searchTextDetails", null, new { placeholder = Resources.Layout.TxtSearchFor, @class= "txtSearch" })
+                        <button class="btn btnSearch  btn-secondary" type="submit" onclick="SearchDetails()"><span class="icon-search"></span></button>
+
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="DetailsheaderEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.DetailsLookup.TxtUpdateLookup</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEditDetails" type="button" class="btn btn-secondary">@Resources.DetailsLookup.HebrewContent</button>
+                            <button id="btnArabicEditDetails" type="button" class="btn btn-primary">@Resources.DetailsLookup.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="DetailsheaderCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.DetailsLookup.TxtAddNewDetailsLookup</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewDetails" type="button" class="btn btn-secondary">@Resources.DetailsLookup.HebrewContent</button>
+                            <button id="btnArabicDetails" type="button" class="btn btn-primary">@Resources.DetailsLookup.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageIdDetails" name="LanguageIdDetails" value="1" />
+            <input type="hidden" id="MasterId" name="MasterId" />
+
+            <div id="CreateDetails" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.DetailsLookup.TxtAddNewDetailsLookup</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateDetails()">
+                        <div class="row">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.DetailsLookup.TxtName</label>
+                                <input class="form-control" type="text" required name="NameDetails" id="NameDetails" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.DetailsLookup.TxtStatus</label>
+                                @Html.DropDownList("StatusDetails", null, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreateDetailLookup">@Resources.DetailsLookup.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancelDetails_Add">@Resources.DetailsLookup.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row" style="display: none" id="EditDetails">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.DetailsLookup.TxtUpdateLookup</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveDetails()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEditDetails" name="IdEditDetails" />
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.DetailsLookup.TxtName</label>
+                                <input class="form-control" type="text" required name="NameEditDetails" id="NameEditDetails" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label class="control-label">@Resources.DetailsLookup.TxtStatus</label>
+                                @Html.DropDownList("StatusEditDetails", null, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEditDetails">@Resources.DetailsLookup.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancelDetails_Edit" value="@Resources.DetailsLookup.BtnCancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <table id="tableDetails" style="display: none" class="c-table mb-4">
+                <thead>
+                    <tr>
+                        <th>
+                            @Resources.DetailsLookup.TxtName
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="DetailsLookupstbody"></tbody>
+            </table>
+
+        </div>
+    </section>
+</main>
+
+
+
+
+<script type="text/javascript">
+    $("#btnHebrew").click(function () {
+        $("#LanguageId").val(2);
+
+    });
+    $("#btnArabic").click(function () {
+        $("#LanguageId").val(1);
+
+    });
+
+    $("#btnHebrewEdit").click(function () {
+        $("#LanguageId").val(2);
+        EditMaster($("#IdEdit").val());
+    });
+    $("#btnArabicEdit").click(function () {
+        $("#LanguageId").val(1);
+        EditMaster($("#IdEdit").val());
+    });
+    $("#EditMaster").hide();
+
+    function CreateMaster() {
+        var obj = {};
+        obj.Name = $("#Name").val();
+        obj.LanguageId = $("#LanguageId").val();
+        obj.Status = $("#Status").val();
+
+        $.post("/MasterLookups/AddMasterLookup", { masterLookupViewModel: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error while adding new master lookup");
+                }
+            }
+            ).fail(function (data) {
+                alert("Error while adding new master lookup");
+            })
+    }
+    function SaveMaster() {
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Name = $("#NameEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.LanguageId = $("#LanguageId").val();
+
+
+        $.post("/MasterLookups/EditMasterLookup", { masterLookupViewModel: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+
+                }
+                else {
+                    alert("Error while update master lookpup");
+                }
+            }).fail(function (data) {
+                alert("Error while update master lookpup");
+            })
+    }
+
+    function DeleteMaster(id) {
+        var confirmed = confirm("@Resources.MasterLookup.TxtDeleteConfirmationMessage");
+        if (confirmed == true) {
+            $.post("/MasterLookups/DeleteMasterLookup", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Erroe while delete master lookup");
+                }
+            })
+        }
+    }
+
+    function EditMaster(id) {
+        var languageId = $("#LanguageId").val();
+
+        $.get("/MasterLookups/EditMasterLookup", { id: id, languageId: languageId }, function (data) {
+            if (data) {
+                $("#CreateMaster").hide();
+                $("#EditMaster").show();
+
+
+                $("#tableMasters").hide();
+                $("#divMasterAddNew_Search").hide();
+                $("#MasterheaderCreate").hide();
+                $("#MasterheaderEdit").show();
+                $("#MasterheaderIndex").hide();
+
+
+                $("#NameEdit").val(data.Name);
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#IdEdit").val(id);
+            }
+        });
+        $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+    }
+    function ShowCreateMasterForm() {
+        $("#CreateMaster").show();
+
+        $("#divMasterAddNew_Search").hide();
+        $("#tableMasters").hide();
+
+        $("#MasterheaderCreate").show();
+        $("#MasterheaderEdit").hide();
+        $("#MasterheaderIndex").hide();
+
+    }
+
+    $("#btnMasterCancel_Edit").click(function () {
+        $("#EditMaster").hide();
+        $("#CreateMaster").hide();
+
+        $("#tableMasters").show();
+        $("#divMasterAddNew_Search").show();
+        $("#MasterheaderCreate").hide();
+        $("#MasterheaderEdit").hide();
+        $("#MasterheaderIndex").show();
+    });
+    $("#btnMasterCancel_Add").click(function () {
+        $("#EditMaster").hide();
+        $("#CreateMaster").hide();
+
+        $("#tableMasters").show();
+        $("#divMasterAddNew_Search").show();
+        $("#MasterheaderCreate").hide();
+        $("#MasterheaderEdit").hide();
+        $("#MasterheaderIndex").show();
+    });
+
+
+    @{
+        int pageId = (int) GeneralEnums.PageEnum.Lookup;
+    }
+
+   
+
+    function ShowDetailsLookup(id, name) {
+
+        $('#DetailsLookupstbody').empty();
+        $.get("/DetailsLookups/Index", { MasterId: id, page: null, searchTextDetails: "" },
+            function (data) {
+                $("#MasterId").val(id);
+
+                $("#masterLookupName").html(name);
+
+                $.each(data,
+                    function(index, item) {
+
+                        var eachrow = "<tr>" +
+                            "<td>" +
+                            item.Name +
+                            "</td>" +
+                            "<td>" +
+                            "<a onclick='EditDetailLookup(" +
+                            item.Id +
+                            ")'  title='@Resources.DetailsLookup.BtnEdit' class='btnEditDetailLookup'><i class='fa fa-edit text-dark'></i></a><a onclick='DeleteDetailLookup(" +
+                            item.Id +
+                            ")'  title='@Resources.DetailsLookup.BtnDelete' class='btnDeleteDetailLookup'><i class='fa fa-trash mr-2 text-danger text-b'></i></a>" +
+                            "</td>" +
+                            "</tr>";
+                        $('#DetailsLookupstbody').append(eachrow);
+                    });
+
+                $("#tableDetails").show();
+                $("#btnCreateDetails").show();
+                $("#MasterLookupMain").hide();
+                $("#detailsLookup").show();
+            });
+    }
+
+
+</script>
+
+<script type="text/javascript">
+
+    $("#btnHebrewDetails").click(function () {
+        $("#LanguageIdDetails").val(2);
+    });
+    $("#btnArabicDetails").click(function () {
+        $("#LanguageIdDetails").val(1);
+
+    });
+
+    $("#btnHebrewEditDetails").click(function () {
+        $("#LanguageIdDetails").val(2);
+        EditDetailLookup($("#IdEditDetails").val());
+    });
+    $("#btnArabicEditDetails").click(function () {
+        $("#LanguageIdDetails").val(1);
+        EditDetailLookup($("#IdEditDetails").val());
+    });
+    $("#EditDetails").hide();
+
+    function CreateDetails() {
+        var obj = {};
+        obj.Name = $("#NameDetails").val();
+        obj.LanguageId = $("#LanguageIdDetails").val();
+        obj.Status = $("#StatusDetails").val();
+        obj.masterId = $("#MasterId").val();
+        $.post("/DetailsLookups/AddDetailsLookup", { DetailsLookupViewModel: obj },
+            function (data) {
+                if (data != null) {
+                    @*var eachrow = "<tr>"
+                            + "<td>" + data.Name + "</td>"
+                            + "<td>" + "<button style='display:none' type='button' onclick='EditDetailLookup(" + data.Id + ")' rel='tooltip' title='@Resources.DetailsLookup.BtnEdit' class='btn btn-primary btn-simple btn-xs btnEditDetailLookup'><i class='material-icons'>edit</i></button><button style='display:none' type='button' onclick='DeleteDetailLookup(" + data.Id + ")' rel='tooltip' title='@Resources.DetailsLookup.BtnDelete' class='btn btn-primary btn-simple btn-xs btnDeleteDetailLookup'><i class='material-icons'>close</i></button>"
+                         + "</td>"
+                            + "</tr>";
+                    $('#DetailsLookupstbody').append(eachrow);*@
+                    SearchDetails();
+                    $("#CreateDetails").hide();
+                    $("#NameDetails").val("");
+                } else {
+                    alert("Error while adding new master lookup");
+                }
+            }
+            ).fail(function (data) {
+                alert("Error while adding new master lookup");
+            })
+
+    }
+    function SaveDetails() {
+        var obj = {};
+        obj.Id = $("#IdEditDetails").val();
+        obj.Name = $("#NameEditDetails").val();
+        obj.Status = $("#StatusEditDetails").val();
+        obj.LanguageId = $("#LanguageIdDetails").val();
+
+
+        $.post("/DetailsLookups/EditDetailsLookup", { DetailsLookupViewModel: obj },
+            function (data) {
+                if (data != null) {
+                    SearchDetails();
+                    $("#EditDetails").hide();
+                }
+                else {
+                    alert("Error while update details lookpup");
+                }
+            }).fail(function (data) {
+
+                alert("Error while update details lookpup");
+            })
+    }
+
+    function DeleteDetailLookup(id) {
+        var confirmed = confirm("@Resources.DetailsLookup.TxtDeleteConfirmationMessage");
+        if (confirmed == true) {
+            $.post("/DetailsLookups/DeleteDetailsLookup", { id: id }, function (data) {
+                if (data != null) {
+                    SearchDetails();
+                }
+                else {
+                    alert("Erroe while delete details lookup");
+                }
+            })
+        }
+    }
+
+    function EditDetailLookup(id) {
+        var languageId = $("#LanguageIdDetails").val();
+
+        $.get("/DetailsLookups/EditDetailsLookup", { id: id, languageId: languageId }, function (data) {
+            if (data) {
+                $("#CreateDetails").hide();
+                $("#EditDetails").show();
+
+                $("#tableDetails").hide();
+                $("#divDetailsAddNew_Search").hide();
+                $("#DetailsheaderCreate").hide();
+                $("#DetailsheaderEdit").show();
+                $("#DetailsheaderIndex").hide();
+
+
+                $("#NameEditDetails").val(data.Name);
+                $("StatusEditDetails").val(data.Status);
+                $('#StatusEditDetails').trigger("chosen:updated");
+                $("#IdEditDetails").val(data.Id);
+            }
+        });
+        $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+    }
+    function ShowCreateDetailsForm() {
+        $("#CreateDetails").show();
+
+        $("#divDetailsAddNew_Search").hide();
+        $("#tableDetails").hide();
+
+        $("#DetailsheaderCreate").show();
+        $("#DetailsheaderEdit").hide();
+        $("#DetailsheaderIndex").hide();
+
+    }
+
+
+
+    $("#btnCancelDetails_Edit").click(function () {
+        $("#EditDetails").hide();
+        $("#CreateDetails").hide();
+
+        $("#tableDetails").show();
+        $("#divDetailsAddNew_Search").show();
+        $("#DetailsheaderCreate").hide();
+        $("#DetailsheaderEdit").hide();
+        $("#DetailsheaderIndex").show();
+    });
+    $("#btnCancelDetails_Add").click(function () {
+        $("#EditDetails").hide();
+        $("#CreateDetails").hide();
+
+        $("#tableDetails").show();
+        $("#divDetailsAddNew_Search").show();
+        $("#DetailsheaderCreate").hide();
+        $("#DetailsheaderEdit").hide();
+        $("#DetailsheaderIndex").show();
+    });
+
+
+    function SearchDetails() {
+
+        $('#DetailsLookupstbody').empty();
+        var masterId = $("#MasterId").val();
+        var searchDetails = $("#searchTextDetails").val();
+        $.get("/DetailsLookups/Index", { MasterId: masterId, page: null, searchTextDetails: searchDetails },
+            function (data) {
+
+                //$("#MasterId").val(data.Id);
+
+                //$("#masterLookupName").html(data.Name);
+
+                $.each(data, function (index, item) {
+
+                    var eachrow = "<tr>"
+                                + "<td>" + item.Name + "</td>"
+                                + "<td>" + "<a style='display:none'  onclick='EditDetailLookup(" + item.Id + ")' class='btnEditDetailLookup' title='@Resources.DetailsLookup.BtnEdit' ><i class='fa fa-edit text-dark'></i></a><a style='display:none'  onclick='DeleteDetailLookup(" + item.Id + ")' class='btnDeleteDetailLookup' title='@Resources.DetailsLookup.BtnDelete' ><i class='fa fa-trash mr-2 text-danger text-b'></i></a>"
+                             + "</td>"
+                                + "</tr>";
+                    $('#DetailsLookupstbody').append(eachrow);
+                })
+                $("#detailsLookup").show();
+                $("#tableDetails").show();
+                $("#btnCreateDetails").show();
+            });
+
+
+
+    }
+
+
+    function ExitFromLookupDetails() {
+        $("#MasterLookupMain").show();
+        $("#detailsLookup").hide();
+
+    }
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=MasterLookups", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateMaster").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditMaster").removeClass("disabled");
+                        $(".btnEditDetailLookup").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteMaster").removeClass("disabled");
+                        $(".btnEditDeleteLookup").removeClass("disabled");
+                    }
+
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+</script>

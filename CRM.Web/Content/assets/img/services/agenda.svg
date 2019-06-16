@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 58">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ead8bb;
+      }
+
+      .cls-2 {
+        fill: #6b4842;
+      }
+
+      .cls-3 {
+        fill: #513531;
+      }
+
+      .cls-4 {
+        fill: #d3bea1;
+      }
+
+      .cls-5 {
+        fill: #dd352e;
+      }
+
+      .cls-6 {
+        fill: #b02721;
+      }
+    </style>
+  </defs>
+  <g id="agenda" transform="translate(-7.5)">
+    <path id="Path_65" data-name="Path 65" class="cls-1" d="M12,0A4.514,4.514,0,0,0,7.53,4L7.5,5a4.012,4.012,0,0,0,4,4h6l2-4h12L29.539,8.921A.055.055,0,0,0,29.588,9H50.5V0Z"/>
+    <path id="Path_66" data-name="Path 66" class="cls-2" d="M29.5,9V35.2a.5.5,0,0,1-.925.256L23.5,27l-5.075,8.458A.5.5,0,0,1,17.5,35.2V9h-6a4.012,4.012,0,0,1-4-4V53.958A4.042,4.042,0,0,0,11.542,58H50.5V9Z"/>
+    <path id="Path_67" data-name="Path 67" class="cls-3" d="M12.5,9h-1a4.012,4.012,0,0,1-4-4V53.958A4.042,4.042,0,0,0,11.542,58H12.5Z"/>
+    <path id="Path_68" data-name="Path 68" class="cls-4" d="M50.5,2h-9a1,1,0,0,0,0,2h9Z"/>
+    <path id="Path_69" data-name="Path 69" class="cls-4" d="M50.5,5h-8a1,1,0,0,0,0,2h8Z"/>
+    <path id="Path_70" data-name="Path 70" class="cls-5" d="M19.5,5l-2,4V35.2a.5.5,0,0,0,.925.256L23.5,27l5.075,8.458A.5.5,0,0,0,29.5,35.2V9l2-4Z"/>
+    <path id="Path_71" data-name="Path 71" class="cls-6" d="M19.5,5l-2,4h12l2-4Z"/>
+  </g>
+</svg>

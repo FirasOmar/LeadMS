@@ -1,0 +1,1074 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@model PagedList.IPagedList<CRM.Core.Models.ProfileViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.UserProfile.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+    var activeStatusValue = (int)GeneralEnums.StatusEnum.Active;
+    var provinces = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.Province,
+Request.Cookies["_culture"]);
+    var cites = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.City,
+        Request.Cookies["_culture"]);
+    var regions = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.Region,
+        Request.Cookies["_culture"]);
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.UserProfile.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    <a id="btnCreateProfile"  onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.UserProfile.TxtAddNewProfile</a>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.UserProfile.TxtUpdateProfile</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.UserProfile.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.UserProfile.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.UserProfile.TxtAddNewProfile</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.UserProfile.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.UserProfile.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+
+            <div id="CreateProfile" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>
+                        @Resources.UserProfile.TxtAddNewProfile
+                    </h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateProfile(); return false;">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label for="FullName">@Resources.UserProfile.TxtFullName</label>
+                                <input class="form-control" type="text" required name="FullName" id="FullName" onInput="PreventEnterChartecherName()" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="IdNumber">@Resources.UserProfile.TxtIdNumber</label>
+                                <input class="form-control" type="number" required name="IdNumber" id="IdNumber" onkeypress="return isNumberKey(event)" onInput="checkLengthIdNumber()" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="PhoneNumber">@Resources.UserProfile.TxtPhoneNumber</label>
+                                <input class="form-control" type="text" name="PhoneNumber" id="PhoneNumber" onkeypress="return isNumberKey(event)" onInput="checkLengthPhone()" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="Mobile">@Resources.UserProfile.TxtMobile</label>
+                                <input class="form-control" type="text" required name="Mobile" id="Mobile" onkeypress="return isNumberKey(event)" onInput="checkLengthMobile()" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="BirthDay">@Resources.UserProfile.TxtBirthDay</label>
+                                <input class="form-control" type="Date" name="BirthDay" id="BirthDay" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="GenderLookupId">@Resources.UserProfile.TxtGenderLookupId</label>
+                                @Html.DropDownList("GenderLookupId", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="DepartmentsList">@Resources.UserProfile.Department</label>
+                                @Html.DropDownList("DepartmentsList", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="ManagerId">@Resources.UserProfile.ManagerId</label>
+                                @Html.DropDownList("ManagerId", null, string.Empty, new { @class = "form-control chosen-select"})
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="Address">@Resources.UserProfile.TxtAddress</label>
+                                <input class="form-control" type="text" name="Address" id="Address" onInput="PreventEnterSpecialAddress()" />
+                            </div>
+
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="PrefferdLanguage">@Resources.UserProfile.PrefferdLanguage</label>
+                                @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="MartialStatusLookupId">@Resources.UserProfile.TxtMartialStatusLookupId</label>
+                                @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="ProvinceId">@Resources.Register.TxtProvinceId</label>
+                                @Html.DropDownList("ProvinceId", new SelectList(provinces, "Id", "Name"), string.Empty, new { @class = "form-control chosen-select"})
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="CityId">@Resources.Register.TxtCityId</label>
+                                @Html.DropDownList("CityId", new SelectList(cites, "Id", "Name"), string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.UserProfile.TxtStatus</label>
+                                @Html.DropDownList("Status", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+
+
+                            <div class="form-group col-lg-6">
+                                <label for="Email">@Resources.UserProfile.TxtEmail</label>
+                                <input class="form-control" type="email" name="Email" id="Email" required />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="Username">@Resources.UserProfile.TxtUsername</label>
+                                <input class="form-control" name="Username" id="Username" required />
+                            </div>
+
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="password">@Resources.UserProfile.TxtPassword</label>
+                                <input class="form-control" type="password" name="Password" id="Password" required />
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.UserProfile.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancel_Add">@Resources.UserProfile.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="display: none" id="EditProfile">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.UserProfile.TxtUpdateProfile</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveProfile()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="FullNameEdit">@Resources.UserProfile.TxtFullName</label>
+                                <input class="form-control" type="text" required name="FullNameEdit" id="FullNameEdit" onInput="PreventEnterChartecherNameEdit()" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="IdNumberEdit">@Resources.UserProfile.TxtIdNumber</label>
+                                <input class="form-control" type="number" name="IdNumberEdit" id="IdNumberEdit" onkeypress="return isNumberKey(event)" onInput="checkLengthIdNumberEdit()" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="PhoneNumberEdit">@Resources.UserProfile.TxtPhoneNumber</label>
+                                <input class="form-control" type="text" name="PhoneNumberEdit" id="PhoneNumberEdit" onkeypress="return isNumberKey(event)" onInput="checkLengthPhoneEdit()" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="MobileEdit">@Resources.UserProfile.TxtMobile</label>
+                                <input class="form-control" type="text" required name="MobileEdit" id="MobileEdit" onkeypress="return isNumberKey(event)" onInput="checkLengthMobileEdit()" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="BirthDayEdit">@Resources.UserProfile.TxtBirthDay</label>
+                                <input class="form-control" type="Date" name="BirthDayEdit" id="BirthDayEdit" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="EmailEdit">@Resources.UserProfile.TxtEmail</label>
+                                <input class="form-control" type="text" required name="EmailEdit" id="EmailEdit" onInput="PreventEnterChartecherNameEdit()" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="GenderLookupIdEdit">@Resources.UserProfile.TxtGenderLookupId</label>
+                                @Html.DropDownList("GenderLookupIdEdit", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="DepartmentsListEdit">@Resources.UserProfile.Department</label>
+                                @Html.DropDownList("DepartmentsListEdit", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="ManagerIdEdit">@Resources.UserProfile.ManagerId</label>
+                                @Html.DropDownList("ManagerIdEdit", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="PrefferdLanguageEdit">@Resources.UserProfile.PrefferdLanguage</label>
+                                @Html.DropDownList("PrefferdLanguageEdit", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="MartialStatusLookupIdEdit">@Resources.UserProfile.TxtMartialStatusLookupId</label>
+                                @Html.DropDownList("MartialStatusLookupIdEdit", null, string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="ProvinceIdEdit">@Resources.Register.TxtProvinceId</label>
+                                @Html.DropDownList("ProvinceIdEdit", new SelectList(provinces, "Id", "Name"), string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="CityIdEdit">@Resources.Register.TxtCityId</label>
+                                @Html.DropDownList("CityIdEdit", new SelectList(cites, "Id", "Name"), string.Empty, new { @class = "form-control chosen-select" })
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="AddressEdit">@Resources.UserProfile.TxtAddress</label>
+                                <input class="form-control" type="text" name="AddressEdit" id="AddressEdit" onInput="PreventEnterSpecialAddressEdit()" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="StatusEdit">@Resources.UserProfile.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+
+                            <div class="form-group col-lg-6" id="StatusEditDescDiv" style="display:none">
+                                <label for="StatusEditDescription">@Resources.UserProfile.TxtStatusDesc</label>
+                                @Html.TextArea("StatusEditDescription", string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            
+                            @{
+                                var weekDays = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.WeekDays, Request.Cookies["_culture"]);
+                            }
+                            <div class="col-md-12">
+                                <h3>العطل الاسبوعية</h3>
+                                @foreach (var item in weekDays)
+                                {
+                                    var divId = "WeekDay_" + item.Id;
+                                    <div class="userprofile-weekbox">
+                                        @Html.CheckBox(divId, false, new { @class = "weekday-chkbx" })
+                                        <label for="@divId" class="weekday-chkbx-lbl">
+                                            @Html.Raw(item.Name)
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.UserProfile.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.UserProfile.BtnCancel" />
+                            </div>
+
+
+                           
+                            
+                            
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label for="RoleList">@Resources.UserProfile.TextChooseRole</label>
+                            @Html.DropDownList("RoleList", null, new { @class = "form-control chosen-select", required = "required" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            <label>
+                                @Resources.UserProfile.TxtUserRoles
+                            </label>
+                            <div id="userRoles"></div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <input type="button" class="btn btn-primary" id="btnAddRole" value="@Resources.UserProfile.BtnAddRole" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <input type="hidden" id="HolidayIdEdit" name="IdEdit" />
+                            <form id="AddHolidayForm" method="post" onsubmit="AddHoliday()">
+                                <div class="col-md-6  pull-right">
+                                    <div class="form-group is-empty">
+                                        <label class="control-label">Holiday Date</label>
+                                        <input class="form-control" type="date" required name="holidaydate" id="holidaydate" />
+                                        <span class="material-input"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6  pull-right">
+                                    <div class="form-group is-empty">
+                                        <label class="control-label">Holiday Description</label>
+                                        <input class="form-control" type="text" required name="holidaydesc" id="holidaydesc" />
+                                        <span class="material-input"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pull-right">
+                                    <div class="form-group is-empty">
+                                        <input type="submit" value="@Resources.UserProfile.BtnAdd" id="btnAddHoliday" class="btn btn-primary savebtn" />
+                                    </div>
+                                </div>
+                            </form>
+
+                            <form id="EditHolidayForm" style="display: none" method="post" onsubmit="SaveHoliday()">
+                                <div class="col-md-6  pull-right">
+                                    <div class="form-group is-empty">
+                                        <label class="control-label">Holiday Date</label>
+                                        <input class="form-control" type="date" required name="holidaydateedit" id="holidaydateedit" />
+                                        <span class="materholidays_tableial-input"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6  pull-right">
+                                    <div class="form-group is-empty">
+                                        <label class="control-label">Holiday Description</label>
+                                        <input class="form-control" type="text" required name="holidaydescedit" id="holidaydescedit" />
+                                        <span class="material-input"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pull-right">
+                                    <div class="form-group is-empty">
+                                        <input type="submit" value="@Resources.UserProfile.BtnSave" id="btnSaveHoliday" class="btn btn-primary savebtn" />
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="holidays_table"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table id="tableProfiles" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).FullName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Department)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).ManagerId)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DepartmentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ManagerName)
+                            </td>
+                            <td>
+                                <a href="#" onclick="EditProfile(@item.Id)" class="btnEditProfile disabled" title="@Resources.UserProfile.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                @*<a href="#" onclick="Delete(@item.Id)" class="btnDeleteProfile disabled" title="@Resources.UserProfile.BtnDelete"><i class="fa fa-trash text-danger"></i></a>*@
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+    var permission = {};
+    var activeStatusValue = "@((int)GeneralEnums.StatusEnum.Active)";
+
+    $("#btnHebrew").click(function () {
+        $("#LanguageId").val(2);
+        EditProfile($("#IdEdit").val());
+    });
+    $("#btnArabic").click(function () {
+        $("#LanguageId").val(1);
+        EditProfile($("#IdEdit").val());
+    });
+
+    $("#btnHebrewEdit").click(function () {
+        $("#LanguageId").val(2);
+        EditProfile($("#IdEdit").val());
+    });
+    $("#btnArabicEdit").click(function () {
+        $("#LanguageId").val(1);
+        EditProfile($("#IdEdit").val());
+    });
+    $("#EditProfile").hide();
+
+    $("#StatusEdit").on("change", function () {
+        var value = this.value || 0;
+
+        if (value != "@activeStatusValue" && value != 0) {
+            $("#StatusEditDescDiv").show();
+        }
+        else {
+            $("#StatusEditDescDiv").hide();
+        }
+    });
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateProfile").show();
+        $("#btnCreateProfile").hide();
+
+        $("#divAddNew_Search").hide();
+        $("#divPageing").hide();
+        $("#tableProfiles").hide();
+
+        $("#headerCreate").show();
+        $("#headerEdit").hide();
+        $("#headerIndex").hide();
+    }
+    function CreateProfile() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.FullName = $("#FullName").val();
+        obj.Address = $("#Address").val();
+        obj.IdNumber = $("#IdNumber").val();
+        obj.PhoneNumber = $("#PhoneNumber").val();
+        obj.GenderLookupId = $("#GenderLookupId").val();
+        obj.ProvinceId = $("#ProvinceId").val();
+        obj.CityId = $("#CityId").val();
+        obj.RegionId = $("#RegionId").val();
+        obj.MartialStatusLookupId = $("#MartialStatusLookupId").val();
+        obj.Department = $("#DepartmentsList").val();
+        obj.ManagerId = $("#ManagerId").val();
+        obj.PrefferdLanguage = $("#PrefferdLanguage").val();
+        obj.LanguageId = $("#LanguageId").val();
+        obj.Email = $("#Email").val();
+        obj.Username = $("#Username").val();
+        obj.BirthDay = $("#BirthDay").val();
+        obj.Mobile = $("#Mobile").val();
+        obj.Status = $("#Status").val();
+        obj.Password = $("#Password").val();
+        $.post("/UserProfile/AddProfile",
+            { profile: obj },
+            function (data) {
+                if (data != null) {
+
+                    if (data.Id == 0) {
+                        alert(data.Msg);
+                    }
+                    else {
+                        location.reload();
+                    }
+
+                } else {
+                    alert("Error");
+                }
+            }).fail(function (data) {
+                alert("Error while adding new user");
+            });
+    }
+
+    function AddHoliday() {
+        var obj = {};
+        obj.Description = $("#holidaydesc").val();
+        obj.UserProfileId = $("#IdEdit").val();
+        obj.HolidayDate = $("#holidaydate").val();
+        $.post("/UserProfile/AddHoliday",
+            { holiday: obj },
+            function (data) {
+                if (data != null) {
+                    if (data.UserHolidays) {
+                        var content = "<table class='table'>";
+                        content = content + "<tr> <th> Date </th> <th> Description </th><th></th></tr>";
+                        data.UserHolidays.forEach(function (element) {
+                            if (element.HolidayDate) {
+                                var date1 = new Date(parseInt(element.HolidayDate.substr(6)));
+                                content += '<tr><td>' +
+                                    date1.toLocaleDateString() +
+                                    '</td> <td>' +
+                                    element.Description +
+                                    '</td>';
+
+                                content += "<td>" +
+                                    "<a href='#' onclick='EditHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnEdit''><i class='fa fa-edit text-dark'></i></a>" +
+                                    "<a href='#' onclick='DeleteHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnDelete''><i class='fa fa-trash text-danger'></i></a>" +
+                                    "</td>";
+                                content += '</tr>';
+                            }
+
+                        });
+
+                        content += "</table>";
+                        $('#holidays_table').html("");
+                        $('#holidays_table').append(content);
+                    }
+                } else {
+                    alert("Error");
+                }
+            }).fail(function (data) {
+                alert("Error while adding new user holiday");
+            });
+    }
+
+    function EditHoliday(id) {
+        $.get("/UserProfile/EditHoliday", { id: id }, function (data) {
+            if (data != null) {
+                $("#AddHolidayForm").hide();
+                $("#EditHolidayForm").show();
+
+                $("#holidaydescedit").val(data.Description);
+                if (data.HolidayDate) {
+                    var date = new Date(parseInt(data.HolidayDate.substr(6)));
+                    document.getElementById("holidaydateedit").valueAsDate = date;
+                }
+
+                $("#HolidayIdEdit").val(id);
+            }
+        });
+    }
+
+
+    function SaveHoliday() {
+        var obj = {};
+        obj.Id = $("#HolidayIdEdit").val();
+        obj.Description = $("#holidaydescedit").val();
+        obj.HolidayDate = $("#holidaydateedit").val();
+        $.post("/UserProfile/EditHoliday",
+            { item: obj },
+            function (data) {
+                if (data != null) {
+                    if (data.UserHolidays) {
+                        var content = "<table class='table'>";
+                        content = content + "<tr> <th> Date </th> <th> Description </th><th></th></tr>";
+                        data.UserHolidays.forEach(function (element) {
+                            if (element.HolidayDate) {
+                                var date1 = new Date(parseInt(element.HolidayDate.substr(6)));
+                                content += '<tr><td>' +
+                                    date1.toLocaleDateString() +
+                                    '</td> <td>' +
+                                    element.Description +
+                                    '</td>';
+
+                                content += "<td>" +
+                                    "<a href='#' onclick='EditHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnEdit''><i class='fa fa-edit text-dark'></i></a>" +
+                                    "<a href='#' onclick='DeleteHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnDelete''><i class='fa fa-trash text-danger'></i></a>" +
+                                    "</td>";
+                                content += '</tr>';
+                            }
+
+                        });
+                        content += "</table>";
+                        $('#holidays_table').html("");
+                        $('#holidays_table').append(content);
+                    }
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function DeleteHoliday(id) {
+        var confirmed = confirm("@Resources.UserProfile.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/UserProfile/DeleteHoliDay", { id: id }, function (data) {
+                if (data != null) {
+                    if (data.UserHolidays) {
+                        var content = "<table class='table'>";
+                        content = content + "<tr> <th> Date </th> <th> Description </th><th></th></tr>";
+                        data.UserHolidays.forEach(function (element) {
+                            if (element.HolidayDate) {
+                                var date1 = new Date(parseInt(element.HolidayDate.substr(6)));
+                                content += '<tr><td>' +
+                                    date1.toLocaleDateString() +
+                                    '</td> <td>' +
+                                    element.Description +
+                                    '</td>';
+
+                                content += "<td>" +
+                                    "<a href='#' onclick='EditHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnEdit''><i class='fa fa-edit text-dark'></i></a>" +
+                                    "<a href='#' onclick='DeleteHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnDelete''><i class='fa fa-trash text-danger'></i></a>" +
+                                    "</td>";
+                                content += '</tr>';
+                            }
+
+                        });
+                        content += "</table>";
+                        $('#holidays_table').html("");
+                        $('#holidays_table').append(content);
+                    }
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+    function EditProfile(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var days = ['WeekDay_20', 'WeekDay_21', 'WeekDay_22', 'WeekDay_23', 'WeekDay_24', 'WeekDay_25', 'WeekDay_26'];
+        var languageId = $("#LanguageId").val();
+        $.get("/UserProfile/EditProfile", { id: id, languageId: languageId }, function (data) {
+            if (data != null) {
+                $("#CreateProfile").hide();
+                $("#EditProfile").show();
+
+                $("#tableProfiles").hide();
+                $("#divPageing").hide();
+                $("#divAddNew_Search").hide();
+                $("#headerCreate").hide();
+                $("#headerEdit").show();
+                $("#headerIndex").hide();
+
+                $("#FullNameEdit").val(data.FullName);
+                $("#EmailEdit").val(data.Email);
+                $("#StatusEdit").val(data.Status);
+                if (typeof data.Status != typeof undefined && data.Status != null && data.Status != "@activeStatusValue" && data.Status != "") {
+                    $("#StatusEditDescription").val(data.StatusEditDescription);
+                    $("#StatusEditDescDiv").show();
+                }
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#AddressEdit").val(data.Address);
+                $("#IdNumberEdit").val(data.IdNumber);
+                if (data.BirthDay) {
+                    var date = new Date(parseInt(data.BirthDay.substr(6)));
+                    document.getElementById("BirthDayEdit").valueAsDate = date;
+                }
+
+                $("#MobileEdit").val(data.Mobile);
+                $("#PhoneNumberEdit").val(data.PhoneNumber);
+                $("#GenderLookupIdEdit").val(data.GenderLookupId);
+                $('#GenderLookupIdEdit').trigger("chosen:updated");
+                $("#PrefferdLanguageEdit").val(data.PrefferdLanguage);
+                $('#PrefferdLanguageEdit').trigger("chosen:updated");
+                $("#DepartmentsListEdit").val(data.Department);
+                $('#DepartmentsListEdit').trigger("chosen:updated");
+
+                $("#ManagerIdEdit").val(data.ManagerId);
+                $('#ManagerIdtEdit').trigger("chosen:updated");
+                $("#ProvinceIdEdit").val(data.ProvinceId);
+                $('#ProvinceIdEdit').trigger("chosen:updated");
+                $("#CityIdEdit").val(data.CityId);
+                $('#CityIdEdit').trigger("chosen:updated");
+                $("#RegionIdEdit").val(data.RegionId);
+                $('#RegionIdEdit').trigger("chosen:updated");
+                $("#MartialStatusLookupIdEdit").val(data.MartialStatusLookupId);
+                $('#MartialStatusLookupIdEdit').trigger("chosen:updated");
+                $("#EmailEdit").val(data.Email);
+                $("#PasswordEdit").val(data.Password);
+                $("#LanguageId").val(data.LanguageId);
+                $("#IdEdit").val(id);
+                var rolesHtml = "";
+                if (data.Roles) {
+                    for (var i = 0; i < data.Roles.length; i++) {
+                        rolesHtml = rolesHtml + '<div class="btn btn-primary ">' + data.Roles[i].Name + '<a onclick="DeleteRole(' + data.Roles[i].RoleId + ',' + data.Roles[i].UserId + ')"> <i class="material-icons delete-role">close</i></a>' + '</div>';
+                    }
+                }
+                if (data.WeekDaysOff) {
+                    data.WeekDaysOff.forEach(function (element) {
+                        var day = $("#WeekDay_" + element);
+                        if (day) {
+                            $("#WeekDay_" + element).prop('checked', true);;
+                        }
+                    });
+                }
+                if (data.UserHolidays) {
+                    var content = "<table class='table'>";
+                    content = content + "<tr> <th> Date </th> <th> Description </th><th></th></tr>";
+                    data.UserHolidays.forEach(function (element) {
+                        if (element.HolidayDate) {
+                            var date1 = new Date(parseInt(element.HolidayDate.substr(6)));
+                            content += '<tr><td>' +
+                                date1.toLocaleDateString() +
+                                '</td> <td>' +
+                                element.Description +
+                                '</td>';
+
+                            content += "<td>" +
+                                "<a href='#' onclick='EditHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnEdit''> <i class='fa fa-edit text-dark'></i> </a>" +
+                                "<a href='#' onclick='DeleteHoliday(" + element.Id + ")' class='btnEditProfile disabled' title='@Resources.UserProfile.BtnDelete''> <i class='fa fa-trash text-danger'></i> </a>" +
+                                "</td>";
+                            content += '</tr>';
+                        }
+
+                    });
+                    content += "</table>";
+                    $('#holidays_table').html("");
+                    $('#holidays_table').append(content);
+                }
+                document.getElementById("userRoles").innerHTML = rolesHtml;
+
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    }
+
+    function SaveProfile() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var days = ['WeekDay_20', 'WeekDay_21', 'WeekDay_22', 'WeekDay_23', 'WeekDay_24', 'WeekDay_25', 'WeekDay_26'];
+        var userdays = [];
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.FullName = $("#FullNameEdit").val();
+        obj.Email = $("#EmailEdit").val();
+        obj.Address = $("#AddressEdit").val();
+        obj.IdNumber = $("#IdNumberEdit").val();
+        obj.PhoneNumber = $("#PhoneNumberEdit").val();
+        obj.BirthDay = $("#BirthDayEdit").val();
+        obj.Mobile = $("#MobileEdit").val();
+        obj.GenderLookupId = $("#GenderLookupIdEdit").val();
+        obj.PrefferdLanguage = $("#PrefferdLanguageEdit").val();
+        obj.Department = $("#DepartmentsListEdit").val();
+        obj.ManagerId = $("#ManagerIdEdit").val();
+        obj.ProvinceId = $("#ProvinceIdEdit").val();
+        obj.CityId = $("#CityIdEdit").val();
+        obj.RegionId = $("#RegionIdEdit").val();
+        obj.MartialStatusLookupId = $("#MartialStatusLookupIdEdit").val();
+        obj.LanguageId = $("#LanguageId").val();
+        obj.Email = $("#EmailEdit").val();
+        obj.Password = $("#PasswordEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.StatusEditDescription = $("#StatusEditDescription").val();
+        days.forEach(function (element) {
+            var day = $("#" + element).is(":checked");
+            if (day) {
+                userdays.push(element.replace('WeekDay_', ''));
+            }
+        });
+        obj.WeekDaysOff = userdays;
+        $.post("/UserProfile/EditProfile",
+            { profile: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function DeleteRole(roleId, userId) {
+        var obj = {};
+        obj.UserId = userId;
+        obj.RoleId = roleId;
+
+        $.post("/UserProfile/DeleteRole",
+            { role: obj },
+            function (data) {
+                if (data != null) {
+                    var rolesHtml = "";
+                    for (var i = 0; i < data.Roles.length; i++) {
+                        rolesHtml = rolesHtml + '<div class="btn btn-primary ">' + data.Roles[i].Name + '<a onclick="DeleteRole(' + data.Roles[i].RoleId + ',' + data.Roles[i].UserId + ')"> <i class="material-icons delete-role">close</i></a>' + '</div>';
+                    }
+                    document.getElementById("userRoles").innerHTML = rolesHtml;
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    $("#btnAddRole").click(function () {
+        var obj = {};
+        obj.UserId = $("#IdEdit").val();
+        obj.RoleId = $("#RoleList").val();
+
+        $.post("/UserProfile/AddRole",
+            { role: obj },
+            function (data) {
+                if (data != null) {
+                    var rolesHtml = "";
+                    for (var i = 0; i < data.Roles.length; i++) {
+                        rolesHtml = rolesHtml + '<div class="btn btn-primary ">' + data.Roles[i].Name + '<a onclick="DeleteRole(' + data.Roles[i].RoleId + ',' + data.Roles[i].UserId + ')"> <i class="material-icons delete-role">close</i></a>' + '</div>';
+                    }
+                    document.getElementById("userRoles").innerHTML = rolesHtml;
+                } else {
+                    alert("Error");
+                }
+            });
+    });
+
+    $("#btnCancel").click(function () {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            $("#CreateProfile").hide();
+            $("#btnCreateProfile").show();
+            $("#EditProfile").hide();
+            return;
+        }
+        $("#CreateProfile").show();
+        $("#EditProfile").hide();
+    });
+
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.UserProfile.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/UserProfile/DeleteProfile", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+    @{
+        int pageId = (int) GeneralEnums.PageEnum.UserProfile;
+    }
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Users", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreate").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateProfile").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditProfile").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteProfile").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function checkLengthIdNumber() {
+
+        var fieldLength = $("#IdNumber").val().length;
+        if (fieldLength <= 9) {
+            return true;
+        }
+        else {
+            var str = $("#IdNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#IdNumber").val(str);
+        }
+    }
+
+
+    function checkLengthPhone() {
+
+        var fieldLength = $("#PhoneNumber").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#PhoneNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#PhoneNumber").val(str);
+        }
+    }
+
+    function checkLengthMobile() {
+
+        var fieldLength = $("#Mobile").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#Mobile").val();
+            str = str.substring(0, str.length - 1);
+            $("#Mobile").val(str);
+        }
+    }
+    function PreventEnterSpecialAddress() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+        str = $("#Address").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#Address").val();
+                str = str.substring(0, str.length - 1);
+                $("#Address").val(str);
+            }
+        }
+
+    }
+
+
+    function PreventEnterChartecherName() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#FullName").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#FullName").val();
+                str = str.substring(0, str.length - 1);
+                $("#FullName").val(str);
+            }
+        }
+
+    }
+
+
+    function checkLengthIdNumberEdit() {
+
+        var fieldLength = $("#IdNumberEdit").val().length;
+        if (fieldLength <= 9) {
+            return true;
+        }
+        else {
+            var str = $("#IdNumberEdit").val();
+            str = str.substring(0, str.length - 1);
+            $("#IdNumberEdit").val(str);
+        }
+    }
+
+
+    function checkLengthPhoneEdit() {
+
+        var fieldLength = $("#PhoneNumberEdit").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#PhoneNumberEdit").val();
+            str = str.substring(0, str.length - 1);
+            $("#PhoneNumberEdit").val(str);
+        }
+    }
+
+    function checkLengthMobileEdit() {
+
+        var fieldLength = $("#MobileEdit").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#MobileEdit").val();
+            str = str.substring(0, str.length - 1);
+            $("#MobileEdit").val(str);
+        }
+    }
+    function PreventEnterSpecialAddressEdit() {
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+        str = $("#AddressEdit").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#AddressEdit").val();
+                str = str.substring(0, str.length - 1);
+                $("#AddressEdit").val(str);
+            }
+        }
+
+    }
+
+
+    function PreventEnterChartecherNameEdit() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#FullNameEdit").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#FullNameEdit").val();
+                str = str.substring(0, str.length - 1);
+                $("#FullNameEdit").val(str);
+            }
+        }
+
+    }
+
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateProfile").hide();
+        $("#EditProfile").hide();
+
+        $("#tableProfiles").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateProfile").show();
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreateProfile").hide();
+        $("#EditProfile").hide();
+
+        $("#tableProfiles").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateProfile").show();
+    });
+
+</script>  

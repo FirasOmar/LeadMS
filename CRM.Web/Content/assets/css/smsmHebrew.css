@@ -1,0 +1,229 @@
+﻿@font-face {
+    font-family: 'droidkufi-regular';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Assistant'), local('Assistant-Regular'), url(https://fonts.gstatic.com/s/assistant/v2/2sDcZGJYnIjSi6H75xkzamW5O7w.woff2) format('woff2');
+    unicode-range: U+0590-05FF, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
+@font-face {
+    font-family: 'droidkufi-bold';
+    src: local('Assistant'), local('Assistant-Regular'), url(https://fonts.gstatic.com/s/assistant/v2/2sDcZGJYnIjSi6H75xkzamW5O7w.woff2) format('woff2');
+    font-weight: 900 !important;
+    font-style: normal;
+}
+
+
+body, h1, h2, h3, h4, h5, h6, div, span, li, ul, a, font, strong{
+          font-family: 'droidkufi-regular' !important;
+}
+
+.section-title:before {
+    top: -15px !important;
+}
+
+.main-menu > li > a {
+    font-size: 16px;
+}
+
+.site-header__top ul {
+    font-size: 15px;
+}
+
+.top-nav, .lang {
+    padding-top: 5px;
+}
+
+.menu-toggle {
+    font-size: 16px !important;
+}
+
+@media (max-width: 991px) {
+    .site-header__top .top-nav {
+        top: 25px !important;
+    }
+}
+
+
+.mega-menu__item h2 {
+    font-size: 20px !important;
+}
+
+.mega-menu__item li {
+    font-size: 16px !important;
+}
+
+
+@media (min-width: 992px) {
+    .section-title {
+        font-size: 25px;
+        font-weight: 600;
+    }
+
+    .footer-main h2 {
+        font-size: 18px !important;
+    }
+}
+
+
+.article h3 {
+    font-size: 18px !important;
+    padding-top: 5px !important;
+}
+
+.footer-nav {
+    font-size: 15px !important;
+    line-height: 1.4 !important;
+}
+
+
+.service h3 {
+    padding: 0.9rem 1rem !important;
+    font-size: 17px !important;
+}
+
+
+.site-header__top .lang li.active {
+    font-weight: 700;
+}
+
+@media (max-width: 650px) {
+    .section-title:before {
+        top: -3px !important;
+    }
+
+    .footer-main h2 {
+        font-size: 17px !important;
+    }
+
+    .article .article-content p {
+        padding-top: 3px !important;
+    }
+}
+
+
+.main-menu > li {
+    padding: 4px 0px !important;
+}
+
+
+.hero h1 {
+    font-size: 26px !important;
+    margin-top: 8px !important;
+    font-weight: 700 !important;
+}
+
+
+.social-article li {
+    line-height: 2;
+}
+
+
+.article-header h1 {
+    font-size: 25px !important;
+    margin-top: 10px !important;
+}
+
+
+.article-header time {
+    font-size: 16px;
+}
+
+
+.s-article {
+    line-height: 1.5;
+    font-size: 17px;
+}
+
+
+.login-box h2 {
+    font-size: 22px;
+}
+
+.login-box label {
+    font-size: 17px;
+    padding-bottom: 3px;
+}
+
+
+.login-box footer {
+    font-size: 15px;
+}
+
+.login-box form a {
+    font-size: 15px;
+    line-height: 2;
+}
+
+
+.cms-col-header {
+    font-size: 17px;
+}
+
+label {
+    font-size: 17px !important;
+    margin-bottom: 5px !important;
+}
+
+
+.panel-default > .panel-heading a p {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+.c-table th {
+    font-size: 18px;
+}
+
+.formBuilder .section-title:before {
+    top: -7px !important;
+}
+
+@media (max-width: 650px) {
+    .formBuilder .section-title:before {
+        top: -4px !important;
+    }
+}
+
+
+ul.new-sidebar-nav a {
+    font-size: 17px;
+    padding-top: 11px;
+    padding-bottom: 10px;
+}
+
+.siteCMS-Sidebar__top ul {
+    font-size: 18px;
+}
+
+
+ul.new-sidebar-nav li.has-ul a::after {
+    padding: 7px 24px 0;
+}
+
+
+.menu-item {
+    font-size: 17px;
+}
+
+
+.table td {
+    font-size: 17px !important;
+}
+
+
+
+.question-title {
+    font-size: 17px;
+}
+
+.question input {
+    margin-bottom: 3px;
+}

@@ -1,0 +1,17 @@
+﻿@using CRM.Core
+@using CRM.Core.Helpers
+
+@{
+
+    var setting = SettingHelper.GetOrCreate(Constants.SystemSettings.GoogleAnalytics, "UA-87284465-2");
+}
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=@setting.Value"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', '@setting.Value');
+</script>

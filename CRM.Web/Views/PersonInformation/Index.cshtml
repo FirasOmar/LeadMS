@@ -1,0 +1,239 @@
+﻿@using CRM.Core
+@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@model PagedList.IPagedList<CRM.Core.Models.ProfileViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.SystemCases.PersonInformation;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    #Title_Search_Row {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn.active {
+        background-color: #666 !important;
+        color: white !important;
+    }
+    form {
+        width: 100%!important;
+    }
+    #divPageing{
+        margin-top:20px;
+    }
+    .center {
+        text-align: center;
+    }
+
+    .pagination {
+        display: inline-flex;
+    }
+
+        .pagination li {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+            margin: 0 4px;
+        }
+
+            .pagination li.active {
+                background-color: #6658dd;
+                color: white;
+                border: 1px solid #6658dd;
+            }
+
+            .pagination  li:hover:not(.active) {
+                background-color: #ddd;
+            }
+</style>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+
+<div class="container-fluid">
+    <div class="row" id="Title_Search_Row">
+        <div class="col-md-4 col-lg-4 col-sm-4">
+            <div @*class="d-flex"*@>
+                @*<button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>*@
+                <h4 class="section-title">@ViewBag.Title</h4>
+            </div>
+        </div>
+        @*<div class="clearfix"></div>*@
+    </div>
+
+    <div class="row">
+        @using (Html.BeginForm())
+        {
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+            @Html.Hidden("resetTo", 1)
+            var citizenSearchTypes = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CitizenSearchTypes, Request.Cookies["_culture"]);
+            <div id="btnContainer" class="btn-group  col-lg-1 col-md-1 col-sm-4 float-left" @*style="direction:rtl;"*@>
+                <button type="button" class="btn switch btn-light" onclick="GridView();"><i class="fa fa-th-large"></i></button>
+                <button type="button" class="btn switch btn-light active" onclick="listView();"><i class="fa fa-bars"></i></button>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-4 float-left ">
+                @Html.DropDownList("typeId", new SelectList(citizenSearchTypes, "Id", "Name"), string.Empty, new { @class = "form-control General-Search-txt chosen-select", required = "required" })
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-4 float-left">
+                <input class="form-control General-Search-txt" type="text" required name="searchText" id="searchText" placeholder="@Resources.Layout.TxtSearchFor" />
+            </div>
+            <div class="form-group col-lg-2  col-md-2 col-sm-3 float-left">
+                <input class="btn btn-secondary" type="submit" value="@Resources.Layout.BtnSearch" />
+            </div>
+        }
+    </div>
+
+
+
+
+    <div class="row" id="profiles_tableView">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <table id="tablePersonInfo" @*class="c-table mb-4"*@
+                   class="table-borderless"
+                   data-toggle="table"
+                   data-page-size="10"
+                   data-pagination="false"
+                   style="background-color:white;">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th data-sortable="true">
+                            @Html.DisplayNameFor(model => model.ElementAt(0).FullName)
+                        </th>
+                        <th data-sortable="true">
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Email)
+                        </th>
+                        <th data-sortable="true">
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Mobile)
+                        </th>
+                        <th data-sortable="true">
+                            @Html.DisplayNameFor(model => model.ElementAt(0).IdNumber)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="personInfo" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdNumber)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", new {id = item.Id})" class="btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row" id="profiles_GridView" style="display:none;">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <div class="card card-body">
+                    <h5 class="card-title"> @Html.DisplayFor(modelItem => item.FullName)</h5><hr>
+                    <p class="card-text">
+
+                        @Html.DisplayFor(modelItem => item.Email) <br>
+                        @Html.DisplayFor(modelItem => item.Mobile) <br>
+                        @Html.DisplayFor(modelItem => item.IdNumber)
+
+
+                    </p>
+                    <a href="@Url.Action("Details", new {id = item.Id})" class="btn btn-success waves-effect waves-light">@Resources.SystemCases.BtnDetails <i class="fa fa-eye text-white"></i></a>
+                </div>
+            </div>
+        }
+
+    </div>
+    @if (Model.PageCount > 0)
+    {
+    <div id="divPageing" class="center">
+        <div class="pagination">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, TypeId = ViewBag.typeId, searchText = ViewBag.SearchText }))
+        </div>
+    </div>
+    }
+</div>
+
+
+
+<script>
+    var sel = $('.sel'),
+        txt = $('.txt'),
+        options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+
+    /* Optional: Add active class to the current button (highlight it) */
+    var container = document.getElementById("btnContainer");
+    var btns = container.getElementsByClassName("btn");
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("btn switch active");
+            current[0].className = current[0].className.replace("active", "");
+            this.className += " active";
+        });
+    }
+
+</script>
+<script type="text/javascript">
+    function listView() {
+        document.getElementById("profiles_tableView").style.display = "flex";
+        document.getElementById("profiles_GridView").style.display = "none";
+    };
+    function GridView() {
+        document.getElementById("profiles_tableView").style.display = "none";
+        document.getElementById("profiles_GridView").style.display = "flex";
+    };
+</script>

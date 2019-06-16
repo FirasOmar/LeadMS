@@ -1,0 +1,289 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Web.Models
+@using CRM.Core
+@model PagedList.IPagedList<CRM.Web.Models.FormsViewModel>
+@using PagedList.Mvc
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var jobCategories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.JobCategories, Request.Cookies["_culture"]);
+    var tenderCategories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.TenderCategories, Request.Cookies["_culture"]);
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var categories = new List<DetailsLookupViewModel>
+        ();
+    var typeId = ViewBag.typeId;
+    var langId = ViewBag.langId;
+    var userRoles = LanguageFallbackHelper.GetUserRoles(User);
+    var isCitizen = User.IsInRole(Constants.Roles.Citizen) && userRoles.Count == 1 ? true : false;
+    int stringType = int.Parse(typeId?.ToString() ?? "1");
+    var winnerStatus = stringType == (int)GeneralEnums.CasesType.Tenders ? (int)GeneralEnums.StateEnum.TenderWinner : (int)GeneralEnums.StateEnum.JobWinner;
+    var masterLookupStatesId = 0;
+
+    switch (stringType)
+    {
+        case (int)GeneralEnums.CasesType.Jobs:
+            ViewBag.Title = Resources.Layout.Jobs;
+            categories = jobCategories;
+            masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.JobStates;
+            break;
+        case (int)GeneralEnums.CasesType.Tenders:
+            ViewBag.Title = Resources.Layout.Tenders;
+            categories = tenderCategories;
+            masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.TenderStates;
+            break;
+    }
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <h2 class="section-title">
+                            @ViewBag.Title
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-md-4">&nbsp;</div>
+                <div class="col-md-4">
+                    <div class="header-form" id="divAddNew_Search">
+                        <button class="btn btn-default" onclick="$('#AdvanceSearchForm').toggle('slow')">
+                            <i class="fa fa-search"></i> @Resources.Home.AdvanceSearch
+                        </button>&nbsp;&nbsp;&nbsp;
+                        @if (!User.IsInRole(Constants.Roles.Citizen))
+                        {
+                            using (Html.BeginForm())
+                            {
+                                @Html.Hidden("resetTo", 1)
+
+                                @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                                <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <br />
+            @{
+                var display = (ViewBag.FromAdvanceSearch != null && ViewBag.FromAdvanceSearch) ? "normal" : "none";
+                var citizens = LookupHelper.GetCitizens(Request.Cookies["_culture"]);
+
+                var states = LookupHelper.GetLookupDetailsByMasterId(masterLookupStatesId, Request.Cookies["_culture"]);
+                var uniqueIdTitle = string.Empty; var TypeTitle = string.Empty;
+                <form id="AdvanceSearchForm" method="get" style="display:@display" action="@Url.Action(" FormsIndex", "ManageCases" )">
+                    <input type="hidden" value="true" name="FromAdvanceSearch" />
+                    @Html.Hidden("resetTo", 1)
+                    @Html.Hidden("type", stringType)
+                    @{
+                        switch (stringType)
+                        {
+                            case (int)GeneralEnums.CasesType.Jobs:
+                                uniqueIdTitle = Resources.SystemCases.JobId;
+                                TypeTitle = Resources.SystemCases.JobTitle;
+                                break;
+                            case (int)GeneralEnums.CasesType.Tenders:
+                                uniqueIdTitle = Resources.SystemCases.TenderId;
+                                TypeTitle = Resources.SystemCases.TenderTitle;
+                                break;
+                        }
+                    }
+                    <div class="row">
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ComplainId", string.Empty, new { type = "number", @class = "form-control General-Search-txt", placeholder = uniqueIdTitle })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("TitleSearch", string.Empty, new { @class = "form-control General-search-txt", placeholder = TypeTitle })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("TagsSearch", string.Empty, new { placeholder = Resources.SystemCases.Tags, @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.DropDownList("StatusId", new SelectList(states, "Id", "Name"), Resources.SystemCases.TxtStatus, new { @class = "form-control General-Search-txt chosen-select" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("FromDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.FromDate })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ToDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.ToDate })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("PublishDateFrom", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.SystemCases.PublishDateFrom })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("PublishDateTo", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.SystemCases.PublishDateTo })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("EndDateFrom", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.SystemCases.EndDateFrom })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("EndDateTo", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.SystemCases.EndDateTo })
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-2 float-right">
+                        <input class="btn btn-primary" type="submit" value="@Resources.Layout.BtnSearch" />
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            }
+            <br />
+            <table id="tableCases" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Resources.SystemCases.Title
+                        </th>
+                        <th>
+                            @Resources.SystemCases.TxtDescription
+                        </th>
+                        <th>
+                            @Resources.SystemCases.TxtCreatedOn
+                        </th>
+                        <th>
+                            @Resources.SystemCases.PublishDate
+                        </th>
+                        <th>
+                            @Resources.SystemCases.EndDate
+                        </th>
+                        <th>
+                            @Resources.SystemCases.ApplicantsCount
+                        </th>
+                        <th>
+                            @Resources.SystemCases.TxtStatus
+                        </th>
+                        @if (!isCitizen)
+                        {
+                            <th>
+                                @Resources.SystemCases.Winner
+                            </th>
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+
+                            <td>
+                                @Html.Raw(item.Description)
+                            </td>
+                            <td>
+                                @item.CreatedOn.ToString().AsDateTime().ToString("dd/MM/yyyy")
+                            </td>
+                            <td>
+                                @if (item.PublishDate.HasValue)
+                                {
+                                    <span>@item.PublishDate.ToString().AsDateTime().ToString("dd/MM/yyyy")</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.EndDate.HasValue)
+                                {
+                                    <span>@item.EndDate.ToString().AsDateTime().ToString("dd/MM/yyyy")</span>
+                                }
+                            </td>
+                            <td>
+                                @item.NumberOfApplicant
+                            </td>
+                            <td>
+                                @if (item.Status != (int)GeneralEnums.StatusEnum.Archived)
+                                {
+                                    <span>@Resources.SystemCases.Active</span>
+                                }
+                                else
+                                {
+                                    <span>@Resources.SystemCases.Archived</span>
+                                }
+                            </td>
+                            @if (!isCitizen)
+                            {
+                                var formWinners = LanguageFallbackHelper.GetFormWinnersNames(item.Id.ToString(), langId, winnerStatus);
+                                <td>
+                                    @foreach (var winner in formWinners)
+                                    {
+                                        <p>@winner</p>
+                                    }
+                                </td>
+                            }
+                            <td>
+                                @if (!isCitizen && item.Status != (int)GeneralEnums.StatusEnum.Archived)
+                                {
+                                    <a href="@Url.Action("FormDetails","ManageCases", new {formId=item.Id})"
+                                       class="btn btn-default btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails">
+                                        <i class="fa fa-users text-success"></i>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.PageCount > 0 && Model.Count > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new
+                   {
+                       type = ViewBag.typeId,
+                       page,
+                       ViewBag.searchText,
+                       FromAdvanceSearch = ViewBag.AdvanceSearchFilters?.FromAdvanceSearch,
+                       TitleSearch = ViewBag.AdvanceSearchFilters.TitleSearch,
+                       ComplainId = ViewBag.AdvanceSearchFilters?.ComplainId,
+                       StatusId = ViewBag.AdvanceSearchFilters?.StatusId,
+                       FromDate = ViewBag.AdvanceSearchFilters?.FromDate,
+                       ToDate = ViewBag.AdvanceSearchFilters?.ToDate,
+                       PublishDateFrom = ViewBag.AdvanceSearchFilters?.PublishDateFrom,
+                       PublishDateTo = ViewBag.AdvanceSearchFilters?.PublishDateTo,
+                       EndDateFrom = ViewBag.AdvanceSearchFilters?.EndDateFrom,
+                       EndDateTo = ViewBag.AdvanceSearchFilters?.EndDateTo,
+                       TagsSearch = ViewBag.AdvanceSearchFilters.TagsSearch,
+                   }))
+                </nav>
+            }
+        </div>
+    </section>
+</main>
+
+<script type="text/javascript">
+    var permission = {};
+
+    $(".datepicker").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Cases", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Comment")) {
+                        $(".btnCommentCase").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+</script>

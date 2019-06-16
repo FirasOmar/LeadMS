@@ -1,0 +1,356 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Core
+@model CRM.Web.Models.CaseViewModel
+@{
+    ViewBag.Title = Resources.SystemCases.DetailsTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isCitizen = User.IsInRole(Constants.Roles.Citizen);
+    int fileTypeNo = (int)GeneralEnums.FileEnum.File;
+    var title = Resources.Layout.LinkComplaints;
+    var masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.WorkFlowStates;
+
+    switch (Model.TypeId)
+    {
+        case (int)GeneralEnums.CasesType.Complaints:
+            title = Resources.Layout.LinkComplaints;
+            break;
+        case (int)GeneralEnums.CasesType.Emergency:
+            title = Resources.Layout.TxtEmergency;
+            break;
+        case (int)GeneralEnums.CasesType.Jobs:
+            title = Resources.Layout.TxtJobs;
+            masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.JobStates;
+            break;
+        case (int)GeneralEnums.CasesType.Tenders:
+            title = Resources.Layout.Tenders;
+            masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.TenderStates;
+            break;
+        case (int)GeneralEnums.CasesType.Froms:
+            title = Resources.Layout.LinkForms;
+            break;
+    }
+
+
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <h2 class="section-title">@ViewBag.Title - @title</h2>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div>
+                @{
+                    var states = LookupHelper.GetLookupDetailsByMasterId(masterLookupStatesId, Request.Cookies["_culture"]);
+                }
+                @if (!isCitizen)
+                {
+                    foreach (var item in states)
+                    {
+                        //if((Model.TypeId == (int)GeneralEnums.CasesType.Jobs || Model.TypeId == (int)GeneralEnums.CasesType.Tenders) && (item.Id == (int)GeneralEnums.StateEnum.Closed || item.Id == (int)GeneralEnums.StateEnum.Resolved))
+                        //{
+                        //    continue;
+                        //}
+                        if (item.Id == (int)GeneralEnums.StateEnum.Na)
+                        {
+                            <a style="display: none" href="@Url.Action("ChangeState", new {caseId = Model.Id, stateId = item.Id, prevState = Model.FlowStatus ?? (int) GeneralEnums.StateEnum.Na})" class='btn btn-success disabled assign-state'>
+                                @item.Name
+                            </a>
+                        }
+                        else if (item.Id == Model.FlowStatus)
+                        {
+                            <a href="@Url.Action("ChangeState", new {caseId = Model.Id, stateId = item.Id, prevState = Model.FlowStatus ?? (int) GeneralEnums.StateEnum.Na})" class='btn btn-success disabled selected-state'>
+                                @item.Name
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("ChangeState", new {caseId = Model.Id, stateId = item.Id, prevState = Model.FlowStatus ?? (int) GeneralEnums.StateEnum.Na})" class='btn btn-success disabled assign-state'>
+                                @item.Name
+                            </a>
+                        }
+                    }
+                }
+                else
+                {
+                    var currentStatus = states.Where(t => t.Id == Model.FlowStatus).FirstOrDefault();
+                    if (currentStatus != null)
+                    {
+                        <a href="#" class='btn btn-success disabled selected-state'>
+                            @currentStatus.Name
+                        </a>
+                    }
+                }
+
+                <br />
+                <table class="c-table mb-4">
+                    <tr>
+                        <td>@Resources.SystemCases.Title</td>
+                        <td>@Model.Title</td>
+                    </tr>
+                    @if (!isCitizen)
+                    {
+                        <tr>
+                            <td>@Resources.SystemCases.Tags</td>
+                            <td>@Model.Tags</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>@Resources.SystemCases.TxtDescription</td>
+                        <td>@Html.Raw(Model.Description)</td>
+                    </tr>
+                    @if (Model.TypeId == (int)GeneralEnums.CasesType.Complaints
+|| Model.TypeId == (int)GeneralEnums.CasesType.Emergency)
+                    {
+                        <tr>
+                            <td>@Resources.SystemCases.Address</td>
+                            <td>@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <td>@Resources.SystemCases.Location</td>
+                            <td>@Model.Location</td>
+                        </tr>
+                    }
+                    @if (!isCitizen)
+                    {
+                        <tr>
+                            <td>@Resources.SystemCases.AssigneeUserName</td>
+                            <td>@Model.AssigneeName</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>@Resources.SystemCases.CategoryName</td>
+                        <td>@Model.CategoryName</td>
+                    </tr>
+                    @if ((Model.TypeId == (int)GeneralEnums.CasesType.Complaints
+ || Model.TypeId == (int)GeneralEnums.CasesType.Emergency) && !isCitizen)
+                    {
+                        <tr>
+                            <td>@Resources.SystemCases.PriorityName</td>
+                            <td>@Model.PriorityName</td>
+                        </tr>
+                        <tr>
+                            <td>@Resources.SystemCases.SeverityName</td>
+                            <td>@Model.SeverityName</td>
+                        </tr>
+                    }
+
+                    @if (Model.UserProfile != null)
+                    {
+                        <tr>
+                            <td>@Resources.UserProfile.TxtFullName</td>
+                            <td>@Model.UserProfile.FullName</td>
+                        </tr>
+
+                        <tr>
+                            <td>@Resources.UserProfile.TxtMobile</td>
+                            <td>@Model.UserProfile.Mobile</td>
+                        </tr>
+                        <tr>
+                            <td>@Resources.UserProfile.TxtIdNumber</td>
+                            <td>@Model.UserProfile.IdNumber</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@Resources.SystemCases.TxtCreatedBy</td>
+                            <td>@Model.CreatedBy</td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td>@Resources.SystemCases.TxtCreatedOn</td>
+                        <td>@Model.CreatedOn</td>
+                    </tr>
+                </table>
+
+                <hr />
+                <h4>@Resources.SystemCases.TxtUploadFile</h4>
+                @foreach (var file in Model.Files)
+                {
+                    <a target="_blank" href="@file.FileUrl" class='btn btn-success'>
+                        <i class="fa fa-paperclip"></i>
+                    </a>
+                }
+
+                <hr />
+                <h4>@Resources.SystemCases.Comments</h4>
+                <form method="post" onsubmit="AddNewComment()">
+                    @Html.Hidden("CaseId", Model.Id)
+                    <div class="row">
+                        <div class="col-md-6 form-group is-empty">
+                            <label class="control-label">@Resources.SystemCases.Comment</label>
+                            <br>
+                            @Html.TextArea("Comment", null, new { @class = "form-control", required = "required" })
+                            <span class="material-input"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">
+                                @Resources.SystemCases.AddAttachmentToTheComment
+                            </label><br />
+                            <input name="UploadFile" id="UploadFile" type="file" onchange="previewFile()">
+                        </div>
+                        @if (!isCitizen)
+                        {
+                            <div class="col-md-2">
+                                <label class="control-label">
+                                    @Resources.SystemCases.ShowCommentToTheCitizen
+                                </label><br />
+                                @Html.CheckBox("ForCitizen")
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">@Resources.SystemCases.BtnAdd</button>
+                        <br /><br />
+                    </div>
+                </form>
+
+
+                @if (Model.Comments.Count > 0)
+                {
+                    var count = 1;
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>@Resources.SystemCases.Comment</th>
+                                <th>@Resources.SystemCases.Attachments</th>
+                                <th>@Resources.SystemCases.TxtCreatedBy</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <tr>
+                                <td>@count</td>
+                                <td>@comment.Comment</td>
+                                <td>
+                                    @if (comment.FilePath.IsNotNullOrEmpty())
+                                    {
+                                        <a target="_blank" href="@comment.FilePath" class="btn btn-success btn-simple">
+                                            <i class='fa fa-paperclip'></i>
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <a>
+                                        @{
+                                            var profilePath = comment.CreatedByProfile?.ProfilePath;
+                                            if (profilePath.IsNotNullOrEmpty())
+                                            {
+                                                <img class="profile-img img-thumbnail img-circle" src="@comment.CreatedByProfile.ProfilePath" alt="@comment.CreatedByProfile.FullName">
+                                            }
+                                            else
+                                            {
+                                                <img class="profile-img img-thumbnail img-circle" src="~/Content/assets/img/profile.png" alt="@comment.CreatedByProfile.FullName" />
+                                            }
+                                        }
+                                    </a>
+                                    @comment.CreatedByProfile.FullName
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("DeleteComment", new {id = comment.Id})" class="btn btn-default"
+                                       rel="tooltip" title="@Resources.SystemCases.BtnDelete">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                                                count++;
+                                            }
+                    </table>
+                                            }
+
+
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+
+
+
+<script type="text/javascript">
+    var addImagesList = [];
+
+
+    function AddNewComment() {
+        if (!permission.AllowedPermissonsList.includes("Comment")) {
+            return;
+        }
+        var obj = {};
+        obj.CaseId = $("#CaseId").val();
+        obj.Comment = $("#Comment").val();
+        obj.ForCitizen = $("#ForCitizen").prop("checked");
+        if (typeof addImagesList != typeof undefined && addImagesList != null && addImagesList.length > 0)
+            obj.FilePath = addImagesList[0].FileUrl;
+        $.post("/ManageCases/AddComment", { commentData: obj },
+                   function (data) {
+                       location.reload();
+                   });
+    }
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Cases", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+
+                    if (data.AllowedPermissonsList.includes("Assign")) {
+                        $(".assign-state").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+    $('#UploadFile').on('change', function (e) {
+        addImagesList = [];
+        var files = e.target.files;
+        if (files.length > 0) {
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@fileTypeNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var i;
+                        for (i = 0; i < result.length; i++) {
+                            addImagesList.push(result[i]);
+                        }
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+</script>

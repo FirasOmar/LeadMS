@@ -1,0 +1,502 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.PermissionViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.Permission.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+
+
+
+<style>
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+
+
+</style>
+<style>
+    body {
+        text-align: -webkit-auto !important;
+    }
+
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+
+    .srchF {
+        display: inline-block;
+        width: auto !important;
+    }
+
+    .header-form {
+        margin-bottom: 10px;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    <a id="btnCreatePermission" onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.Permission.TxtAddNewPermission</a>
+                    @using (Html.BeginForm())
+                    {
+                    @Html.Hidden("resetTo", 1)
+
+                    @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                    <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.Permission.TxtUpdatePermission</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.Permission.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.Permission.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.Permission.TxtAddNewPermission</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.Permission.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.Permission.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+
+            <div id="CreatePermission" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>
+                        @Resources.Permission.TxtAddNewPermission
+                    </h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreatePermission()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label for="PageName">@Resources.Permission.TxtPageName</label>
+                                <input class="form-control" type="text" required name="PageName" id="PageName" />
+                            </div>
+                            
+                            <div class="form-group col-lg-6">
+                                <label for="PermissionKey">@Resources.Permission.TxtPermissionKey</label>
+                                <input class="form-control" type="text" required name="PermissionKey" id="PermissionKey" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="Description">@Resources.Permission.TxtDescription</label>
+                                <input class="form-control" type="text" required name="Description" id="Description" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.Permission.TxtStatus</label>
+                                @Html.DropDownList("Status", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+
+
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.Permission.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancel_Add">@Resources.Permission.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="display: none" id="EditPermission">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.Permission.TxtUpdatePermission</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SavePermission()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="PageNameEdit">@Resources.Permission.TxtPageName</label>
+                                <input class="form-control" type="text" required name="PageNameEdit" id="PageNameEdit" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="PermissionKeyEdit">@Resources.Permission.TxtPermissionKey</label>
+                                <input class="form-control" type="text" required name="PermissionKeyEdit" id="PermissionKeyEdit" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="DescriptionEdit">@Resources.Permission.TxtDescription</label>
+                                <input class="form-control" type="text" required name="DescriptionEdit" id="DescriptionEdit" />
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label for="StatusEdit">@Resources.Permission.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+
+
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.Permission.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.Permission.BtnCancel" />
+                            </div>
+
+
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table id="tablePermissions" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).PageName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).PermissionKey)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+            {
+                <tr class="parentPermission" id="TableData">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PageName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PermissionKey)
+                    </td>
+                    <td>
+                        <a href="#" onclick="EditPermission(@item.Id)" class="btnEditPermission disabled" title="@Resources.Permission.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                        <a href="#" onclick="Delete(@item.Id)" class="btnDeletePermission disabled" title="@Resources.Permission.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                    </td>
+                </tr>
+            }
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+    $("#EditPermission").hide();
+    var permissionx = {};
+    function ShowCreateForm() {
+        if (!permissionx.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreatePermission").show();
+        $("#btnCreatePermission").hide();
+    }
+    function CreatePermission() {
+        if (!permissionx.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.Status = $("#Status").val();
+        obj.Description = $("#Description").val();
+        obj.PermissionKey = $("#PermissionKey").val();
+        obj.PageName = $("#PageName").val();
+        //obj.PageUrl = $("#PageUrl").val();
+
+        $.post("/Permissions/AddPermission",
+            { permission: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function EditPermission(id) {
+        if (!permissionx.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        $.get("/Permissions/EditPermission", { id: id }, function (data) {
+            if (data != null) {
+                $("#CreatePermission").hide();
+                $("#EditPermission").show();
+                $("#btnCreatePermission").hide();
+
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#DescriptionEdit").val(data.Description);
+                $("#PermissionKeyEdit").val(data.PermissionKey);
+                $("#PageNameEdit").val(data.PageName);
+                //$("#PageUrlEdit").val(data.PageUrl);
+                $("#IdEdit").val(id);
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    }
+
+
+
+    function SavePermission() {
+        if (!permissionx.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.Description = $("#DescriptionEdit").val();
+        obj.PermissionKey = $("#PermissionKeyEdit").val();
+        obj.PageName = $("#PageNameEdit").val();
+        //obj.PageUrl = $("#PageUrlEdit").val();
+        $.post("/Permissions/EditPermission",
+            { permission: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+    function Delete(id) {
+        if (!permissionx.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.Permission.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/Permissions/DeletePermission", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Settings", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permissionx = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreate").removeClass("disabled");
+                        $("#btnCreatePermission").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditPermission").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeletePermission").removeClass("disabled");
+                    }
+
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreatePermission").hide();
+        $("#EditPermission").hide();
+
+        $("#tablePermissions").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreatePermission").show();
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreatePermission").hide();
+        $("#EditPermission").hide();
+
+        $("#tablePermissions").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreatePermission").show();
+    });
+
+
+</script>
+
+
+
+<script>
+    var sel = $('.sel'),
+   txt = $('.txt'),
+   options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+</script>

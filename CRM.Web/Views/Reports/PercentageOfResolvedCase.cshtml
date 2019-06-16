@@ -1,0 +1,105 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.Reports.PercentageOfResolvedCaseViewModel>
+@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.Reports.PercentageOfResolvedCase;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+    var categories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CaseCategory, Request.Cookies["_culture"]);
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title </h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+                </div>
+            </header>
+            
+            @using (Html.BeginForm())
+            {
+                @Html.Hidden("resetTo", 1)
+                <div class="form-group col-lg-3 float-right">
+                    <input class="form-control " type="date" required name="fromDate" id="fromDate"  placeholder = "@Resources.Layout.TxtSearchFor" />
+                </div>
+                <div class="form-group col-lg-3 float-right">
+                    <input class="form-control " type="date" required name="toDate" id="toDate"  placeholder = "@Resources.Layout.TxtSearchFor" />
+                </div>
+                <div class="form-group col-lg-3 float-right">
+                    @Html.DropDownList("categoryId", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                </div>
+                <div class="form-group col-lg-2 float-right">
+                    <input class="btn btn-success" type="submit" value="@Resources.Layout.BtnSearch" />
+                </div>
+
+                <div class="clearfix"></div>
+                <hr />
+            }
+
+            <table class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Resources.Reports.Date
+                        </th>
+                        <th>
+                            @Resources.Reports.CountOfCases
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Count)
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("PercentageOfResolvedCase", new { page, ViewBag.fromDate, ViewBag.toDate, ViewBag.categoryId }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+<script type="text/javascript">
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Reports", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+
+                    if (data.AllowedPermissonsList.includes("View")) {
+                        $(".btnDetails").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("ExportToExcel")) {
+                        $(".btnExportExcel").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+</script>

@@ -1,0 +1,2597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CrmSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="FriendlyName" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Campaigns">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+        </EntityType>
+        <EntityType Name="CasesByEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="EmailDescription" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SentTo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CategoryTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CommunicationLogs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+          <Property Name="LogText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="DepartmentTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetailsLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasterId" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="Code" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="DetailsLookupTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DetailsLookupId" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lead_Activity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Activity_Type" Type="int" />
+          <Property Name="Activity_Status" Type="int" />
+          <Property Name="Activity_Date" Type="datetime" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Lead_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="Leads">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="Phone_Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Created_Date" Type="datetime" />
+          <Property Name="Notes" Type="text" />
+          <Property Name="AssigneeId" Type="int" />
+          <Property Name="CampaignId" Type="int" />
+        </EntityType>
+        <EntityType Name="MasterLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MasterLookupTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MasterLookupId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Icon" Type="nvarchar" MaxLength="200" />
+          <Property Name="ParentId" Type="int" />
+          <Property Name="PageId" Type="int" />
+          <Property Name="PageUrl" Type="nvarchar(max)" />
+          <Property Name="SortOrder" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MenuTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuId" Type="int" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PageUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PageName" Type="nvarchar" MaxLength="300" />
+          <Property Name="PermissionKey" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RolePermissions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PermissionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SMSTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DefaultLanguage" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SMSTemplateTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SMSTemplateId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StateHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="int" Nullable="false" />
+          <Property Name="PreviousState" Type="int" Nullable="false" />
+          <Property Name="CurrentState" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="StateTransitionsConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="StateFrom" Type="int" Nullable="false" />
+          <Property Name="StateTo" Type="int" Nullable="false" />
+          <Property Name="AssigneeId" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="CategoryType" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SysCaseComments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CaseId" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="ForCitizen" Type="bit" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="SystemCaseAttachments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileId" Type="int" Nullable="false" />
+          <Property Name="CaseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SystemCases">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UniqueId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="SeverityId" Type="int" />
+          <Property Name="SeverityValue" Type="int" />
+          <Property Name="PriorityId" Type="int" />
+          <Property Name="PriorityValue" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="300" />
+          <Property Name="Tags" Type="nvarchar(max)" />
+          <Property Name="AssigneeId" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="Address" Type="nvarchar" MaxLength="400" />
+          <Property Name="Location" Type="nvarchar" MaxLength="500" />
+          <Property Name="TypeId" Type="int" />
+          <Property Name="FormId" Type="nvarchar" MaxLength="200" />
+          <Property Name="FormName" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="SystemFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeId" Type="int" />
+          <Property Name="FileUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SystemFileTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SystemFileId" Type="int" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="AltText" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Component" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="StackTrace" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SystemSetting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SystemSettingTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SettingId" Type="int" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="IdNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="50" />
+          <Property Name="Birthday" Type="datetime" />
+          <Property Name="GenderLookupId" Type="int" />
+          <Property Name="MartialStatusLookupId" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastLogin" Type="datetime" />
+          <Property Name="ProfilePhoto" Type="nvarchar(max)" />
+          <Property Name="IntegrationId" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProvinceId" Type="int" />
+          <Property Name="CityId" Type="int" />
+          <Property Name="RegionId" Type="int" />
+          <Property Name="DepartmentId" Type="int" />
+          <Property Name="ManagerId" Type="int" />
+          <Property Name="PreferedLanguageId" Type="int" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="StatusEditDescription" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="UserProfileHolidays">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserProfileId" Type="int" />
+          <Property Name="HolidayDate" Type="datetime" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserProfileOffDays">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserProfileId" Type="int" />
+          <Property Name="WeekDay" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserProfileTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="UserProfileId" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <Association Name="FK__Lead_Acti__Lead___0B5CAFEA">
+          <End Role="Leads" Type="Self.Leads" Multiplicity="0..1" />
+          <End Role="Lead_Activity" Type="Self.Lead_Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Leads">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lead_Activity">
+              <PropertyRef Name="Lead_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leads__AssigneeI__078C1F06">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="Leads" Type="Self.Leads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Leads">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leads__CampaignI__0880433F">
+          <End Role="Campaigns" Type="Self.Campaigns" Multiplicity="0..1" />
+          <End Role="Leads" Type="Self.Leads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaigns">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Leads">
+              <PropertyRef Name="CampaignId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryTranslation_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="CategoryTranslation" Type="Self.CategoryTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategoryTranslation">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepartmentTranslation_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="DepartmentTranslation" Type="Self.DepartmentTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DepartmentTranslation">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsLookup_MasterLookup">
+          <End Role="MasterLookup" Type="Self.MasterLookup" Multiplicity="1" />
+          <End Role="DetailsLookup" Type="Self.DetailsLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DetailsLookup">
+              <PropertyRef Name="MasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsLookupTranslation_DetailsLookup">
+          <End Role="DetailsLookup" Type="Self.DetailsLookup" Multiplicity="1" />
+          <End Role="DetailsLookupTranslation" Type="Self.DetailsLookupTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DetailsLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DetailsLookupTranslation">
+              <PropertyRef Name="DetailsLookupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterLookupTranslation_MasterLookup">
+          <End Role="MasterLookup" Type="Self.MasterLookup" Multiplicity="1" />
+          <End Role="MasterLookupTranslation" Type="Self.MasterLookupTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterLookupTranslation">
+              <PropertyRef Name="MasterLookupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_Menu">
+          <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
+          <End Role="Menu1" Type="Self.Menu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MenuTranslation_Menu">
+          <End Role="Menu" Type="Self.Menu" Multiplicity="1" />
+          <End Role="MenuTranslation" Type="Self.MenuTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MenuTranslation">
+              <PropertyRef Name="MenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermissions_AspNetRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
+          <End Role="RolePermissions" Type="Self.RolePermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermissions">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermissions_Permission">
+          <End Role="Permission" Type="Self.Permission" Multiplicity="1" />
+          <End Role="RolePermissions" Type="Self.RolePermissions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermissions">
+              <PropertyRef Name="PermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SMSTemplateTranslation_SMSTemplate">
+          <End Role="SMSTemplate" Type="Self.SMSTemplate" Multiplicity="1" />
+          <End Role="SMSTemplateTranslation" Type="Self.SMSTemplateTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SMSTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SMSTemplateTranslation">
+              <PropertyRef Name="SMSTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StateHistory_SystemCases">
+          <End Role="SystemCases" Type="Self.SystemCases" Multiplicity="1" />
+          <End Role="StateHistory" Type="Self.StateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCases">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StateHistory">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StateTransitionsConfiguration_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="StateTransitionsConfiguration" Type="Self.StateTransitionsConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StateTransitionsConfiguration">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SysCaseComments_SystemCases">
+          <End Role="SystemCases" Type="Self.SystemCases" Multiplicity="1" />
+          <End Role="SysCaseComments" Type="Self.SysCaseComments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCases">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SysCaseComments">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCaseAttachments_SystemCases">
+          <End Role="SystemCases" Type="Self.SystemCases" Multiplicity="1" />
+          <End Role="SystemCaseAttachments" Type="Self.SystemCaseAttachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCases">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCaseAttachments">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCaseAttachments_SystemFile">
+          <End Role="SystemFile" Type="Self.SystemFile" Multiplicity="1" />
+          <End Role="SystemCaseAttachments" Type="Self.SystemCaseAttachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemFile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCaseAttachments">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCases_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="SystemCases" Type="Self.SystemCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCases">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemFileTranslation_SystemFile">
+          <End Role="SystemFile" Type="Self.SystemFile" Multiplicity="1" />
+          <End Role="SystemFileTranslation" Type="Self.SystemFileTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemFile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemFileTranslation">
+              <PropertyRef Name="SystemFileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemSettingTranslation_SystemSetting">
+          <End Role="SystemSetting" Type="Self.SystemSetting" Multiplicity="1" />
+          <End Role="SystemSettingTranslation" Type="Self.SystemSettingTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemSetting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemSettingTranslation">
+              <PropertyRef Name="SettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="UserProfile1" Type="Self.UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile1">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileHolidays_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="UserProfileHolidays" Type="Self.UserProfileHolidays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileHolidays">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileOffDays_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="UserProfileOffDays" Type="Self.UserProfileOffDays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileOffDays">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileTranslation_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserProfileTranslation" Type="Self.UserProfileTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileTranslation">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CrmSystemModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Campaigns" EntityType="Self.Campaigns" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CasesByEmail" EntityType="Self.CasesByEmail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryTranslation" EntityType="Self.CategoryTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommunicationLogs" EntityType="Self.CommunicationLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DepartmentTranslation" EntityType="Self.DepartmentTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetailsLookup" EntityType="Self.DetailsLookup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetailsLookupTranslation" EntityType="Self.DetailsLookupTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lead_Activity" EntityType="Self.Lead_Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Leads" EntityType="Self.Leads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MasterLookup" EntityType="Self.MasterLookup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MasterLookupTranslation" EntityType="Self.MasterLookupTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu" EntityType="Self.Menu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MenuTranslation" EntityType="Self.MenuTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RolePermissions" EntityType="Self.RolePermissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSTemplate" EntityType="Self.SMSTemplate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SMSTemplateTranslation" EntityType="Self.SMSTemplateTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StateHistory" EntityType="Self.StateHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StateTransitionsConfiguration" EntityType="Self.StateTransitionsConfiguration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SysCaseComments" EntityType="Self.SysCaseComments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemCaseAttachments" EntityType="Self.SystemCaseAttachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemCases" EntityType="Self.SystemCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemFile" EntityType="Self.SystemFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemFileTranslation" EntityType="Self.SystemFileTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemLog" EntityType="Self.SystemLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemSetting" EntityType="Self.SystemSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemSettingTranslation" EntityType="Self.SystemSettingTranslation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfileHolidays" EntityType="Self.UserProfileHolidays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfileOffDays" EntityType="Self.UserProfileOffDays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfileTranslation" EntityType="Self.UserProfileTranslation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Lead_Acti__Lead___0B5CAFEA" Association="Self.FK__Lead_Acti__Lead___0B5CAFEA">
+            <End Role="Leads" EntitySet="Leads" />
+            <End Role="Lead_Activity" EntitySet="Lead_Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leads__AssigneeI__078C1F06" Association="Self.FK__Leads__AssigneeI__078C1F06">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Leads" EntitySet="Leads" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leads__CampaignI__0880433F" Association="Self.FK__Leads__CampaignI__0880433F">
+            <End Role="Campaigns" EntitySet="Campaigns" />
+            <End Role="Leads" EntitySet="Leads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryTranslation_Category" Association="Self.FK_CategoryTranslation_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="CategoryTranslation" EntitySet="CategoryTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentTranslation_Department" Association="Self.FK_DepartmentTranslation_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="DepartmentTranslation" EntitySet="DepartmentTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsLookup_MasterLookup" Association="Self.FK_DetailsLookup_MasterLookup">
+            <End Role="MasterLookup" EntitySet="MasterLookup" />
+            <End Role="DetailsLookup" EntitySet="DetailsLookup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsLookupTranslation_DetailsLookup" Association="Self.FK_DetailsLookupTranslation_DetailsLookup">
+            <End Role="DetailsLookup" EntitySet="DetailsLookup" />
+            <End Role="DetailsLookupTranslation" EntitySet="DetailsLookupTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterLookupTranslation_MasterLookup" Association="Self.FK_MasterLookupTranslation_MasterLookup">
+            <End Role="MasterLookup" EntitySet="MasterLookup" />
+            <End Role="MasterLookupTranslation" EntitySet="MasterLookupTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_Menu" Association="Self.FK_Menu_Menu">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="Menu1" EntitySet="Menu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MenuTranslation_Menu" Association="Self.FK_MenuTranslation_Menu">
+            <End Role="Menu" EntitySet="Menu" />
+            <End Role="MenuTranslation" EntitySet="MenuTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermissions_AspNetRoles" Association="Self.FK_RolePermissions_AspNetRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="RolePermissions" EntitySet="RolePermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermissions_Permission" Association="Self.FK_RolePermissions_Permission">
+            <End Role="Permission" EntitySet="Permission" />
+            <End Role="RolePermissions" EntitySet="RolePermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SMSTemplateTranslation_SMSTemplate" Association="Self.FK_SMSTemplateTranslation_SMSTemplate">
+            <End Role="SMSTemplate" EntitySet="SMSTemplate" />
+            <End Role="SMSTemplateTranslation" EntitySet="SMSTemplateTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StateHistory_SystemCases" Association="Self.FK_StateHistory_SystemCases">
+            <End Role="SystemCases" EntitySet="SystemCases" />
+            <End Role="StateHistory" EntitySet="StateHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StateTransitionsConfiguration_UserProfile" Association="Self.FK_StateTransitionsConfiguration_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="StateTransitionsConfiguration" EntitySet="StateTransitionsConfiguration" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SysCaseComments_SystemCases" Association="Self.FK_SysCaseComments_SystemCases">
+            <End Role="SystemCases" EntitySet="SystemCases" />
+            <End Role="SysCaseComments" EntitySet="SysCaseComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCaseAttachments_SystemCases" Association="Self.FK_SystemCaseAttachments_SystemCases">
+            <End Role="SystemCases" EntitySet="SystemCases" />
+            <End Role="SystemCaseAttachments" EntitySet="SystemCaseAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCaseAttachments_SystemFile" Association="Self.FK_SystemCaseAttachments_SystemFile">
+            <End Role="SystemFile" EntitySet="SystemFile" />
+            <End Role="SystemCaseAttachments" EntitySet="SystemCaseAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCases_UserProfile" Association="Self.FK_SystemCases_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="SystemCases" EntitySet="SystemCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemFileTranslation_SystemFile" Association="Self.FK_SystemFileTranslation_SystemFile">
+            <End Role="SystemFile" EntitySet="SystemFile" />
+            <End Role="SystemFileTranslation" EntitySet="SystemFileTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemSettingTranslation_SystemSetting" Association="Self.FK_SystemSettingTranslation_SystemSetting">
+            <End Role="SystemSetting" EntitySet="SystemSetting" />
+            <End Role="SystemSettingTranslation" EntitySet="SystemSettingTranslation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_Department" Association="Self.FK_UserProfile_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="UserProfile" EntitySet="UserProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_UserProfile" Association="Self.FK_UserProfile_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserProfile1" EntitySet="UserProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileHolidays_UserProfile" Association="Self.FK_UserProfileHolidays_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserProfileHolidays" EntitySet="UserProfileHolidays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileOffDays_UserProfile" Association="Self.FK_UserProfileOffDays_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserProfileOffDays" EntitySet="UserProfileOffDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileTranslation_UserProfile" Association="Self.FK_UserProfileTranslation_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserProfileTranslation" EntitySet="UserProfileTranslation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CrmSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CrmSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="CrmSystemModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="CrmSystemModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="CrmSystemModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUserRoles" EntityType="CrmSystemModel.AspNetUserRole" />
+          <EntitySet Name="AspNetUsers" EntityType="CrmSystemModel.AspNetUser" />
+          <EntitySet Name="Campaigns" EntityType="CrmSystemModel.Campaign" />
+          <EntitySet Name="CasesByEmails" EntityType="CrmSystemModel.CasesByEmail" />
+          <EntitySet Name="Categories" EntityType="CrmSystemModel.Category" />
+          <EntitySet Name="CategoryTranslations" EntityType="CrmSystemModel.CategoryTranslation" />
+          <EntitySet Name="CommunicationLogs" EntityType="CrmSystemModel.CommunicationLog" />
+          <EntitySet Name="Departments" EntityType="CrmSystemModel.Department" />
+          <EntitySet Name="DepartmentTranslations" EntityType="CrmSystemModel.DepartmentTranslation" />
+          <EntitySet Name="DetailsLookups" EntityType="CrmSystemModel.DetailsLookup" />
+          <EntitySet Name="DetailsLookupTranslations" EntityType="CrmSystemModel.DetailsLookupTranslation" />
+          <EntitySet Name="Lead_Activity" EntityType="CrmSystemModel.Lead_Activity" />
+          <EntitySet Name="Leads" EntityType="CrmSystemModel.Lead" />
+          <EntitySet Name="MasterLookups" EntityType="CrmSystemModel.MasterLookup" />
+          <EntitySet Name="MasterLookupTranslations" EntityType="CrmSystemModel.MasterLookupTranslation" />
+          <EntitySet Name="Menus" EntityType="CrmSystemModel.Menu" />
+          <EntitySet Name="MenuTranslations" EntityType="CrmSystemModel.MenuTranslation" />
+          <EntitySet Name="Permissions" EntityType="CrmSystemModel.Permission" />
+          <EntitySet Name="RolePermissions" EntityType="CrmSystemModel.RolePermission" />
+          <EntitySet Name="SMSTemplates" EntityType="CrmSystemModel.SMSTemplate" />
+          <EntitySet Name="SMSTemplateTranslations" EntityType="CrmSystemModel.SMSTemplateTranslation" />
+          <EntitySet Name="StateHistories" EntityType="CrmSystemModel.StateHistory" />
+          <EntitySet Name="StateTransitionsConfigurations" EntityType="CrmSystemModel.StateTransitionsConfiguration" />
+          <EntitySet Name="SysCaseComments" EntityType="CrmSystemModel.SysCaseComment" />
+          <EntitySet Name="SystemCaseAttachments" EntityType="CrmSystemModel.SystemCaseAttachment" />
+          <EntitySet Name="SystemCases" EntityType="CrmSystemModel.SystemCas" />
+          <EntitySet Name="SystemFiles" EntityType="CrmSystemModel.SystemFile" />
+          <EntitySet Name="SystemFileTranslations" EntityType="CrmSystemModel.SystemFileTranslation" />
+          <EntitySet Name="SystemLogs" EntityType="CrmSystemModel.SystemLog" />
+          <EntitySet Name="SystemSettings" EntityType="CrmSystemModel.SystemSetting" />
+          <EntitySet Name="SystemSettingTranslations" EntityType="CrmSystemModel.SystemSettingTranslation" />
+          <EntitySet Name="UserProfiles" EntityType="CrmSystemModel.UserProfile" />
+          <EntitySet Name="UserProfileHolidays" EntityType="CrmSystemModel.UserProfileHoliday" />
+          <EntitySet Name="UserProfileOffDays" EntityType="CrmSystemModel.UserProfileOffDay" />
+          <EntitySet Name="UserProfileTranslations" EntityType="CrmSystemModel.UserProfileTranslation" />
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRole" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermissions_AspNetRoles" Association="CrmSystemModel.FK_RolePermissions_AspNetRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="RolePermission" EntitySet="RolePermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="CrmSystemModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="CrmSystemModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRole" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leads__CampaignI__0880433F" Association="CrmSystemModel.FK__Leads__CampaignI__0880433F">
+            <End Role="Campaign" EntitySet="Campaigns" />
+            <End Role="Lead" EntitySet="Leads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryTranslation_Category" Association="CrmSystemModel.FK_CategoryTranslation_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="CategoryTranslation" EntitySet="CategoryTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DepartmentTranslation_Department" Association="CrmSystemModel.FK_DepartmentTranslation_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="DepartmentTranslation" EntitySet="DepartmentTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_Department" Association="CrmSystemModel.FK_UserProfile_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsLookup_MasterLookup" Association="CrmSystemModel.FK_DetailsLookup_MasterLookup">
+            <End Role="MasterLookup" EntitySet="MasterLookups" />
+            <End Role="DetailsLookup" EntitySet="DetailsLookups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsLookupTranslation_DetailsLookup" Association="CrmSystemModel.FK_DetailsLookupTranslation_DetailsLookup">
+            <End Role="DetailsLookup" EntitySet="DetailsLookups" />
+            <End Role="DetailsLookupTranslation" EntitySet="DetailsLookupTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Lead_Acti__Lead___0B5CAFEA" Association="CrmSystemModel.FK__Lead_Acti__Lead___0B5CAFEA">
+            <End Role="Lead" EntitySet="Leads" />
+            <End Role="Lead_Activity" EntitySet="Lead_Activity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Leads__AssigneeI__078C1F06" Association="CrmSystemModel.FK__Leads__AssigneeI__078C1F06">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="Lead" EntitySet="Leads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MasterLookupTranslation_MasterLookup" Association="CrmSystemModel.FK_MasterLookupTranslation_MasterLookup">
+            <End Role="MasterLookup" EntitySet="MasterLookups" />
+            <End Role="MasterLookupTranslation" EntitySet="MasterLookupTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_Menu" Association="CrmSystemModel.FK_Menu_Menu">
+            <End Role="Menu" EntitySet="Menus" />
+            <End Role="Menu1" EntitySet="Menus" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MenuTranslation_Menu" Association="CrmSystemModel.FK_MenuTranslation_Menu">
+            <End Role="Menu" EntitySet="Menus" />
+            <End Role="MenuTranslation" EntitySet="MenuTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolePermissions_Permission" Association="CrmSystemModel.FK_RolePermissions_Permission">
+            <End Role="Permission" EntitySet="Permissions" />
+            <End Role="RolePermission" EntitySet="RolePermissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SMSTemplateTranslation_SMSTemplate" Association="CrmSystemModel.FK_SMSTemplateTranslation_SMSTemplate">
+            <End Role="SMSTemplate" EntitySet="SMSTemplates" />
+            <End Role="SMSTemplateTranslation" EntitySet="SMSTemplateTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StateHistory_SystemCases" Association="CrmSystemModel.FK_StateHistory_SystemCases">
+            <End Role="SystemCas" EntitySet="SystemCases" />
+            <End Role="StateHistory" EntitySet="StateHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_StateTransitionsConfiguration_UserProfile" Association="CrmSystemModel.FK_StateTransitionsConfiguration_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="StateTransitionsConfiguration" EntitySet="StateTransitionsConfigurations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SysCaseComments_SystemCases" Association="CrmSystemModel.FK_SysCaseComments_SystemCases">
+            <End Role="SystemCas" EntitySet="SystemCases" />
+            <End Role="SysCaseComment" EntitySet="SysCaseComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCaseAttachments_SystemCases" Association="CrmSystemModel.FK_SystemCaseAttachments_SystemCases">
+            <End Role="SystemCas" EntitySet="SystemCases" />
+            <End Role="SystemCaseAttachment" EntitySet="SystemCaseAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCaseAttachments_SystemFile" Association="CrmSystemModel.FK_SystemCaseAttachments_SystemFile">
+            <End Role="SystemFile" EntitySet="SystemFiles" />
+            <End Role="SystemCaseAttachment" EntitySet="SystemCaseAttachments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemCases_UserProfile" Association="CrmSystemModel.FK_SystemCases_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="SystemCas" EntitySet="SystemCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemFileTranslation_SystemFile" Association="CrmSystemModel.FK_SystemFileTranslation_SystemFile">
+            <End Role="SystemFile" EntitySet="SystemFiles" />
+            <End Role="SystemFileTranslation" EntitySet="SystemFileTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SystemSettingTranslation_SystemSetting" Association="CrmSystemModel.FK_SystemSettingTranslation_SystemSetting">
+            <End Role="SystemSetting" EntitySet="SystemSettings" />
+            <End Role="SystemSettingTranslation" EntitySet="SystemSettingTranslations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_UserProfile" Association="CrmSystemModel.FK_UserProfile_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserProfile1" EntitySet="UserProfiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileHolidays_UserProfile" Association="CrmSystemModel.FK_UserProfileHolidays_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserProfileHoliday" EntitySet="UserProfileHolidays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileOffDays_UserProfile" Association="CrmSystemModel.FK_UserProfileOffDays_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserProfileOffDay" EntitySet="UserProfileOffDays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfileTranslation_UserProfile" Association="CrmSystemModel.FK_UserProfileTranslation_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="UserProfileTranslation" EntitySet="UserProfileTranslations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FriendlyName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRole" ToRole="AspNetUserRole" />
+          <NavigationProperty Name="RolePermissions" Relationship="CrmSystemModel.FK_RolePermissions_AspNetRoles" FromRole="AspNetRole" ToRole="RolePermission" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="CrmSystemModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="CrmSystemModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetRole" Relationship="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRole" ToRole="AspNetRole" />
+          <NavigationProperty Name="AspNetUser" Relationship="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUserRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="CrmSystemModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="CrmSystemModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="CrmSystemModel.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserRole" />
+        </EntityType>
+        <EntityType Name="Campaign">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Leads" Relationship="CrmSystemModel.FK__Leads__CampaignI__0880433F" FromRole="Campaign" ToRole="Lead" />
+        </EntityType>
+        <EntityType Name="CasesByEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="EmailDescription" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SentTo" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FilePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CategoryTranslations" Relationship="CrmSystemModel.FK_CategoryTranslation_Category" FromRole="Category" ToRole="CategoryTranslation" />
+        </EntityType>
+        <EntityType Name="CategoryTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="CrmSystemModel.FK_CategoryTranslation_Category" FromRole="CategoryTranslation" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="CommunicationLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <Property Name="LogText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DepartmentTranslations" Relationship="CrmSystemModel.FK_DepartmentTranslation_Department" FromRole="Department" ToRole="DepartmentTranslation" />
+          <NavigationProperty Name="UserProfiles" Relationship="CrmSystemModel.FK_UserProfile_Department" FromRole="Department" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="DepartmentTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="CrmSystemModel.FK_DepartmentTranslation_Department" FromRole="DepartmentTranslation" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="DetailsLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasterId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="Code" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MasterLookup" Relationship="CrmSystemModel.FK_DetailsLookup_MasterLookup" FromRole="DetailsLookup" ToRole="MasterLookup" />
+          <NavigationProperty Name="DetailsLookupTranslations" Relationship="CrmSystemModel.FK_DetailsLookupTranslation_DetailsLookup" FromRole="DetailsLookup" ToRole="DetailsLookupTranslation" />
+        </EntityType>
+        <EntityType Name="DetailsLookupTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DetailsLookupId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DetailsLookup" Relationship="CrmSystemModel.FK_DetailsLookupTranslation_DetailsLookup" FromRole="DetailsLookupTranslation" ToRole="DetailsLookup" />
+        </EntityType>
+        <EntityType Name="Lead_Activity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Activity_Type" Type="Int32" />
+          <Property Name="Activity_Status" Type="Int32" />
+          <Property Name="Activity_Date" Type="DateTime" Precision="3" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Lead_ID" Type="Int32" />
+          <NavigationProperty Name="Lead" Relationship="CrmSystemModel.FK__Lead_Acti__Lead___0B5CAFEA" FromRole="Lead_Activity" ToRole="Lead" />
+        </EntityType>
+        <EntityType Name="Lead">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Phone_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Created_Date" Type="DateTime" Precision="3" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AssigneeId" Type="Int32" />
+          <Property Name="CampaignId" Type="Int32" />
+          <NavigationProperty Name="Campaign" Relationship="CrmSystemModel.FK__Leads__CampaignI__0880433F" FromRole="Lead" ToRole="Campaign" />
+          <NavigationProperty Name="Lead_Activity" Relationship="CrmSystemModel.FK__Lead_Acti__Lead___0B5CAFEA" FromRole="Lead" ToRole="Lead_Activity" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK__Leads__AssigneeI__078C1F06" FromRole="Lead" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="MasterLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="DetailsLookups" Relationship="CrmSystemModel.FK_DetailsLookup_MasterLookup" FromRole="MasterLookup" ToRole="DetailsLookup" />
+          <NavigationProperty Name="MasterLookupTranslations" Relationship="CrmSystemModel.FK_MasterLookupTranslation_MasterLookup" FromRole="MasterLookup" ToRole="MasterLookupTranslation" />
+        </EntityType>
+        <EntityType Name="MasterLookupTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MasterLookupId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MasterLookup" Relationship="CrmSystemModel.FK_MasterLookupTranslation_MasterLookup" FromRole="MasterLookupTranslation" ToRole="MasterLookup" />
+        </EntityType>
+        <EntityType Name="Menu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Icon" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ParentId" Type="Int32" />
+          <Property Name="PageId" Type="Int32" />
+          <Property Name="PageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SortOrder" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Menu1" Relationship="CrmSystemModel.FK_Menu_Menu" FromRole="Menu" ToRole="Menu1" />
+          <NavigationProperty Name="Menu2" Relationship="CrmSystemModel.FK_Menu_Menu" FromRole="Menu1" ToRole="Menu" />
+          <NavigationProperty Name="MenuTranslations" Relationship="CrmSystemModel.FK_MenuTranslation_Menu" FromRole="Menu" ToRole="MenuTranslation" />
+        </EntityType>
+        <EntityType Name="MenuTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuId" Type="Int32" Nullable="false" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Menu" Relationship="CrmSystemModel.FK_MenuTranslation_Menu" FromRole="MenuTranslation" ToRole="Menu" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PageUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PageName" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="PermissionKey" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="RolePermissions" Relationship="CrmSystemModel.FK_RolePermissions_Permission" FromRole="Permission" ToRole="RolePermission" />
+        </EntityType>
+        <EntityType Name="RolePermission">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PermissionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetRole" Relationship="CrmSystemModel.FK_RolePermissions_AspNetRoles" FromRole="RolePermission" ToRole="AspNetRole" />
+          <NavigationProperty Name="Permission" Relationship="CrmSystemModel.FK_RolePermissions_Permission" FromRole="RolePermission" ToRole="Permission" />
+        </EntityType>
+        <EntityType Name="SMSTemplate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DefaultLanguage" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SMSTemplateTranslations" Relationship="CrmSystemModel.FK_SMSTemplateTranslation_SMSTemplate" FromRole="SMSTemplate" ToRole="SMSTemplateTranslation" />
+        </EntityType>
+        <EntityType Name="SMSTemplateTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SMSTemplateId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="SMSTemplate" Relationship="CrmSystemModel.FK_SMSTemplateTranslation_SMSTemplate" FromRole="SMSTemplateTranslation" ToRole="SMSTemplate" />
+        </EntityType>
+        <EntityType Name="StateHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Int32" Nullable="false" />
+          <Property Name="PreviousState" Type="Int32" Nullable="false" />
+          <Property Name="CurrentState" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SystemCas" Relationship="CrmSystemModel.FK_StateHistory_SystemCases" FromRole="StateHistory" ToRole="SystemCas" />
+        </EntityType>
+        <EntityType Name="StateTransitionsConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="StateFrom" Type="Int32" Nullable="false" />
+          <Property Name="StateTo" Type="Int32" Nullable="false" />
+          <Property Name="AssigneeId" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="CategoryType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK_StateTransitionsConfiguration_UserProfile" FromRole="StateTransitionsConfiguration" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="SysCaseComment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CaseId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="ForCitizen" Type="Boolean" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemCas" Relationship="CrmSystemModel.FK_SysCaseComments_SystemCases" FromRole="SysCaseComment" ToRole="SystemCas" />
+        </EntityType>
+        <EntityType Name="SystemCaseAttachment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileId" Type="Int32" Nullable="false" />
+          <Property Name="CaseId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SystemCas" Relationship="CrmSystemModel.FK_SystemCaseAttachments_SystemCases" FromRole="SystemCaseAttachment" ToRole="SystemCas" />
+          <NavigationProperty Name="SystemFile" Relationship="CrmSystemModel.FK_SystemCaseAttachments_SystemFile" FromRole="SystemCaseAttachment" ToRole="SystemFile" />
+        </EntityType>
+        <EntityType Name="SystemCas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UniqueId" Type="Guid" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="SeverityId" Type="Int32" />
+          <Property Name="SeverityValue" Type="Int32" />
+          <Property Name="PriorityId" Type="Int32" />
+          <Property Name="PriorityValue" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Tags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssigneeId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="Address" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="FormId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FormName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="StateHistories" Relationship="CrmSystemModel.FK_StateHistory_SystemCases" FromRole="SystemCas" ToRole="StateHistory" />
+          <NavigationProperty Name="SysCaseComments" Relationship="CrmSystemModel.FK_SysCaseComments_SystemCases" FromRole="SystemCas" ToRole="SysCaseComment" />
+          <NavigationProperty Name="SystemCaseAttachments" Relationship="CrmSystemModel.FK_SystemCaseAttachments_SystemCases" FromRole="SystemCas" ToRole="SystemCaseAttachment" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK_SystemCases_UserProfile" FromRole="SystemCas" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="SystemFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="FileUrl" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SystemCaseAttachments" Relationship="CrmSystemModel.FK_SystemCaseAttachments_SystemFile" FromRole="SystemFile" ToRole="SystemCaseAttachment" />
+          <NavigationProperty Name="SystemFileTranslations" Relationship="CrmSystemModel.FK_SystemFileTranslation_SystemFile" FromRole="SystemFile" ToRole="SystemFileTranslation" />
+        </EntityType>
+        <EntityType Name="SystemFileTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SystemFileId" Type="Int32" Nullable="false" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AltText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemFile" Relationship="CrmSystemModel.FK_SystemFileTranslation_SystemFile" FromRole="SystemFileTranslation" ToRole="SystemFile" />
+        </EntityType>
+        <EntityType Name="SystemLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Component" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SystemSetting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="SystemSettingTranslations" Relationship="CrmSystemModel.FK_SystemSettingTranslation_SystemSetting" FromRole="SystemSetting" ToRole="SystemSettingTranslation" />
+        </EntityType>
+        <EntityType Name="SystemSettingTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SettingId" Type="Int32" Nullable="false" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SystemSetting" Relationship="CrmSystemModel.FK_SystemSettingTranslation_SystemSetting" FromRole="SystemSettingTranslation" ToRole="SystemSetting" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="3" />
+          <Property Name="GenderLookupId" Type="Int32" />
+          <Property Name="MartialStatusLookupId" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="Mobile" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastLogin" Type="DateTime" Precision="3" />
+          <Property Name="ProfilePhoto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IntegrationId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProvinceId" Type="Int32" />
+          <Property Name="CityId" Type="Int32" />
+          <Property Name="RegionId" Type="Int32" />
+          <Property Name="DepartmentId" Type="Int32" />
+          <Property Name="ManagerId" Type="Int32" />
+          <Property Name="PreferedLanguageId" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="StatusEditDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Department" Relationship="CrmSystemModel.FK_UserProfile_Department" FromRole="UserProfile" ToRole="Department" />
+          <NavigationProperty Name="Leads" Relationship="CrmSystemModel.FK__Leads__AssigneeI__078C1F06" FromRole="UserProfile" ToRole="Lead" />
+          <NavigationProperty Name="StateTransitionsConfigurations" Relationship="CrmSystemModel.FK_StateTransitionsConfiguration_UserProfile" FromRole="UserProfile" ToRole="StateTransitionsConfiguration" />
+          <NavigationProperty Name="SystemCases" Relationship="CrmSystemModel.FK_SystemCases_UserProfile" FromRole="UserProfile" ToRole="SystemCas" />
+          <NavigationProperty Name="UserProfile1" Relationship="CrmSystemModel.FK_UserProfile_UserProfile" FromRole="UserProfile" ToRole="UserProfile1" />
+          <NavigationProperty Name="UserProfile2" Relationship="CrmSystemModel.FK_UserProfile_UserProfile" FromRole="UserProfile1" ToRole="UserProfile" />
+          <NavigationProperty Name="UserProfileHolidays" Relationship="CrmSystemModel.FK_UserProfileHolidays_UserProfile" FromRole="UserProfile" ToRole="UserProfileHoliday" />
+          <NavigationProperty Name="UserProfileOffDays" Relationship="CrmSystemModel.FK_UserProfileOffDays_UserProfile" FromRole="UserProfile" ToRole="UserProfileOffDay" />
+          <NavigationProperty Name="UserProfileTranslations" Relationship="CrmSystemModel.FK_UserProfileTranslation_UserProfile" FromRole="UserProfile" ToRole="UserProfileTranslation" />
+        </EntityType>
+        <EntityType Name="UserProfileHoliday">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserProfileId" Type="Int32" />
+          <Property Name="HolidayDate" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK_UserProfileHolidays_UserProfile" FromRole="UserProfileHoliday" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="UserProfileOffDay">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserProfileId" Type="Int32" />
+          <Property Name="WeekDay" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK_UserProfileOffDays_UserProfile" FromRole="UserProfileOffDay" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="UserProfileTranslation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="UserProfileId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserProfile" Relationship="CrmSystemModel.FK_UserProfileTranslation_UserProfile" FromRole="UserProfileTranslation" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Type="CrmSystemModel.AspNetRole" Role="AspNetRole" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CrmSystemModel.AspNetUserRole" Role="AspNetUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermissions_AspNetRoles">
+          <End Type="CrmSystemModel.AspNetRole" Role="AspNetRole" Multiplicity="1" />
+          <End Type="CrmSystemModel.RolePermission" Role="RolePermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermission">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="CrmSystemModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CrmSystemModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="CrmSystemModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CrmSystemModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+          <End Type="CrmSystemModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CrmSystemModel.AspNetUserRole" Role="AspNetUserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leads__CampaignI__0880433F">
+          <End Type="CrmSystemModel.Campaign" Role="Campaign" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.Lead" Role="Lead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Campaign">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lead">
+              <PropertyRef Name="CampaignId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryTranslation_Category">
+          <End Type="CrmSystemModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="CrmSystemModel.CategoryTranslation" Role="CategoryTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CategoryTranslation">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DepartmentTranslation_Department">
+          <End Type="CrmSystemModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="CrmSystemModel.DepartmentTranslation" Role="DepartmentTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DepartmentTranslation">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_Department">
+          <End Type="CrmSystemModel.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsLookup_MasterLookup">
+          <End Type="CrmSystemModel.MasterLookup" Role="MasterLookup" Multiplicity="1" />
+          <End Type="CrmSystemModel.DetailsLookup" Role="DetailsLookup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DetailsLookup">
+              <PropertyRef Name="MasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsLookupTranslation_DetailsLookup">
+          <End Type="CrmSystemModel.DetailsLookup" Role="DetailsLookup" Multiplicity="1" />
+          <End Type="CrmSystemModel.DetailsLookupTranslation" Role="DetailsLookupTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DetailsLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DetailsLookupTranslation">
+              <PropertyRef Name="DetailsLookupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Lead_Acti__Lead___0B5CAFEA">
+          <End Type="CrmSystemModel.Lead" Role="Lead" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.Lead_Activity" Role="Lead_Activity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lead">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lead_Activity">
+              <PropertyRef Name="Lead_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Leads__AssigneeI__078C1F06">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.Lead" Role="Lead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Lead">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MasterLookupTranslation_MasterLookup">
+          <End Type="CrmSystemModel.MasterLookup" Role="MasterLookup" Multiplicity="1" />
+          <End Type="CrmSystemModel.MasterLookupTranslation" Role="MasterLookupTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MasterLookup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MasterLookupTranslation">
+              <PropertyRef Name="MasterLookupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_Menu">
+          <End Type="CrmSystemModel.Menu" Role="Menu" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.Menu" Role="Menu1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MenuTranslation_Menu">
+          <End Type="CrmSystemModel.Menu" Role="Menu" Multiplicity="1" />
+          <End Type="CrmSystemModel.MenuTranslation" Role="MenuTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Menu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MenuTranslation">
+              <PropertyRef Name="MenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolePermissions_Permission">
+          <End Type="CrmSystemModel.Permission" Role="Permission" Multiplicity="1" />
+          <End Type="CrmSystemModel.RolePermission" Role="RolePermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Permission">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RolePermission">
+              <PropertyRef Name="PermissionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SMSTemplateTranslation_SMSTemplate">
+          <End Type="CrmSystemModel.SMSTemplate" Role="SMSTemplate" Multiplicity="1" />
+          <End Type="CrmSystemModel.SMSTemplateTranslation" Role="SMSTemplateTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SMSTemplate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SMSTemplateTranslation">
+              <PropertyRef Name="SMSTemplateId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StateHistory_SystemCases">
+          <End Type="CrmSystemModel.SystemCas" Role="SystemCas" Multiplicity="1" />
+          <End Type="CrmSystemModel.StateHistory" Role="StateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StateHistory">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_StateTransitionsConfiguration_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.StateTransitionsConfiguration" Role="StateTransitionsConfiguration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="StateTransitionsConfiguration">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SysCaseComments_SystemCases">
+          <End Type="CrmSystemModel.SystemCas" Role="SystemCas" Multiplicity="1" />
+          <End Type="CrmSystemModel.SysCaseComment" Role="SysCaseComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SysCaseComment">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCaseAttachments_SystemCases">
+          <End Type="CrmSystemModel.SystemCas" Role="SystemCas" Multiplicity="1" />
+          <End Type="CrmSystemModel.SystemCaseAttachment" Role="SystemCaseAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemCas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCaseAttachment">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCaseAttachments_SystemFile">
+          <End Type="CrmSystemModel.SystemFile" Role="SystemFile" Multiplicity="1" />
+          <End Type="CrmSystemModel.SystemCaseAttachment" Role="SystemCaseAttachment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemFile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCaseAttachment">
+              <PropertyRef Name="FileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemCases_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.SystemCas" Role="SystemCas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemCas">
+              <PropertyRef Name="AssigneeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemFileTranslation_SystemFile">
+          <End Type="CrmSystemModel.SystemFile" Role="SystemFile" Multiplicity="1" />
+          <End Type="CrmSystemModel.SystemFileTranslation" Role="SystemFileTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemFile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemFileTranslation">
+              <PropertyRef Name="SystemFileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SystemSettingTranslation_SystemSetting">
+          <End Type="CrmSystemModel.SystemSetting" Role="SystemSetting" Multiplicity="1" />
+          <End Type="CrmSystemModel.SystemSettingTranslation" Role="SystemSettingTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SystemSetting">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SystemSettingTranslation">
+              <PropertyRef Name="SettingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile1">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileHolidays_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.UserProfileHoliday" Role="UserProfileHoliday" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileHoliday">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileOffDays_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.UserProfileOffDay" Role="UserProfileOffDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileOffDay">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfileTranslation_UserProfile">
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="CrmSystemModel.UserProfileTranslation" Role="UserProfileTranslation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileTranslation">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CrmSystemModelStoreContainer" CdmEntityContainer="CrmSystemEntities">
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="CrmSystemModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FriendlyName" ColumnName="FriendlyName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="CrmSystemModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="CrmSystemModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserRoles">
+            <EntityTypeMapping TypeName="CrmSystemModel.AspNetUserRole">
+              <MappingFragment StoreEntitySet="AspNetUserRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="CrmSystemModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Campaigns">
+            <EntityTypeMapping TypeName="CrmSystemModel.Campaign">
+              <MappingFragment StoreEntitySet="Campaigns">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CasesByEmails">
+            <EntityTypeMapping TypeName="CrmSystemModel.CasesByEmail">
+              <MappingFragment StoreEntitySet="CasesByEmail">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="SentTo" ColumnName="SentTo" />
+                <ScalarProperty Name="EmailDescription" ColumnName="EmailDescription" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="CrmSystemModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.CategoryTranslation">
+              <MappingFragment StoreEntitySet="CategoryTranslation">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommunicationLogs">
+            <EntityTypeMapping TypeName="CrmSystemModel.CommunicationLog">
+              <MappingFragment StoreEntitySet="CommunicationLogs">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="LogText" ColumnName="LogText" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="CrmSystemModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DepartmentTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.DepartmentTranslation">
+              <MappingFragment StoreEntitySet="DepartmentTranslation">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetailsLookups">
+            <EntityTypeMapping TypeName="CrmSystemModel.DetailsLookup">
+              <MappingFragment StoreEntitySet="DetailsLookup">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="MasterId" ColumnName="MasterId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetailsLookupTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.DetailsLookupTranslation">
+              <MappingFragment StoreEntitySet="DetailsLookupTranslation">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="DetailsLookupId" ColumnName="DetailsLookupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lead_Activity">
+            <EntityTypeMapping TypeName="CrmSystemModel.Lead_Activity">
+              <MappingFragment StoreEntitySet="Lead_Activity">
+                <ScalarProperty Name="Lead_ID" ColumnName="Lead_ID" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Activity_Date" ColumnName="Activity_Date" />
+                <ScalarProperty Name="Activity_Status" ColumnName="Activity_Status" />
+                <ScalarProperty Name="Activity_Type" ColumnName="Activity_Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Leads">
+            <EntityTypeMapping TypeName="CrmSystemModel.Lead">
+              <MappingFragment StoreEntitySet="Leads">
+                <ScalarProperty Name="CampaignId" ColumnName="CampaignId" />
+                <ScalarProperty Name="AssigneeId" ColumnName="AssigneeId" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Created_Date" ColumnName="Created_Date" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Phone_Number" ColumnName="Phone_Number" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MasterLookups">
+            <EntityTypeMapping TypeName="CrmSystemModel.MasterLookup">
+              <MappingFragment StoreEntitySet="MasterLookup">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MasterLookupTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.MasterLookupTranslation">
+              <MappingFragment StoreEntitySet="MasterLookupTranslation">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MasterLookupId" ColumnName="MasterLookupId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Menus">
+            <EntityTypeMapping TypeName="CrmSystemModel.Menu">
+              <MappingFragment StoreEntitySet="Menu">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="PageUrl" ColumnName="PageUrl" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MenuTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.MenuTranslation">
+              <MappingFragment StoreEntitySet="MenuTranslation">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="CrmSystemModel.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PermissionKey" ColumnName="PermissionKey" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="PageUrl" ColumnName="PageUrl" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolePermissions">
+            <EntityTypeMapping TypeName="CrmSystemModel.RolePermission">
+              <MappingFragment StoreEntitySet="RolePermissions">
+                <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSTemplates">
+            <EntityTypeMapping TypeName="CrmSystemModel.SMSTemplate">
+              <MappingFragment StoreEntitySet="SMSTemplate">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="DefaultLanguage" ColumnName="DefaultLanguage" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSTemplateTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.SMSTemplateTranslation">
+              <MappingFragment StoreEntitySet="SMSTemplateTranslation">
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SMSTemplateId" ColumnName="SMSTemplateId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StateHistories">
+            <EntityTypeMapping TypeName="CrmSystemModel.StateHistory">
+              <MappingFragment StoreEntitySet="StateHistory">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CurrentState" ColumnName="CurrentState" />
+                <ScalarProperty Name="PreviousState" ColumnName="PreviousState" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StateTransitionsConfigurations">
+            <EntityTypeMapping TypeName="CrmSystemModel.StateTransitionsConfiguration">
+              <MappingFragment StoreEntitySet="StateTransitionsConfiguration">
+                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="AssigneeId" ColumnName="AssigneeId" />
+                <ScalarProperty Name="StateTo" ColumnName="StateTo" />
+                <ScalarProperty Name="StateFrom" ColumnName="StateFrom" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SysCaseComments">
+            <EntityTypeMapping TypeName="CrmSystemModel.SysCaseComment">
+              <MappingFragment StoreEntitySet="SysCaseComments">
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="ForCitizen" ColumnName="ForCitizen" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemCaseAttachments">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemCaseAttachment">
+              <MappingFragment StoreEntitySet="SystemCaseAttachments">
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemCases">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemCas">
+              <MappingFragment StoreEntitySet="SystemCases">
+                <ScalarProperty Name="FormName" ColumnName="FormName" />
+                <ScalarProperty Name="FormId" ColumnName="FormId" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AssigneeId" ColumnName="AssigneeId" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="PriorityValue" ColumnName="PriorityValue" />
+                <ScalarProperty Name="PriorityId" ColumnName="PriorityId" />
+                <ScalarProperty Name="SeverityValue" ColumnName="SeverityValue" />
+                <ScalarProperty Name="SeverityId" ColumnName="SeverityId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="UniqueId" ColumnName="UniqueId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemFiles">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemFile">
+              <MappingFragment StoreEntitySet="SystemFile">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="FileUrl" ColumnName="FileUrl" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemFileTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemFileTranslation">
+              <MappingFragment StoreEntitySet="SystemFileTranslation">
+                <ScalarProperty Name="AltText" ColumnName="AltText" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="SystemFileId" ColumnName="SystemFileId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemLogs">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemLog">
+              <MappingFragment StoreEntitySet="SystemLog">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="Component" ColumnName="Component" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemSettings">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemSetting">
+              <MappingFragment StoreEntitySet="SystemSetting">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemSettingTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.SystemSettingTranslation">
+              <MappingFragment StoreEntitySet="SystemSettingTranslation">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="SettingId" ColumnName="SettingId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="CrmSystemModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="StatusEditDescription" ColumnName="StatusEditDescription" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PreferedLanguageId" ColumnName="PreferedLanguageId" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="ProvinceId" ColumnName="ProvinceId" />
+                <ScalarProperty Name="IntegrationId" ColumnName="IntegrationId" />
+                <ScalarProperty Name="ProfilePhoto" ColumnName="ProfilePhoto" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="MartialStatusLookupId" ColumnName="MartialStatusLookupId" />
+                <ScalarProperty Name="GenderLookupId" ColumnName="GenderLookupId" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="IdNumber" ColumnName="IdNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfileHolidays">
+            <EntityTypeMapping TypeName="CrmSystemModel.UserProfileHoliday">
+              <MappingFragment StoreEntitySet="UserProfileHolidays">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="HolidayDate" ColumnName="HolidayDate" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfileOffDays">
+            <EntityTypeMapping TypeName="CrmSystemModel.UserProfileOffDay">
+              <MappingFragment StoreEntitySet="UserProfileOffDays">
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="WeekDay" ColumnName="WeekDay" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfileTranslations">
+            <EntityTypeMapping TypeName="CrmSystemModel.UserProfileTranslation">
+              <MappingFragment StoreEntitySet="UserProfileTranslation">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

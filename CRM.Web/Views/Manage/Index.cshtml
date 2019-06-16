@@ -1,0 +1,367 @@
+﻿@using CRM.Core.SystemEnums
+@model CRM.Web.Models.ProfileViewModel
+@{
+    ViewBag.Title = Resources.Register.ProfileTitle;
+    int imageNo = (int)GeneralEnums.FileEnum.ProfileImage;
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<section class="section profile" id="sectionProfile">
+    <header class="profile-header">
+        <div class="container">
+            <div class="user">
+                @if (!string.IsNullOrWhiteSpace(Model.ProfilePath))
+                {
+                    <img class="profile-img img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
+                }
+                else
+                {
+                    <img class="profile-img img-thumbnail" src="~/Content/assets/img/profile.png" />
+                }
+                <div>
+                    <h2>@Model.FullName</h2>
+                    <p>@Model.Address</p>
+                </div>
+            </div>
+            <div>
+                <a onclick="ShowManageProfile()" class="btn btn-default">إعدادات الحساب</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="profile-info">
+            <div class="profile-info-content">
+                
+                <div class="profile-info-item color-5">
+                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                    <div>
+                        <h3>@Resources.UserProfile.PrefferdLanguage </h3>
+                        <p> @Model.PrefferdLanguageName</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-5">
+                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtEmail </h3>
+                        <p> @Model.Email</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-1">
+                    <div class="icon-wrapper"><i class="icon icon-card"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtIdNumber</h3>
+                        <p>@Model.IdNumber</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-2">
+                    <div class="icon-wrapper"><i class="icon icon-mobile"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtMobile</h3>
+                        <p>@Model.Mobile</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-3">
+                    <div class="icon-wrapper"><i class="icon icon-contact"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtPhoneNumber  </h3>
+                        <p>@Model.PhoneNumber</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-4">
+                    <div class="icon-wrapper"><i class="icon icon-time"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtGenderLookupId</h3>
+                        <p>@Model.GenderLookupName</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-5">
+                    <div class="icon-wrapper"><i class="icon icon-sex"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtMartialStatusLookupId  </h3>
+                        <p>@Model.MartialStatusLookupName</p>
+                    </div>
+                </div>
+                <div class="profile-info-item color-5">
+                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                    <div>
+                        <h3>@Resources.Register.TxtAddress </h3>
+                        <p> @Model.Address</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@if (TempData["UpdateProfileResult"] != null)
+{
+    <div class="text-success">@TempData["UpdateProfileResult"]</div>
+}
+
+@if (TempData["SendFormToCRMStatus"] != null && TempData["SendFormToCRMStatus"].ToString() == "Susccess")
+{
+    <div class="text-success">تم ارسال النموذج بنجاح</div>
+}
+
+<section class="section" id="userProfileEdit" style="display:none">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="d-flex">
+                    <h2 class="section-title">اعدادات الحساب</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-lg-4 cms-col-header">
+                <h2>معلومات عامة</h2>
+            </div>
+            <div class="col-lg-8">
+                @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(r => r.Id)
+                    <div class="row">
+
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                            @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control" })
+                        </div>
+                        
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.IdNumber, new { @for = "IdNumber" })
+                            @Html.TextBoxFor(m => m.IdNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthIdNumber()" })
+                            @Html.ValidationMessageFor(m => m.IdNumber, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.PhoneNumber, new { @for = "PhoneNumber" })
+                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthPhone()" })
+                            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.Mobile, new { @for = "Mobile" })
+                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
+                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.BirthDay, new { @for = "BirthDay" })
+                            @Html.TextBoxFor(m => m.BirthDay, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
+                            @Html.ValidationMessageFor(m => m.BirthDay, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                            @Html.DropDownList("GenderLookupId", null, new { @class = "form-control" })
+                        </div>
+
+
+                        <div class="form-group col-lg-6">
+                            @Html.LabelFor(m => m.MartialStatusLookupId, new { @for = "MartialStatusLookupId" })
+                            @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control" })
+                        </div>
+
+
+
+
+                        <div class="form-group col-lg-6">
+                            @Html.HiddenFor(m => m.ProfilePath)
+                            <label for="MainImageUrlEdit">
+                                @Resources.Register.TxtProfilePath
+                            </label>
+
+                            <input name="MainImageUrl" id="MainImageUrlEdit" type="file" onchange="previewFile()" class="form-control-file">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group col-lg-12">
+                        <button type="submit" class="btn btn-primary">@Resources.Register.BtnSave</button>
+                        <button class="btn btn-secondary" onclick="HideManageProfile()">إلغاء</button>
+                    </div>
+                    <small>
+                        <a href="@Url.Action("ChangePassword")">@Resources.ChangePassword.LinkChangePassword</a>
+                    </small>
+
+                }
+            </div>
+        </div>      
+    </div>
+</section>
+
+<script>
+
+    function ShowManageProfile()
+    {
+        $('#userProfileEdit').show();
+        $('#sectionProfile').hide();
+        $('#divtab').hide();
+        $('#sectionComplaints').hide();
+        $('#sectionForms').hide();
+    }
+
+    function HideManageProfile() {
+        $('#userProfileEdit').hide();
+        $('#sectionProfile').show();
+        $('#divtab').show();
+        $('#sectionForms').show();
+        $('#sectionComplaints').hide();
+
+
+        $("#userFormBtn").addClass("active");
+        $("#ComplaintBtn").removeClass("active");
+
+    }
+
+    function ShowSectionComplaint()
+    {
+        $('#sectionComplaints').show();
+        $('#sectionForms').hide();
+
+        $("#ComplaintBtn").addClass("active");
+        $("#userFormBtn").removeClass("active");
+    }
+    function ShowSectionForm()
+    {
+        $('#sectionComplaints').hide();
+        $('#sectionForms').show();
+
+        $("#userFormBtn").addClass("active");
+        $("#ComplaintBtn").removeClass("active");
+
+    }
+
+
+    $('#MainImageUrlEdit').on('change', function (e) {
+        var files = e.target.files;
+        if (files.length > 0) {
+
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@imageNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        $("#ProfilePath").val(result[0].FileUrl);
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+    function checkLengthIdNumber() {
+
+
+        var fieldLength = $("#IdNumber").val().length;
+        if (fieldLength <= 9) {
+            return true;
+        }
+        else {
+            var str = $("#IdNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#IdNumber").val(str);
+        }
+    }
+
+
+    function checkLengthPhone() {
+
+        var fieldLength = $("#PhoneNumber").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#PhoneNumber").val();
+            str = str.substring(0, str.length - 1);
+            $("#PhoneNumber").val(str);
+        }
+    }
+
+    function checkLengthMobile() {
+
+
+        var fieldLength = $("#Mobile").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#Mobile").val();
+            str = str.substring(0, str.length - 1);
+            $("#Mobile").val(str);
+        }
+    }
+    function PreventEnterSpecialAddress() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+        str = $("#Address").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#Address").val();
+                str = str.substring(0, str.length - 1);
+                $("#Address").val(str);
+            }
+        }
+
+    }
+
+
+    function PreventEnterChartecherName() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#FullName").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#FullName").val();
+                str = str.substring(0, str.length - 1);
+                $("#FullName").val(str);
+            }
+        }
+
+    }
+</script>
+

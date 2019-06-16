@@ -1,0 +1,33 @@
+﻿@model CRM.Web.Models.ReportViewModel
+@{
+    ViewBag.Title = Resources.Reports.CreatedVsResolvedCasesPerWeek;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src=@Url.Content("~/Scripts/Chart.js")></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+            </header>
+            <div class="col-md-12">
+                <h5>@Resources.Reports.CreatedVsResolvedCasesPerWeek</h5>
+                <canvas id="BarChart" width="400" height="400"></canvas>
+                <script type="text/javascript">
+                    var ctx = document.getElementById("BarChart").getContext("2d");
+
+                    var data = JSON.parse('{"labels": @Html.Raw(Model.Labels), "datasets": @Html.Raw(Model.Data)}');
+                    var options = JSON.parse('{}');
+                    var BarChartApartement_chart = new Chart(ctx).Bar(data, options);
+                </script>
+            </div>
+
+        </div>
+    </section>
+</main>
+

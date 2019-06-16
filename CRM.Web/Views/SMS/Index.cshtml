@@ -1,0 +1,480 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.SMSTemplateViewModel>
+@using CRM.Core.SystemEnums
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.SMSTemplate.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+
+<style>
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    <a id="btnCreateSMSTemplate" onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.SMSTemplate.TxtAddNewSMSTemplate</a>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.SMSTemplate.TxtUpdateSMSTemplate</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.SMSTemplate.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.SMSTemplate.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.SMSTemplate.TxtAddNewSMSTemplate</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.SMSTemplate.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.SMSTemplate.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+           
+
+            <div id="CreateSMSTemplate" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>
+                        @Resources.SMSTemplate.TxtAddNewSMSTemplate
+                    </h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateSMSTemplate()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label for="Name">@Resources.SMSTemplate.TxtName</label>
+                                <input class="form-control" type="text" required name="Name" id="Name" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.SMSTemplate.TxtStatus</label>
+                                @Html.DropDownList("Status", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Description">
+                                    @Resources.SMSTemplate.TxtDescription
+                                    @{
+                                        var title = "to include Full Name add {FullName} -- "
+                                                   + "to include Mobile No add {Mobile No} -- "
+                                                   + "to include Identity add {Identity} -- "
+                                                   + "to include Username add {Username} ";
+                                    }
+                                </label>
+                                <textarea class="form-control" type="text" required name="Description" id="Description"></textarea>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="DefaultTemplateLang">@Resources.SMSTemplate.TxtDefaultTemplateLanguage</label><br />
+                                @Html.DropDownList("DefaultTemplateLang", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <span>@Html.Raw(title)</span>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.SMSTemplate.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancel_Add">@Resources.SMSTemplate.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+     
+            <div class="row" style="display: none" id="EditSMSTemplate">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.SMSTemplate.TxtUpdateSMSTemplate</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveSMSTemplate()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="NameEdit">@Resources.SMSTemplate.TxtName</label>
+                                <input class="form-control" type="text" required name="NameEdit" id="NameEdit" onInput="PreventEnterChartecherNameEdit()" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="StatusEdit">@Resources.SMSTemplate.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="DescriptionEdit">@Resources.SMSTemplate.TxtDescription</label>
+                                <textarea class="form-control" type="text" required name="DescriptionEdit" id="DescriptionEdit" onInput="PreventEnterChartecherNameEdit()"></textarea>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="DefaultTemplateLangEdit">@Resources.SMSTemplate.TxtDefaultTemplateLanguage</label><br />
+                                @Html.DropDownList("DefaultTemplateLangEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <span>@title</span>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.SMSTemplate.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.SMSTemplate.BtnCancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table id="tableSMSTemplates" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Description)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="parentSMSTemplate" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.Raw(item.Description)
+                            </td>
+                            <td>
+                                <a href="#" onclick="EditSMSTemplate(@item.Id)" class="btnEditSMSTemplate disabled" title="@Resources.SMSTemplate.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                <a href="#" onclick="Delete(@item.Id)" class="btnDeleteSMSTemplate disabled" title="@Resources.SMSTemplate.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+    var permission = {};
+    $("#btnHebrew").click(function () {
+        $("#LanguageId").val(2);
+        EditSMSTemplate($("#IdEdit").val());
+    });
+    $("#btnArabic").click(function () {
+        $("#LanguageId").val(1);
+        EditSMSTemplate($("#IdEdit").val());
+    });
+
+    $("#btnHebrewEdit").click(function () {
+        $("#LanguageId").val(2);
+        EditSMSTemplate($("#IdEdit").val());
+    });
+    $("#btnArabicEdit").click(function () {
+        $("#LanguageId").val(1);
+        EditSMSTemplate($("#IdEdit").val());
+    });
+    $("#EditSMSTemplate").hide();
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateSMSTemplate").show();
+        $("#btnCreateSMSTemplate").hide();
+        $("#headerCreate").show();
+        $("#headerEdit").hide();
+        $("#headerIndex").hide();
+    }
+    function CreateSMSTemplate() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.Status = $("#Status").val();
+        obj.Description = $("#Description").val();
+        obj.DefaultTemplateLanguage = $("#DefaultTemplateLang").val();
+        obj.Name = $("#Name").val();
+        obj.LanguageId = $("#LanguageId").val();
+        //------------------------------------
+
+        $.post("/SMS/AddSMSTemplate",
+            { smsTemplate: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload(true);
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function EditSMSTemplate(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var languageId = $("#LanguageId").val();
+        $.get("/SMS/EditSMSTemplate", { id: id, languageId: languageId }, function (data) {
+            if (data != null) {
+                $("#CreateSMSTemplate").hide();
+                $("#EditSMSTemplate").show();
+                $("#btnCreateSMSTemplate").hide();
+                $("#headerCreate").hide();
+                $("#headerEdit").show();
+                $("#headerIndex").hide();
+
+
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#DescriptionEdit").val(data.Description);
+                $("#DefaultTemplateLangEdit").val(data.DefaultTemplateLanguage);
+                $("#NameEdit").val(data.Name);
+                //$("#LanguageId").val(data.LanguageId);
+                $("#IdEdit").val(id);
+            }
+        });
+    }
+
+
+
+    function SaveSMSTemplate() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.Description = $("#DescriptionEdit").val();
+        obj.DefaultTemplateLanguage = $("#DefaultTemplateLangEdit").val();
+        obj.Name = $("#NameEdit").val();
+        obj.LanguageId = $("#LanguageId").val();
+        $.post("/SMS/EditSMSTemplate",
+            { smsTemplate: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    $("#btnCancel").click(function () {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            $("#CreateSMSTemplate").hide();
+            $("#btnCreateSMSTemplate").show();
+            $("#EditSMSTemplate").hide();
+            return;
+        }
+        $("#CreateSMSTemplate").show();
+        $("#EditSMSTemplate").hide();
+    });
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.SMSTemplate.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/SMS/DeleteSMSTemplate", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=SMSTemplate", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreate").removeClass("disabled");
+                    }
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateSMSTemplate").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditSMSTemplate").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteSMSTemplate").removeClass("disabled");
+                    }
+
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+
+
+</script>
+
+
+
+<script>
+    var sel = $('.sel'),
+   txt = $('.txt'),
+   options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateSMSTemplate").hide();
+        $("#EditSMSTemplate").hide();
+
+        $("#tableSMSTemplates").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateSMSTemplate").show();
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreateSMSTemplate").hide();
+        $("#EditSMSTemplate").hide();
+
+        $("#tableSMSTemplates").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateSMSTemplate").show();
+    });
+</script>

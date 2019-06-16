@@ -1,0 +1,372 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Core
+@model PagedList.IPagedList<CRM.Web.Models.CaseFormViewModel>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = Model.Count > 0 ?  Model[0]?.FormName :string.Empty;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int fileTypeNo = (int)GeneralEnums.FileEnum.File;
+    var isCitizen = User.IsInRole(Constants.Roles.Citizen);
+    var categories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.TenderCategories, Request.Cookies["_culture"]);
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var statuses = LookupHelper.GetStatuses(Request.Cookies["_culture"]);
+
+
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <h2 class="section-title">
+                            @ViewBag.Title
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-md-4">&nbsp;</div>
+                <div class="col-md-4">
+                    <div class="header-form" id="divAddNew_Search">
+                      
+                        @if (!isCitizen)
+                        {
+                            using (Html.BeginForm())
+                            {
+                                @Html.Hidden("resetTo", 1)
+
+                                @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                                <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.SystemCases.TxtUpdateCase</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.SystemCases.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.SystemCases.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <br />
+
+            @if (!isCitizen)
+            {
+                <div class="row" style="display: none" id="EditCase">
+                    <div class="col-lg-4 cms-col-header">
+                        <h2>@Resources.SystemCases.TxtUpdateCase</h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form method="post" onsubmit="SaveCase()">
+                            <div class="row">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                                <div class="form-group col-lg-6">
+                                    <label for="UniqueIdEdit">@Resources.SystemCases.UniqueId</label>
+                                    <input disabled="disabled" class="form-control" type="text" required name="UniqueIdEdit" id="UniqueIdEdit" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="TagsEdit">@Resources.SystemCases.Tags</label>
+                                    <input class="form-control" type="text" required name="TagsEdit" id="TagsEdit" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="TitleEdit">@Resources.SystemCases.Title</label>
+                                    <input class="form-control" type="text" required name="TitleEdit" id="TitleEdit" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="CategoryIdEdit">@Resources.SystemCases.CategoryName</label>
+                                    @Html.DropDownList("CategoryIdEdit", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+
+                                <div class="form-group col-lg-6">
+                                    <label for="PriorityIdEdit">@Resources.SystemCases.AssigneeUserName</label>
+                                    @Html.DropDownList("AssigneeIdEdit", new SelectList(users, "Id", "FullName"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+
+                                <div class="form-group col-lg-6">
+                                    <label for="StatusEdit">@Resources.SystemCases.TxtStatus</label>
+                                    @Html.DropDownList("StatusEdit", new SelectList(statuses, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+
+                                <div class="form-group col-lg-6">
+                                    <label for="UploadFileEdit">
+                                        @Resources.SystemCases.TxtUploadFile
+                                        <i class="material-icons">add_a_photo</i>
+                                    </label>
+                                    <input name="UploadFileEdit" id="UploadFileEdit" type="file" onchange="previewFile()" multiple>
+                                    <div id="caseAttachments"></div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="DescriptionEdit">@Resources.SystemCases.TxtDescription</label>
+                                    <textarea class="form-control" required name="DescriptionEdit" id="DescriptionEdit"></textarea>
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.SystemCases.BtnSave</button>
+                                    <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.SystemCases.BtnCancel" />
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+
+            <table id="tableCases" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Resources.SystemCases.OrderNumber
+                        </th>
+                        <th>
+                           @Resources.SystemCases.ApplicantName  
+                        </th>
+                        <th>
+                           @Resources.SystemCases.OrderDate 
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @if (Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CaseId</td>
+                                <td>@item.CreatedByProfile.FullName</td>
+                                <td>@item.CreateOn.ToString().AsDateTime().ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a href="#" onclick="EditCase(@item.CaseId)" class="btn btn-default btnEditCase disabled" title="@Resources.SystemCases.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                    <a href="#" onclick="Delete(@item.CaseId)" class="btn btn-default btnDeleteCase disabled" title="@Resources.SystemCases.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                                    <a href="@Url.Action("Details", new {id = item.CaseId})" class="btn btn-default btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">
+                                لا يوجد معلومات لعرضها
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new
+               {
+                   formId = ViewBag.FormId,
+                   page,
+                   ViewBag.searchText,
+               }))
+
+                </nav>
+            }
+
+        </div>
+
+    </section>
+</main>
+
+
+
+
+<script type="text/javascript">
+    var permission = {};
+    var addImagesList = [];
+    var editImagesList = [];
+    $("#EditCase").hide();
+
+
+    function EditCase(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        $.get("/ManageCases/EditCase", { id: id }, function (data) {
+            if (data != null) {
+                $("#CreateCase").hide();
+                $("#EditCase").show();
+                $("#btnCreateCase").hide();
+
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#CategoryIdEdit").val(data.CategoryId);
+                $('#CategoryIdEdit').trigger("chosen:updated");
+                $("#SeverityIdEdit").val(data.SeverityId);
+                $('#SeverityIdEdit').trigger("chosen:updated");
+                $("#PriorityIdEdit").val(data.PriorityId);
+                $('#PriorityIdEdit').trigger("chosen:updated");
+                $("#AssigneeIdEdit").val(data.AssigneeId);
+                $('#AssigneeIdEdit').trigger("chosen:updated");
+                $("#DescriptionEdit").val(data.Description);
+                $("#TitleEdit").val(data.Title);
+                $("#TagsEdit").val(data.Tags);
+                $("#AddressEdit").val(data.Address);
+                $("#LocationEdit").val(data.Location);
+                $("#UniqueIdEdit").val(id);
+                $("#IdEdit").val(id);
+                var content = "";
+                for (var i = 0; i < data.Files.length; i++) {
+                    var filex = data.Files[i];
+                    content += "<a  target='_blank' href='" + filex.FileUrl + "' class='btn btn-success btn-simple'><i class='fa fa-paperclip'></i></a>";
+                }
+                $('#caseAttachments').html("");
+                $('#caseAttachments').append(content);
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    }
+
+    function SaveCase() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.CategoryId = $("#CategoryIdEdit").val();
+        if ($("#SeverityIdEdit").val()) {
+            obj.SeverityId = $("#SeverityIdEdit").val();
+        }
+        if ($("#PriorityIdEdit").val()) {
+            obj.PriorityId = $("#PriorityIdEdit").val();
+        }
+        obj.AssigneeId = $("#AssigneeIdEdit").val();
+        obj.Description = $("#DescriptionEdit").val();
+        obj.Title = $("#TitleEdit").val();
+        obj.Tags = $("#TagsEdit").val();
+        if ($("#AddressEdit").val()) {
+            obj.Address = $("#AddressEdit").val();
+        }
+        if ($("#LocationEdit").val()) {
+            obj.Location = $("#LocationEdit").val();
+        }
+        obj.UniqueId = $("#UniqueIdEdit").val();
+        obj.Files = editImagesList;
+        $.post("/ManageCases/EditCase",
+            { sysCase: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.SystemCases.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/ManageCases/DeleteCase", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    $('#UploadFileEdit').on('change', function (e) {
+        editImagesList = [];
+        var files = e.target.files;
+        if (files.length > 0) {
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@fileTypeNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var i;
+                        for (i = 0; i < result.length; i++) {
+                            editImagesList.push(result[i]);
+                        }
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Cases", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnCommentCase").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#EditCase").hide();
+        $("#tableCases").show();
+        $("#divPageing").show();
+        $("#headerEdit").hide();
+    });
+
+</script>

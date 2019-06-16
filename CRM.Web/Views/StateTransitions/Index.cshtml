@@ -1,0 +1,496 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@model PagedList.IPagedList<CRM.Web.Models.StateTransitionsConfigurationViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.StateTransitions.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var categories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CaseCategory, Request.Cookies["_culture"]);
+    var workFlowStates = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.WorkFlowStates, Request.Cookies["_culture"]);
+}
+
+<style>
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    <a id="btnCreateStateTransition" onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.StateTransitions.TxtAddNewTransition</a>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.StateTransitions.TxtUpdateStateTransition</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.StateTransitions.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.StateTransitions.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.StateTransitions.TxtAddNewTransition</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.StateTransitions.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.StateTransitions.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+
+            <div id="CreateStateTransition" style="display: none" class="row">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>
+                        @Resources.StateTransitions.TxtAddNewTransition
+                    </h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateStateTransition()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label for="CategoryId">@Resources.StateTransitions.CategoryName</label>
+                                <select class="form-control chosen-select" id="CategoryType" name="CategoryType" onchange="GetCategoryTypeDataForCreate(this.value)">
+                                    <option selected value="@((int) GeneralEnums.MasterLookupEnums.CaseCategory)"> @Resources.Layout.Complaints </option>
+                                    <option value="@((int) GeneralEnums.MasterLookupEnums.EmergencyCategories)"> @Resources.Layout.Emergency </option>
+                                    <option value="@((int) GeneralEnums.MasterLookupEnums.JobCategories)"> @Resources.Layout.Jobs </option>
+                                    <option value="@((int) GeneralEnums.MasterLookupEnums.TenderCategories)"> @Resources.Layout.Tenders </option>
+                                    <option value="@((int) GeneralEnums.MasterLookupEnums.FormCategories)"> @Resources.Layout.Froms </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="CategoryId">@Resources.StateTransitions.CategoryName</label>
+                                @Html.DropDownList("CategoryId", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="StateFrom">@Resources.StateTransitions.StateFrom</label>
+                                @Html.DropDownList("StateFrom", new SelectList(workFlowStates, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="StateTo">@Resources.StateTransitions.StateTo</label>
+                                @Html.DropDownList("StateTo", new SelectList(workFlowStates, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="AssigneeId">@Resources.StateTransitions.UserName</label>
+                                @Html.DropDownList("AssigneeId", new SelectList(users, "Id", "FullName"), new { @class = "form-control chosen-select" })
+                            </div>
+
+
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.StateTransitions.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancel_Add">@Resources.StateTransitions.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" style="display: none" id="EditStateTransition">
+                <div class="col-lg-4 cms-col-header">
+                    <h2>@Resources.StateTransitions.TxtUpdateStateTransition</h2>
+                </div>
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveStateTransition()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="NewCategoryId">@Resources.StateTransitions.CategoryName</label>
+                                @Html.DropDownList("NewCategoryId", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="NewStateFrom">@Resources.StateTransitions.StateFrom</label>
+                                @Html.DropDownList("NewStateFrom", new SelectList(workFlowStates, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="NewStateTo">@Resources.StateTransitions.StateTo</label>
+                                @Html.DropDownList("NewStateTo", new SelectList(workFlowStates, "Id", "Name"), new { @class = "form-control chosen-select" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="NewAssigneeId">@Resources.StateTransitions.UserName</label>
+                                @Html.DropDownList("NewAssigneeId", new SelectList(users, "Id", "FullName"), new { @class = "form-control chosen-select" })
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.StateTransitions.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.StateTransitions.BtnCancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table id="tableStateTransitions" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).CategoryName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).StateFrom)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).StateTo)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Assignee)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="stateTransitions" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StateFrom)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StateTo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Assignee)
+                            </td>
+                            <td>
+                                <a href="#" onclick="EditStateTransition(@item.Id)" class="btnEditStateTransition disabled" title="@Resources.StateTransitions.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                <a href="#" onclick="Delete(@item.Id)" class="btnDeleteStateTransition disabled" title="@Resources.StateTransitions.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+    $("#EditStateTransition").hide();
+    var permission = {};
+
+    function GetCategoryTypeDataForCreate(categoryType) {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $.get("/StateTransitions/GetCategoryTypeData", { categoryType: categoryType }, function (data) {
+            if (data != null) {
+                $("#CategoryId").empty(); $("#StateFrom").empty(); $("#StateTo").empty();
+                var categories = data.categories;
+                var states = data.workFlowStates;
+                var categoriesOptions = []; statesOptions = [];
+
+                for (var i = 0; i < categories.length;i++) {
+                    categoriesOptions.push("<option value=" + categories[i].Id + ">" + categories[i].Name + "</option>");
+                }
+                for (var i = 0; i < states.length; i++) {
+                    statesOptions.push("<option value=" + states[i].Id + ">" + states[i].Name + "</option>");
+                }
+                $("#CategoryId").append(categoriesOptions.join());
+                $("#StateFrom").append(statesOptions.join());
+                $("#StateTo").append(statesOptions.join());
+            }
+        });
+    }
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateStateTransition").show();
+        $("#btnCreateStateTransition").hide();
+    }
+    function CreateStateTransition() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.CategoryId = $("#CategoryId").val();
+        obj.StateFromId = $("#StateFrom").val();
+        obj.StateToId = $("#StateTo").val();
+        obj.AssigneeId = $("#AssigneeId").val();
+        obj.CategoryType = $("#CategoryType").val();
+
+        $.post("/StateTransitions/AddStateTransitionsConfigurations",
+            { stateTransitions: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function EditStateTransition(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        $.get("/StateTransitions/EditStateTransitionsConfigurations", { id: id }, function (result) {
+            if (result != null && result.recordData != null) {
+                var data = result.recordData;
+
+                $("#NewCategoryId").empty(); $("#NewStateFrom").empty(); $("#NewStateTo").empty();
+                var categories = result.categories;
+                var states = result.workFlowStates;
+                var categoriesOptions = []; statesOptions = [];
+
+                for (var i = 0; i < categories.length; i++) {
+                    categoriesOptions.push("<option value=" + categories[i].Id + ">" + categories[i].Name + "</option>");
+                }
+                for (var i = 0; i < states.length; i++) {
+                    statesOptions.push("<option value=" + states[i].Id + ">" + states[i].Name + "</option>");
+                }
+
+                $("#NewCategoryId").append(categoriesOptions.join());
+                $("#NewStateFrom").append(statesOptions.join());
+                $("#NewStateTo").append(statesOptions.join());
+
+                $("#CreateStateTransition").hide();
+                $("#EditStateTransition").show();
+                $("#btnCreateStateTransition").hide();
+                $("#NewCategoryId").val(data.CategoryId);
+                $('#NewCategoryId').trigger("chosen:updated");
+                $("#NewStateFrom").val(data.StateFromId);
+                $('#NewStateFrom').trigger("chosen:updated");
+                $("#NewStateTo").val(data.StateToId);
+                $('#NewStateTo').trigger("chosen:updated");
+                $("#NewAssigneeId").val(data.AssigneeId);
+                $('#NewAssigneeId').trigger("chosen:updated");
+                $("#IdEdit").val(id);
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    }
+    function SaveStateTransition() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.CategoryId = $("#NewCategoryId").val();
+        obj.StateFromId = $("#NewStateFrom").val();
+        obj.StateToId = $("#NewStateTo").val();
+        obj.AssigneeId = $("#NewAssigneeId").val();
+        $.post("/StateTransitions/EditStateTransitionsConfigurations",
+            { stateTransitions: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+    $("#btnCancel").click(function () {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            $("#CreateStateTransition").hide();
+            $("#btnCreateStateTransition").show();
+            $("#EditStateTransition").hide();
+            return;
+        }
+        $("#CreateStateTransition").show();
+        $("#EditStateTransition").hide();
+    });
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.StateTransitions.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/StateTransitions/DeleteStateTransitionsConfigurations", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=StateTransitions", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateStateTransition").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditStateTransition").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteStateTransition").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+
+
+</script>
+
+
+
+<script>
+    var sel = $('.sel'),
+   txt = $('.txt'),
+   options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateStateTransition").hide();
+        $("#EditStateTransition").hide();
+
+        $("#tableStateTransitions").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateStateTransition").show();
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreateStateTransition").hide();
+        $("#EditStateTransition").hide();
+
+        $("#tableStateTransitions").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateStateTransition").show();
+    });
+</script>

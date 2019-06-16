@@ -1,0 +1,317 @@
+﻿@model  IEnumerable<CRM.Web.Models.CustomerViewModel>
+@using CRM.DataEntity.Models
+@using PagedList.Mvc
+@{
+    // ViewBag.Title = Resources.ContactUs.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<style type="text/css">
+    #Kanban_New li {
+        border-color: gray;
+    }
+    #Kanban_InProgress li {
+        border-color: goldenrod;
+    }
+    #Kanban_Completed li {
+        border-color: forestgreen;
+    }
+    #Title_Row {
+        margin-top: 10px;
+       
+    }
+    #buttons_Row {
+        margin-bottom: 10px;  
+    }
+    /*#btnContainer {
+        margin-right: 1.5%;
+    }*/
+    .btn.active {
+        background-color: #666 !important;
+        color: white !important;
+    }
+</style>
+<div class="container-fluid">
+
+    <!-- start page title -->
+
+    <div class="row" id="Title_Row">
+        <div class="col-md-4 col-lg-4 col-sm-4">
+            <div>
+                <h4 class="section-title">Lead Management</h4>
+            </div>
+        </div><br>
+    </div>
+    <div class="row" id="buttons_Row">
+
+        <div id="btnContainer" class="btn-group">
+            <button type="button" class="btn switch btn-light " onclick="NewLeadForm();"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn switch btn-light" onclick="TableView();"><i class="fa fa-bars"></i></button>
+            <button type="button" class="btn switch btn-light active" onclick="KanbanView();"><i class="fa fa-th-large"></i></button>
+
+        </div>
+
+    </div>
+    <!-- end page title -->
+    <!-- Kanban board View -->
+    <div class="row" id="Leads_KanbanView">
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">New</h4><hr>
+                <ul id="Kanban_New" class="sortable-list taskList list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.Status == 1)
+                        {
+                            <li class="kanban_item">
+                                <h5>@Html.DisplayFor(modelItem => item.Name)<a href="@Url.Action("Edit", "Customers", new { id = item.Id })" class=" btn btn-sm btn-link text-success font-13 float-right"> <span class="fa fa-eye"></span></a></h5>
+                                <p class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</p>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div> <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">In Progress</h4><hr>
+                <ul id="Kanban_InProgress" class="sortable-list taskList list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.Status == 2)
+                        {
+                            <li class="kanban_item">
+                                <h5>@Html.DisplayFor(modelItem => item.Name) <a href="@Url.Action("Edit", "Customers", new { id = item.Id })" class=" btn btn-sm btn-link text-success font-13 float-right"> <span class="fa fa-eye"></span></a></h5>
+                                <p class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</p>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card-box">
+                <h4 class="header-title">Completed</h4><hr>
+                <ul id="Kanban_Completed" class="sortable-list taskList list-unstyled">
+                    @foreach (var item in Model)
+                    {
+                        if (item.Status == 3)
+                        {
+                            <li class="kanban_item">
+                                <h5>@Html.DisplayFor(modelItem => item.Name) <a href="@Url.Action("Edit", "Customers", new { id = item.Id })" class=" btn btn-sm btn-link text-success font-13 float-right"> <span class="fa fa-eye"></span></a></h5>
+                                <p class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</p>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+
+    </div>
+    <!-- end row -->
+    <!-- Table View -->
+    <div class="row" id="Leads_tableView" style="display:none;">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <table id="tableLeadsInfo"
+                   class="table-borderless"
+                   data-toggle="table"
+                   data-page-size="10"
+                   data-pagination="false"
+                   style="background-color:white;">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th data-sortable="true">
+                            @*@Html.DisplayNameFor(model => model.ElementAt(0).FullName)*@
+                            Name
+                        </th>
+                        <th data-sortable="true">
+                            @*@Html.DisplayNameFor(model => model.ElementAt(0).FullName)*@
+                            Email
+                        </th>
+                        <th data-sortable="true">
+                            @*@Html.DisplayNameFor(model => model.ElementAt(0).FullName)*@
+                            Mobile
+                        </th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="personInfo" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", new {id = item.Id})" class="btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--Create New Form -->
+    <div class="row" id="NewLead" style="display:none;">
+        <div class="col-lg-4 cms-col-header">
+            <h2>
+                @Resources.KnowledgeCategory.TxtAddNewCategory
+            </h2>
+        </div>
+        <div class="col-lg-8">
+            <form method="post" onsubmit="">
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group col-lg-6">
+                        <label for="Name">@Resources.KnowledgeCategory.TxtName</label>
+                        <input class="form-control" type="text" required name="Name" id="Name" />
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="Status">@Resources.KnowledgeCategory.TxtStatus</label>
+                        @Html.DropDownList("list", ViewData["LeadStatusList"] as List<SelectListItem>, new { @class = "form-control chosen-select", required = "required" })
+                    </div>         
+                    <div class="form-group col-lg-12">
+                        <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.KnowledgeCategory.BtnAdd</button>                
+                    </div>
+                </div>
+            </form>
+        </div>
+        @*@{
+            var customer = new Customer();
+        }
+        @Html.Partial("Create",customer )*@
+    </div>
+    @*<div class="row" style="display: none" id="EditLead">
+        
+    </div>*@
+</div> <!-- end container -->
+    <!-- end wrapper -->
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+    <script type="text/javascript">
+        var item_id;
+        $(function () {
+            $("#Kanban_New, #Kanban_InProgress,#Kanban_Completed").sortable({
+                connectWith: ".taskList"
+            }).disableSelection();
+            $("#Kanban_New").droppable({
+                drop: function (event, ui) {
+                    item_id = ui.draggable.find('p').text();
+                    Status_New(ui.draggable, item_id);
+                }
+            });
+            $("#Kanban_InProgress").droppable({
+                drop: function (event, ui) {
+                    item_id = ui.draggable.find('p').text();
+                    Status_InProgress(ui.draggable, item_id);
+                }
+            });
+
+            $("#Kanban_Completed").droppable({
+                drop: function (event, ui) {
+                    item_id = ui.draggable.find('p').text();
+                    Status_Completed(ui.draggable, item_id);
+                }
+            });
+        });
+        function SaveLead() {
+            var obj = {};
+            obj.Id = $("#IdEdit").val();
+            obj.Status = $("#StatusEdit").val();
+            obj.Description = $("#MobileEdit").val();
+           // obj.DefaultTemplateLanguage = $("#DefaultTemplateLangEdit").val();
+            obj.Name = $("#NameEdit").val();
+            //obj.LanguageId = $("#LanguageId").val();
+            $.post("/Customer/Create",
+                { category: obj },
+                function (data) {
+                    if (data != null) {
+                        location.reload();
+                    } else {
+                        alert("Error");
+                    }
+                });
+        
+        }
+        function Status_New(item, id) {
+            var Customer = {};
+            Customer.Id = id;
+            Customer.Status = 1
+            $.post("/Customers/UpdateCustomer",
+                { customer: Customer },
+                function (data) {
+                    if (data != null) {
+                        //  location.reload();
+                    } else {
+                        alert("Error");
+                    }
+                });
+        }
+        function Status_InProgress(item, id) {
+            var Customer = {};
+            Customer.Id = id;
+            Customer.Status = 2
+            $.post("/Customers/UpdateCustomer",
+                { customer: Customer },
+                function (data) {
+                    if (data != null) {
+                        //   location.reload();
+                    } else {
+                        alert("Error");
+                    }
+                });
+
+        }
+        function Status_Completed(item, id) {
+            var Customer = {};
+            Customer.Id = id;
+            Customer.Status = 3
+            $.post("/Customers/UpdateCustomer",
+                { customer: Customer },
+                function (data) {
+                    if (data != null) {
+                        //  location.reload();
+                    } else {
+                        alert("Error");
+                    }
+                });
+        }
+        /* Optional: Add active class to the current button (highlight it) */
+        var container = document.getElementById("btnContainer");
+        var btns = container.getElementsByClassName("btn");
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function () {
+                var current = document.getElementsByClassName("btn switch active");
+                current[0].className = current[0].className.replace("active", "");
+                this.className += " active";
+            });
+        }
+        function TableView() {
+            document.getElementById("Leads_tableView").style.display = "flex";
+            document.getElementById("Leads_KanbanView").style.display = "none";
+            document.getElementById("NewLead").style.display = "none";
+        };
+        function KanbanView() {
+            document.getElementById("Leads_tableView").style.display = "none";
+            document.getElementById("Leads_KanbanView").style.display = "flex";
+            document.getElementById("NewLead").style.display = "none";
+        };
+        function NewLeadForm() {
+            document.getElementById("Leads_tableView").style.display = "none";
+            document.getElementById("Leads_KanbanView").style.display = "none";
+            document.getElementById("NewLead").style.display = "flex";
+        }
+    </script>

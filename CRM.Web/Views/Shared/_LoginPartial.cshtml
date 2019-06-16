@@ -1,0 +1,53 @@
+﻿@using CRM.Core.Helpers
+@using CRM.Web.Helpers
+@using Microsoft.AspNet.Identity
+@{
+    var langId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
+    var userInfo = AuthenticationHelper.GetUserInfo(User, langId);
+}
+
+@if (Request.IsAuthenticated)
+{
+
+    <a href="#" class="nav-link dropdown-toggle nav-user mr-0 waves-effect" data-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="false">
+        <span class="pro-user-name ml-1 username-hide-mobile">
+            <i class="mdi mdi-chevron-down"></i>
+            @Resources.Layout.TxtWelcome @userInfo.FullName  
+        </span>
+        @if (!string.IsNullOrWhiteSpace(userInfo.ProfilePath))
+        {
+            <img class="img-circle" src="@userInfo.ProfilePath" @*alt="@userInfo.FullName"*@>
+        }
+        else
+        {
+            <img class="img-circle" src="~/Content/assets/img/profile.png" @*alt="@userInfo.FullName"*@ />
+        }
+
+    </a>
+    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+        <a href="@Url.Action("Index", "Manage")" class="dropdown-item notify-item">
+            <i class="fe-user"> @Resources.Layout.PersonalAccount</i>
+        </a>
+        <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item notify-item">
+            <i class="fe-log-out"> @Resources.Layout.LinkLogOff</i>   
+        </a>
+    </div>
+        @*<ul class="dropdown-menu dropdown-menu-default" style="z-index:1000">
+            <li><a href="@Url.Action("Index", "Manage")"><i class="fa fa-user"></i> @Resources.Layout.PersonalAccount </a></li>
+            <li>
+                <a href="javascript:document.getElementById('logoutForm').submit()">
+                    <i class="fas fa-sign-out-alt"></i>@Resources.Layout.LinkLogOff
+                </a>
+            </li>
+        </ul>*@
+
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @style = "display:none" }))
+        {
+        @Html.AntiForgeryToken()
+        }
+        }
+        else
+        {
+        <a class="btn btn-secondary ml-2 login-par" href="@Url.Action("Login", "Account")"> @Resources.Layout.LinkLogin</a>
+        }
+

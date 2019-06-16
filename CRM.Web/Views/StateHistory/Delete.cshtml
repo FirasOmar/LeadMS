@@ -1,0 +1,51 @@
+﻿@model CRM.Web.Models.StateHistoryViewModel
+@{
+    ViewBag.Title = Resources.StateHistory.DeleteTitle;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+            </header>
+
+            <table class="table">
+                <tr>
+                    <td>@Resources.StateHistory.CaseName</td>
+                    <td>@Model.CaseName</td>
+                </tr>
+                <tr>
+                    <td>@Resources.StateHistory.PreviousState</td>
+                    <td>@Model.PreviousStateName</td>
+                </tr>
+                <tr>
+                    <td>@Resources.StateHistory.CurrentStateName</td>
+                    <td>@Model.CurrentStateName</td>
+                </tr>
+                <tr>
+                    <td>@Resources.StateHistory.TxtCreatedBy</td>
+                    <td>@Model.CreatedBy</td>
+                </tr>
+                <tr>
+                    <td>@Resources.StateHistory.TxtCreatedOn</td>
+                    <td>@Model.CreatedOn</td>
+                </tr>
+            </table>
+            @using (Html.BeginForm()) {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="@Resources.StateHistory.BtnDelete" class="btn btn-danger" />
+                </div>
+            }
+
+        </div>
+    </section>
+
+</main>

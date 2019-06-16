@@ -1,0 +1,116 @@
+﻿@model CRM.Web.Models.ContactUsViewModel
+@{
+    ViewBag.Title = Resources.ContactUs.Title;
+}
+    <div class="container-fluid">
+        @*<header class="section-header justify-content-between flex-wrap">*@
+        @*<div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-12"></div>
+                <div class="d-flex">
+                    <h4 class="header-title">@ViewBag.Title</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                    @Resources.ContactUs.willAnswerSoon
+            </div>
+        </div>*@
+          
+        @*</header>*@
+
+        <div class="row" style="margin-top: 24px;">
+            <div class="col-lg-8 col-md-8 col-sm-12">
+                <div class="card-box">                    
+                        @using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { @class = "fo", role = "form" }))
+                        {
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <h4 class="header-title">@ViewBag.Title</h4>
+                            </div>
+                            @*<div class="col-md-4">
+                        @Resources.ContactUs.willAnswerSoon
+                    </div>*@
+                            <div class="form-group col-lg-12">
+                                @if (TempData["ContactUsSuccess"] != null)
+                                {
+                                    if (TempData["ContactUsSuccess"].ToString() == "Success")
+                                    {
+                                        <div class="text-success">@Resources.ContactUs.TxtContactUsSuccess</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-danger">@Resources.ContactUs.TxtContactUsFail</div>
+                                    }
+                                }
+                            </div>
+                            <hr />
+                            <div class="form-group col-lg-12">
+                                <label class="control-label">@Resources.ContactUs.TxtName</label>
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required", onInput = "PreventEnterChartecherName()" })
+                                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-lg-12">
+                                <label class="control-label">@Resources.ContactUs.TxtPhone</label>
+                                @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", required = "required", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
+                                @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <label class="control-label"> @Resources.ContactUs.TxtEmail </label>
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", required = "required", type = "email" })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group col-lg-12">
+                                <p>@Resources.ContactUs.TxtMessage </p>
+                                @Html.TextAreaFor(m => m.Message, new { @class = "form-control", required = "required", rows = "8" })
+                                @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" style="width:100%">@Resources.ContactUs.BtnSend</button>
+                            </div>
+                        }
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+<br />
+
+<script>
+    function PreventEnterChartecherName() {
+
+        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+        str = $("#Name").val();
+        for (var i = 0; i < str.length; i++) {
+            if (special.indexOf(str.charAt(i)) != -1) {
+
+                var str = $("#Name").val();
+                str = str.substring(0, str.length - 1);
+                $("#Name").val(str);
+            }
+        }
+
+    }
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+
+        return true;
+    }
+
+    function checkLengthMobile() {
+
+        var fieldLength = $("#Mobile").val().length;
+        if (fieldLength <= 10) {
+            return true;
+        }
+        else {
+            var str = $("#Mobile").val();
+            str = str.substring(0, str.length - 1);
+            $("#Mobile").val(str);
+        }
+    }
+</script>

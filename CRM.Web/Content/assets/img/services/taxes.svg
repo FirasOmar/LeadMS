@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 63.563 66.102">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #e1e6e9;
+      }
+
+      .cls-2 {
+        fill: #ebf0f3;
+      }
+
+      .cls-3 {
+        fill: #3ea69b;
+      }
+
+      .cls-4 {
+        fill: #44c4a1;
+      }
+
+      .cls-5 {
+        fill: #27a2db;
+      }
+
+      .cls-6 {
+        fill: #d5d6db;
+      }
+    </style>
+  </defs>
+  <g id="taxes" transform="translate(-8.994)">
+    <path id="Path_54" data-name="Path 54" class="cls-1" d="M57.672,2.644V63.458A2.644,2.644,0,0,1,55.027,66.1H11.638a2.644,2.644,0,0,1-2.644-2.644V12.145H21.148V0H55.027A2.644,2.644,0,0,1,57.672,2.644Z"/>
+    <path id="Path_55" data-name="Path 55" class="cls-2" d="M21.148,0V12.145H8.994Z" transform="translate(0)"/>
+    <path id="Path_56" data-name="Path 56" class="cls-3" d="M349.009,309.638a17.7,17.7,0,0,0,4.495,6.847c4.019,4.019,8.685,5.87,10.421,4.134s-.114-6.4-4.134-10.421a17.693,17.693,0,0,0-6.847-4.495Z" transform="translate(-292.02 -262.551)"/>
+    <circle id="Ellipse_3" data-name="Ellipse 3" class="cls-4" cx="17.627" cy="17.627" r="17.627" transform="translate(29.394 15.559)"/>
+    <ellipse id="Ellipse_4" data-name="Ellipse 4" class="cls-2" cx="14.544" cy="14.541" rx="14.544" ry="14.541" transform="translate(61.367 47.92) rotate(-179.226)"/>
+    <path id="Path_57" data-name="Path 57" class="cls-5" d="M237.378,182.767v-1.813a10.778,10.778,0,0,1-6.11-2.708l1.813-2.161a8.6,8.6,0,0,0,4.3,2.161v-4.818a10.119,10.119,0,0,1-4.111-1.762,3.989,3.989,0,0,1-1.3-3.242,4.528,4.528,0,0,1,1.5-3.513,6.079,6.079,0,0,1,3.913-1.492v-1.241h1.589v1.267a10.38,10.38,0,0,1,5.166,1.861l-1.615,2.286a8,8,0,0,0-3.551-1.441v4.669h.075a10.073,10.073,0,0,1,4.2,1.813,4.113,4.113,0,0,1,1.342,3.317,4.511,4.511,0,0,1-1.54,3.539,6.411,6.411,0,0,1-4.073,1.49v1.789h-1.589Zm-1.752-16.031a1.778,1.778,0,0,0-.633,1.391,1.75,1.75,0,0,0,.5,1.316,5,5,0,0,0,1.888.932v-4.3A2.981,2.981,0,0,0,235.626,166.736Zm5.229,10.89a1.919,1.919,0,0,0,.15-2.819,5.484,5.484,0,0,0-2.037-.956v4.471A3.472,3.472,0,0,0,240.854,177.626Z" transform="translate(-190.899 -139.286)"/>
+    <g id="Group_43" data-name="Group 43" transform="translate(15.071 9.501)">
+      <rect id="Rectangle_51" data-name="Rectangle 51" class="cls-6" width="15.681" height="2.644" transform="translate(0 37.801)"/>
+      <rect id="Rectangle_52" data-name="Rectangle 52" class="cls-6" width="9.512" height="2.644" transform="translate(0 28.3)"/>
+      <rect id="Rectangle_53" data-name="Rectangle 53" class="cls-6" width="9.512" height="2.644" transform="translate(0 18.798)"/>
+      <rect id="Rectangle_54" data-name="Rectangle 54" class="cls-6" width="13.037" height="2.644" transform="translate(0 9.296)"/>
+      <rect id="Rectangle_55" data-name="Rectangle 55" class="cls-6" width="36.523" height="2.644" transform="translate(0 47.305)"/>
+      <rect id="Rectangle_56" data-name="Rectangle 56" class="cls-6" width="24.37" height="2.644" transform="translate(12.154)"/>
+    </g>
+  </g>
+</svg>

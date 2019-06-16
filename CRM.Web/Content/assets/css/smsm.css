@@ -1,0 +1,529 @@
+﻿@font-face {
+    font-family: 'droidkufi-regular';
+    src: url("font/droidkufi-regular.woff2"), url("font/droidkufi-regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'droidkufi-bold';
+    src: url("font/droidkufi-bold.woff.woff2"), url("font/droidkufi-bold.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'smsm';
+    src: url("font/smsm.ttf?nbjydj") format("truetype"), url("font/smsm.woff?nbjydj") format("woff"), url("font/smsm.svg?nbjydj#smsm") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+    .pagination > li {
+        display: inline;
+    }
+
+        .pagination > li > a, .pagination > li > span {
+            position: relative;
+            float: right;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > li:first-child > a, .pagination > li:first-child > span {
+            margin-right: 0;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .pagination > li:last-child > a, .pagination > li:last-child > span {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .pagination > li > a:focus, .pagination > li > a:hover, .pagination > li > span:focus, .pagination > li > span:hover {
+            z-index: 2;
+            color: #23527c;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+
+    .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #32547B;
+        border-color: #32547B;
+    }
+
+    .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
+        color: #777;
+        cursor: not-allowed;
+        background-color: #fff;
+        border-color: #ddd;
+    }
+
+.pagination-lg > li > a, .pagination-lg > li > span {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+}
+
+.pagination-lg > li:first-child > a, .pagination-lg > li:first-child > span {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.pagination-lg > li:last-child > a, .pagination-lg > li:last-child > span {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.pagination-sm > li > a, .pagination-sm > li > span {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.pagination-sm > li:first-child > a, .pagination-sm > li:first-child > span {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.pagination-sm > li:last-child > a, .pagination-sm > li:last-child > span {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(3.25rem + 6px);
+}
+
+
+
+.divSearch {
+    display: flex;
+    margin-top: 0;
+    width: 300px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+.txtSearch {
+    width: 100%;
+    color: #707070;
+    background: #fff;
+    border: 1px solid #CECECE;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: 0.3s ease-out;
+    font-size: 16px;
+    padding: 0 0.5rem;
+}
+
+    .txtSearch:focus {
+        border-color: #32547B;
+        outline: 0;
+    }
+
+.btnSearch {
+    border: 1px solid #32547B;
+    margin-right: -10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #32547B;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+
+.s-article font {
+    font-family: 'droidkufi-regular' !important;
+}
+
+
+
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+/* The Close Button */
+.close-model {
+    color: #aaaaaa;
+    float: left;
+    font-size: 45px;
+    font-weight: bold;
+    /*width: 100%;*/
+    text-align: left;
+    margin-top: -2%;
+}
+
+    .close-model:hover,
+    .close-model:focus {
+        color: #000;
+        cursor: pointer;
+    }
+
+
+
+/*Sections for forms*/
+
+.FormBuilder-section-btn {
+    padding: 3px;
+    margin: 0px;
+}
+
+
+.material-icons {
+    vertical-align: middle;
+    font-size: 17px;
+    top: -1px;
+    position: relative;
+}
+.question input{
+    margin-top:5px
+}
+
+.card{
+        margin: 5px;
+        width:99%;
+}
+
+.move-arrow {
+    cursor: pointer;
+    font-size:45px;
+}
+.section-head
+{
+        margin-bottom: 1rem;
+}
+
+.question-title *{
+  font-family: 'droidkufi-regular' !important;
+}
+
+
+.pull-left {
+    float: left !important;
+}
+
+
+.userprofile-weekbox {
+    float: right;
+    margin-right: 20px;
+}
+
+.sla-box {
+    float: right;
+    margin-right: 20px;
+}
+
+.sla-chkbx {
+}
+
+.chkbx {
+    width: 20px;
+}
+
+label.checkbox-lbl {
+    min-width: 49px;
+}
+
+.selected-state {
+    background: #df0606 !important;
+    border: 1px solid #6c0707 !important;
+}
+
+
+div#caseAttachments {
+    margin-top: 10px;
+}
+
+div#caseAttachments a {
+    margin-left: 10px;
+}
+
+.General-Search-txt {
+    width: 100% !important;
+}
+
+.txtSearch {
+
+}
+
+.btnSearch {
+    border: 1px solid #32547B;
+    margin-right: -10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #32547B;
+    color: #fff;
+    cursor: pointer;
+}
+
+.txtSearch {
+    width: 100%;
+    color: #707070;
+    background: #fff;
+    border: 1px solid #CECECE;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: 0.3s ease-out;
+    font-size: 16px;
+    padding: 0 0.5rem;
+}
+
+.divSearch {
+    display: flex;
+    margin-top: 0;
+    width: 300px;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+.siteCMS-Sidebar__top ul {
+    font-size: 13px;
+}
+.siteCMS-Sidebar__top li {
+    display: inline-block;
+}
+.siteCMS-Sidebar__top .lang li:not(:last-child) {
+    border-left: 1px solid #fff;
+    padding-left: 6px;
+    margin-left: 5px;
+}
+.siteCMS-Sidebar__top a {
+    -webkit-transition: 0.3s ease-out;
+    transition: 0.3s ease-out;
+    color: #fff;
+}
+.siteCMS-Sidebar__top .lang li.active {
+    font-family: 'droidkufi-bold' !important;
+    opacity: 1;
+    background: #ffffff;
+    padding: 4px;
+    border: 1px;
+    border-radius: 5px;
+}
+.active a {
+    color: #000;
+}
+
+.site-header .active a {
+    color: #fff;
+}
+
+
+/*start sidebar and sub menu*/ 
+
+ul.new-sidebar-nav {
+    overflow: hidden;
+    background: #333333;
+}
+
+ul.new-sidebar-nav li {
+    position: relative;
+    cursor: pointer;
+}
+
+ul.new-sidebar-nav a {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+ul.new-sidebar-nav a:hover {
+    /* background: #eee; */
+    /* color: #fff; */
+    /* background: #2b2b2b; */
+}
+
+ul.new-sidebar-nav ul.sub-ul li:hover {
+    background: #eee;
+    color: #fff;
+    background: #2b2b2b;
+}
+
+ul.new-sidebar-nav li.has-ul a::after {
+    font-family: "Ionicons";
+    content: '\2190';
+    color: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 14px 24px 0;
+}
+
+
+
+ul.new-sidebar-nav ul.sub-ul {
+    display: none;
+    background-color: #3a3a3a;
+}
+
+ul.new-sidebar-nav ul.sub-ul li {
+    border-bottom: 1px solid #9b9b9b;
+    padding-right: 20px;
+}
+
+ul.new-sidebar-nav ul.sub-ul li a::after {
+    display: none;
+}
+
+
+
+ul.new-sidebar-nav li.active a:after {
+    /* content: '\e90d'; */
+    font-family: "Ionicons";
+    content: '\2193';
+}
+
+
+
+.new-sidebar-nav a:not([href]) {
+    color: #fff;
+}
+
+.new-sidebar-nav a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
+    color: #fff;
+}
+
+
+
+    /*end sidebar and sub menu*/ 
+	
+
+
+.site-header__logo img {
+    height: 40px;
+    width: 40px
+}
+
+a.site-header__logo span {
+    color: #fff;
+}
+
+.login-par {
+    float: left
+}
+
+ul.main-menu {
+    float: right;
+}
+
+.site-header__top {
+    background: #32547B;
+    color: #fff;
+    padding: 4px 0;
+    float: right;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.site-header__bottom .avatar img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 45px;
+    height: 45px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.site-header__bottom .avatar {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    margin-left: 0.5rem;
+}
+
+.custom-head {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.login-par {
+    float: left;
+}
+
+a.logout {
+    margin-top: 5px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 100px;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.text-white a:hover {
+    color: #FFF !important;
+}

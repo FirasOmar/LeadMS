@@ -1,0 +1,88 @@
+﻿@model IEnumerable<CRM.Web.Models.LeadActivityViewModel>
+@{
+
+    Layout = "";
+}
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<style type="text/css">
+    tr:nth-child(even) {
+        background: #FFF
+    }
+
+    .DeleteActivityForm {
+        display: inline !important;
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+</style>
+<table class="table-borderless"
+       data-toggle="table"
+       data-page-size="10"
+       data-pagination="true">
+    <thead class="card-header" data-background-color="purple">
+        <tr>
+            <th data-sortable="true">
+                @Html.DisplayNameFor(model => model.Activity_Type)
+            </th>
+            <th data-sortable="true">
+                @Html.DisplayNameFor(model => model.Activity_Status)
+            </th>
+            <th data-sortable="true">
+                @Html.DisplayNameFor(model => model.Activity_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Lead_ID)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity_Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity_Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                <a href="@Url.Action("ViewLeadActivity", new {id = item.Id})" id="DetailsId_@item.Id"   title="@Resources.SystemCases.BtnDetails"><i class="fa fa-edit text-secondary"></i></a>
+                @using (Html.BeginForm("DeleteLeadActivity", "Home", new { id = item.Id }, FormMethod.Post, new { @class = "DeleteActivityForm", @id = "i_" + item.Id + "" }))
+                {
+
+                    <a href="#" onclick="confirmDelete(@item.Id);"><i class="fa fa-trash text-danger"></i></a>
+                }
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+
+
+
+<script type="text/javascript">
+    function confirmDelete(id) {
+        var txt;
+        var r = confirm("Are you sure you wish to delete this Activity?");
+        if (r == true) {
+            return document.getElementById('i_' + id + '').submit();
+        } else {
+            return false;
+        }
+    }
+
+</script>

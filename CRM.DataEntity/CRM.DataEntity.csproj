@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AFC934FB-8CA6-4A4A-B694-78AF91B3FDAE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CRM.DataEntity</RootNamespace>
+    <AssemblyName>CRM.DataEntity</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\AspNetRole.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUser.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserClaim.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserLogin.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserRole.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Campaign.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CasesByEmail.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CategoryTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CommunicationLog.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CrmEntity.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrmEntity.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CrmEntity.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CrmEntity.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CrmEntity.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Department.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DepartmentTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DetailsLookup.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DetailsLookupTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Lead.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Lead_Activity.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MasterLookup.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MasterLookupTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menu.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Permission.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RolePermission.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SMSTemplate.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SMSTemplateTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StateHistory.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StateTransitionsConfiguration.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SysCaseComment.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemCas.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemCaseAttachment.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemFile.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemFileTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemLog.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemSetting.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SystemSettingTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfile.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfileHoliday.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfileOffDay.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProfileTranslation.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\CrmEntity.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CrmEntity.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\CrmEntity.edmx.diagram">
+      <DependentUpon>CrmEntity.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\DatabaseScript\2018.01.15.01 Tender and Jobs SMS Data.sql" />
+    <Content Include="Data\DatabaseScript\2018.01.16.01 Updates on Tenders and Jobs.sql" />
+    <Content Include="Data\DatabaseScript\2018.08.17.01.CRM_DatabaseScript.sql" />
+    <Content Include="Data\DatabaseScript\2018.08.23.01.CRM_Database_WithData.sql" />
+    <Content Include="Data\DatabaseScript\2018.08.20.01.CRM_Tables_Create.sql" />
+    <Content Include="Data\DatabaseScript\2018.08.19.01.CRM_RolePermissions_Create.sql" />
+    <Content Include="Data\DatabaseScript\2018.10.20.01 add column.sql" />
+    <Content Include="Data\DatabaseScript\2018.09.09.01.CRM_Database_WithData.sql" />
+    <Content Include="Data\DatabaseScript\2018.08.25.01.CRM_Database_WithData.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.09.01 Mapping Article.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.10.01 add table fo sms temlate.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.17.01 Categories and Articles Script.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.17.02 SMS Templates Script.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.24.01 Dashboard Export to Excel Permission.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.25.01 New Assigne SMS Template.sql" />
+    <Content Include="Data\DatabaseScript\2018.12.30.01 Complaints Comments and attachment.sql" />
+    <Content Include="Data\DatabaseScript\2019.01.10.01 FormOwner and User Edit Status Comment.sql" />
+    <Content Include="Data\DatabaseScript\2019.01.14.01 Tenders and Jobs Updates.sql" />
+    <Content Include="Data\DatabaseScript\2019.01.22.01 Control Panel Pages.sql" />
+    <Content Include="Data\DatabaseScript\2019.01.27.01 Administrator Pages Permissions.sql" />
+    <Content Include="Data\DatabaseScript\2019.05.15.02 LeadManagementDBUpdated.sql" />
+    <Content Include="Data\DatabaseScript\2019.05.15.01 LeadManagementDB.sql" />
+    <Content Include="Data\DatabaseScript\2019.01.28.01 Send Case By Email.sql" />
+    <Content Include="Models\CrmEntity.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CrmEntity.edmx</DependentUpon>
+      <LastGenOutput>CrmEntity.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\CrmEntity.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>CrmEntity.edmx</DependentUpon>
+      <LastGenOutput>CrmEntity.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

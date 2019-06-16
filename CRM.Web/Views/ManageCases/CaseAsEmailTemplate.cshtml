@@ -1,0 +1,67 @@
+﻿@model CRM.Web.Models.CaseViewModel
+@using CRM.Core.SystemEnums
+@{
+    Layout = null;
+}
+
+<link href="~/Content/assets/Ilut_css/bootstrap/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+
+@{
+    var title = string.Empty;
+    switch (Model.TypeId)
+    {
+        case (int)GeneralEnums.CasesType.Complaints:
+            title = Resources.SystemCases.ComplaintTitle;
+            break;
+        case (int)GeneralEnums.CasesType.Emergency:
+            title = Resources.SystemCases.EmergencyTitle;
+            break;
+        case (int)GeneralEnums.CasesType.Froms:
+            title = Resources.SystemCases.FormTitle;
+            break;
+    }
+}
+<body dir="rtl">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td>
+                        @Resources.SystemCases.OrderNumber
+                    </td>
+                    <td>
+                        @Model.Id
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @title
+                    </td>
+                    <td>
+                        @Model.Title
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Resources.SystemCases.TxtDescription
+                    </td>
+                    <td>@Model.Description</td>
+                </tr>
+                <tr>
+                    <td>@Resources.SystemCases.AssigneeUserName</td>
+                    <td>@Model.AssigneeName</td>
+                </tr>
+                <tr>
+                    <td>@Resources.SystemCases.TxtCreatedOn</td>
+                    <td>@Model.CreatedOn.ToString().AsDateTime().ToString("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <td>@Resources.SystemCases.TxtStatus</td>
+                    <td>@Model.CurrentStatusName</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>

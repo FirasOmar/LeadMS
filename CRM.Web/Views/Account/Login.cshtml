@@ -1,0 +1,190 @@
+﻿@using CRM.Core.Helpers
+@model CRM.Web.Models.LoginViewModel
+@{
+    ViewBag.Title = Resources.Login.Title;
+    var imagePage = SettingHelper.GetOrCreate("Background_Image_login_page", "/Content/assets/img/hero.jpg").Value;
+    Layout = null;
+    var currentUrl = Request.Url.AbsoluteUri;
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+
+}
+
+@*<div class="container" style="width:100%;padding:0px;margin:0px">
+        <div class="hero no-grad">
+            <img src="@imagePage" alt="">
+        </div>
+        <div class="login-box">
+            <header style="padding:5px;">
+                <h2>@Resources.Login.Title</h2>
+            </header>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+
+                    @Html.LabelFor(m => m.Email, new { @for = "Email" })
+                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+
+                    @Html.LabelFor(m => m.Password, new { @for = "Password" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                    <a href="@Url.Action("ForgotPassword", "Account")"> @Resources.Login.ForgotPasswordLink </a>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Resources.Login.LoginBtn</button>
+                </div>
+            }
+            <hr>
+            <footer>
+
+                <p>@Resources.Login.DontHaveAccount <a href="@Url.Action("Register", "Account")"> @Resources.Login.RegisterLink</a></p>
+            </footer>
+        </div>
+    </div>*@
+
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>LoginPage</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/bootstrap/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/uniform.css?v=3" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/bootstrap-switch-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/components-rtl.min.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/plugins-rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/login.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="login">
+    <div class="user-login-5">
+        <div class="row bs-reset">
+            <div class="col-md-6 bs-reset">
+                <div class="login-bg" style="background-image:url(/Content/assets/img/LoginImg.jpg)">
+                </div>
+            </div>
+            <div class="col-md-6 login-container bs-reset">
+                <div class="login-content">
+                    <div align="center"><img class="login-logo2" src="~/Content/assets/img/lmlogo.png" /></div>
+                    <h1 align="center">@Resources.Layout.WebsiteName</h1>
+                    <div class="row" style="display:flex;align-content:center;justify-content:center" >
+                        <ul class="nav navbar-nav pull-right">
+                            @{
+                                var activeArabicMenu = "";
+                                var activeHebrewMenu = "";
+                            }
+                            @if (websiteCulture == "ar")
+                            {
+                                activeArabicMenu = "active";
+                            }
+                            else
+                            {
+                                activeHebrewMenu = "active";
+                            }
+                            <li class="dropdown @activeArabicMenu">
+                                <a href="@Url.Action("SetCulture", "Home", new {culture = "ar", currentUrl = currentUrl})">عربي</a>
+                            </li>
+                            <li class="droddown dropdown-separator">
+                                <span class="separator"></span>
+                            </li>
+                            <li class="dropdown @activeHebrewMenu">
+                                <a href="@Url.Action("SetCulture", "Home", new {culture = "he", currentUrl = currentUrl})">עברית</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login-form", id = "login-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(m => m.Email, new
+                               {
+                                   @type = "email",
+                                   @class = "required form-control form-control-solid placeholder-no-fix form-group"
+                       ,
+                                   autocomplete = "off",
+                                   placeholder = Resources.Login.TxtEmail
+                               })
+                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-xs-6">
+                                @Html.PasswordFor(m => m.Password, new
+                               {
+                                   @class = "required form-control form-control-solid placeholder-no-fix form-group",
+                                   type = "password",
+                                   autocomplete = "off",
+                                   placeholder = Resources.Login.TxtPassword
+                               })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="rem-password">
+                                        <label>
+                                            @*<input type="checkbox" class="rem-checkbox" />
+                                                تذكرني*@
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8 text-right">
+                                    <div class="forgot-password">
+                                        <a id="forget-password" href="@Url.Action("ForgotPassword", "Account")" class="forget-password"> @Resources.Login.ForgotPasswordLink </a>
+                                    </div>
+                                    <p class="visible-xs"></p>
+                                    <a href="@Url.Action("Register", "Account")" id="newAccount" class="btn red">
+                                        @Resources.Login.RegisterLink
+                                    </a>
+                                    <button class="btn blue" type="submit">@Resources.Login.Title</button>
+                                </div>
+                            </div>
+                    }
+                </div>
+                <div class="login-footer">
+                    <div class="row bs-reset">
+                        <div class="col-xs-12 bs-reset">
+                            <div class="login-copyright text-center">
+                                <p>
+                                    @Resources.Layout.TxtSmsm ©
+                                    <script type="text/javascript">
+                                        document.write(new Date().getFullYear());
+                                    </script>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/assets/Ilut_js/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/js.cookie.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/additional-methods.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/select2.full.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/jquery.backstretch.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/app.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/login.js" type="text/javascript"></script>
+</body>
+</html>

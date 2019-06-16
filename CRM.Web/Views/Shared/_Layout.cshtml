@@ -1,0 +1,256 @@
+﻿@using System.Runtime.Versioning
+@using CRM.Core
+@using CRM.Core.Helpers
+@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using Microsoft.Ajax.Utilities
+@{
+    var currentUrl = Request.Url.AbsoluteUri;
+  //  var googleMapKey = SettingHelper.GetOrCreate("System_Google_Map_Key", "AIzaSyASbUiCGYwyz0MsCk0hMrFzR6a1ksha2A8");
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+
+  //  var cmsSystemLink = SettingHelper.GetOrCreate(Constants.SystemSettings.CmsSystemLink, "#")?.Value;
+   // var archivingSystemLink = SettingHelper.GetOrCreate(Constants.SystemSettings.ArchivingSystemLink, "#")?.Value;
+}
+
+<!DOCTYPE html>
+<html @*lang="ar"*@ @*dir="rtl"*@>
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - @*@Resources.Layout.WebsiteName*@ Lead Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="description" content="@ViewBag.Description">
+
+    <!--Social Media Share Buttons Optional Meta Tags-->
+    <meta property="og:image" content="@ViewBag.Image" />
+    <meta property="og:site_name" content=@Resources.Layout.WebsiteName />
+    <meta itemprop="image" content="@ViewBag.Image" />
+    <meta name="twitter:image:src" content="@ViewBag.Image" /><!--<h1>Place this directly belowyour Header 1 Tag, facebook looks for this</h1>-->
+    <meta property="og:image" content="@ViewBag.Image" />
+    @if (websiteCulture != "ar")
+    {
+        <link href="~/Content/assets-new/css/app.min.css" rel="stylesheet" type="text/css" />
+    }
+    else
+    {
+        <link href="~/Content/assets-new/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+    }
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    <!-- App css -->
+    <link href="~/Content/assets-new/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- plugin css -->
+    <link href="~/Content/assets-new/libs/jquery-vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    <!-- btn Plugins css -->
+    <link href="~/Content/assets-new//libs/jquery-nice-select/nice-select.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new//libs/switchery/switchery.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new//libs/multiselect/multi-select.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new//libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new//libs/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new//libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css" />
+    <!-- time picker Plugins css -->
+    <link href="~/Content/assets-new/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/libs/clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap Tables css -->
+    <link href="~/Content/assets-new/libs/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom box css -->
+    <link href="~/Content/assets-new/libs/custombox/custombox.min.css" rel="stylesheet">
+    <style>
+        .title_name {
+            font-size: 16px;
+            /*padding-top: 25px;*/
+            display: inline-block;
+            color: #566675;
+        }
+
+        #topnav {
+            position: relative !important;
+            padding: 0px !important;
+            z-index: 1 !important;
+        }
+
+        .navbar-custom {
+            position: relative !important;
+        }
+
+        #topnav .topbar-menu {
+            margin-top: 0px !important;
+        }
+    </style>
+</head>
+
+<body class="page-container-bg-solid">
+
+    <!-- Navigation Bar-->
+    <header id="topnav">
+
+        <!-- Topbar Start -->
+        <div class="navbar-custom">
+            <div class="container-fluid">
+                <ul class="list-unstyled topnav-menu mb-0">
+                    <li class="dropdown notification-list">
+                        <!-- Mobile menu toggle-->
+                        <a class="navbar-toggle nav-link">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </a>
+                        <!-- End mobile menu toggle-->
+                    </li>
+                    <!-- LOGO -->
+                    <div class="logo-box">
+                        <a href="@Url.Action("index", "home")" class="logo text-center">
+                            <span class="logo-lg">
+                                <img src="~/Content/assets/img/lmlogo.png" alt="" height="64">
+                                <span class="title_name"> Lead Management @*@Resources.Layout.WebsiteName*@</span>
+                                <!-- <span class="logo-lg-text-light">UBold</span> -->
+                            </span>
+                            <span class="logo-sm">
+                                <!-- <span class="logo-sm-text-dark">U</span> -->
+                                <img src="~/Content/assets/img/lmlogo.png" alt="" height="64">
+                                <span class="title_name"> @Resources.Layout.WebsiteName</span>
+                            </span>
+                        </a>
+                    </div>
+                </ul>
+                <ul class="list-unstyled topnav-menu m-0 ">
+                    @{
+                        var activeArabicMenu = "";
+                        var activeEnglishMenu = "";
+                        var floating="";
+                       
+                    }
+                    @if (websiteCulture == "ar")
+                    {
+                        activeArabicMenu = "active";
+                        floating = "float-left";
+
+                    }
+                    else
+                    {
+                        activeEnglishMenu = "active";
+                        floating = "float-right";
+                    }
+                    <li class=" @activeArabicMenu @floating" >
+                        <a class="nav-link  waves-effect" href="@Url.Action("SetCulture", "Home", new {culture = "ar", currentUrl = currentUrl})" role="button" aria-haspopup="false" aria-expanded="false">
+                            عربي
+                        </a>
+                    </li>
+                    <li class=" @activeEnglishMenu @floating">
+                        <a class="nav-link  waves-effect" href="@Url.Action("SetCulture", "Home", new {culture = "en", currentUrl = currentUrl})" role="button" aria-haspopup="false" aria-expanded="false">
+                            English
+                        </a>
+                    </li>
+                    @*<li class=" @activeArabicMenu">
+                        @Html.Partial("_LoginPartial")
+                    </li>*@
+                </ul>
+
+            </div> <!-- end container-fluid-->
+        </div>
+        <!-- end Topbar -->
+        <div class="topbar-menu">
+            <div class="container-fluid">
+                <div id="navigation">
+                    <!-- Navigation Menu-->
+                    <ul class="navigation-menu ">
+                        <li>
+                            <a href="@Url.Action("Index", "Home")"><i class="fe-sidebar"></i> @Resources.Home.TxtSiteHomePage </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Campaigns")"><i class="fe-sidebar"></i> @Resources.Campaign.Campaigns </a>
+                        </li>
+                        <li class="has-submenu">
+                            <a href="#">
+                                <i class="fe-airplay"></i>@Resources.Home.ControlPanel
+                                <div class="arrow-down"></div>
+                            </a>
+                            <ul class="submenu">
+
+                                <li>
+                                    <a href="@Url.Action("Index", "Permissions")">@Resources.Home.Permissions</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Index", "UserProfile")">@Resources.Home.Users</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- End navigation menu -->
+                    <div class="clearfix"></div>
+                </div>
+                <!-- end #navigation -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end navbar-custom -->
+
+    </header>
+    <!-- End Navigation Bar-->
+    <div class="page-container-fluid">
+        @RenderBody()
+    </div>
+    <br /><br /><br />
+    <div class="footer">
+        @Html.Partial("_Footer")
+    </div>
+
+    @*<script src="~/Content/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>*@
+
+    @*@Html.Partial("_GoogleAnalytics")*@
+
+    <script src="~/Content/assets/Ilut_js/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/Ilut_js/js.cookie.min.js" type="text/javascript"></script>
+
+    <!-- Vendor js -->
+    <script src="~/Content/assets-new/js/vendor.min.js"></script>
+    <script src="~/Content/assets-new/libs/jquery-nice-select/jquery.nice-select.min.js"></script>
+    <script src="~/Content/assets-new/libs/switchery/switchery.min.js"></script>
+    <script src="~/Content/assets-new/libs/multiselect/jquery.multi-select.js"></script>
+    <script src="~/Content/assets-new/libs/select2/select2.min.js"></script>
+    @*<script src="~/Content/assets-new/libs/jquery-mockjax/jquery.mockjax.min.js"></script>*@
+    <script src="~/Content/assets-new/libs/autocomplete/jquery.autocomplete.min.js"></script>
+    <script src="~/Content/assets-new/libs/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/Content/assets-new/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/Content/assets-new/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+
+    <!-- Plugins js-->
+    <script src="~/Content/assets-new/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
+    @*<script src="~/Content/assets-new/libs/jquery-vectormap/jquery-jvectormap-1.2.2.min.js"></script>*@
+    @*<script src="~/Content/assets-new/libs/jquery-vectormap/jquery-jvectormap-world-mill-en.js"></script>*@
+    <script src="~/Content/assets-new/libs/flatpickr/flatpickr.min.js"></script>
+    <script src="~/Content/assets-new/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script src="~/Content/assets-new/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
+
+    <!-- Bootstrap Tables js -->
+    <script src="~/Content/assets-new/libs/bootstrap-table/bootstrap-table.min.js"></script>
+    <!-- Init js-->
+    @*<script src="~/Content/assets-new/js/pages/form-advanced.init.js"></script>*@
+    <!-- Init js -->
+    <script src="~/Content/assets-new/js/pages/bootstrap-tables.init.js"></script>
+
+    <!-- Init js-->
+    <script src="~/Content/assets-new/js/pages/form-pickers.init.js"></script>
+    <!-- Modal-Effect -->
+    <script src="~/Content/assets-new/libs/custombox/custombox.min.js"></script>
+    <!-- Jquery Ui js -->
+    <script src="~/Content/assets-new/libs/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Init -->
+    <script src="~/Content/assets-new/js/pages/kanban.init.js"></script>
+    <!-- App js-->
+    <script src="~/Content/assets-new/js/app.min.js"></script>
+
+
+</body>
+</html>

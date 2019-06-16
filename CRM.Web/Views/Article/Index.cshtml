@@ -1,0 +1,641 @@
+﻿@model PagedList.IPagedList<CRM.Web.Models.ArticleViewModel>
+@using CRM.Core.SystemEnums
+@using PagedList.Mvc
+@{
+    ViewBag.Title = Resources.Article.Title;
+    Layout = "~/Views/Shared/_LayoutCMS.cshtml";
+}
+
+
+
+<style>
+    .sel {
+        color: black;
+        box-sizing: border-box;
+        overflow: hidden;
+        border: 1px solid #aaaaaa;
+        border-radius: 6px;
+    }
+
+    .txt {
+        padding: 1px 10px;
+        background-image: linear-gradient(#eee 20%, #fff 80%);
+        box-shadow: 0 1px 0 #fff inset;
+        height: 20px;
+    }
+
+    .selected {
+        background-color: #3875d7;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+        background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+        color: #fff;
+    }
+
+    .hide1 {
+        display: none;
+    }
+
+    .sel .options {
+        width: 100%;
+        background-color: #ffffff;
+        border: 1px solid #aaaaaa;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 5;
+    }
+
+        .sel .options div {
+            transition: all 0.2s ease-out;
+            padding: 10px;
+        }
+
+            .sel .options div:hover {
+                background-color: #3875d7;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+                background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+                color: #fff;
+            }
+
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+
+
+            <header class="section-header justify-content-between flex-wrap" id="headerIndex">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@ViewBag.Title</h2>
+                </div>
+                <div class="header-form" id="divAddNew_Search">
+
+                    <a id="btnCreateArticle" onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.Article.TxtAddNewArticle</a>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.Hidden("resetTo", 1)
+
+                        @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                        <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                    }
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.Article.TxtUpdateArticle</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.Article.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.Article.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.Article.TxtAddNewArticle</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.Article.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.Article.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="ArticleImageUrl" name="ArticleImageUrl" value="" />
+
+            <div id="CreateArticle" style="display: none" class="row">
+                @*<div class="col-lg-4 cms-col-header">
+                        <h2>
+                            @Resources.Article.TxtAddNewArticle
+                        </h2>
+                    </div>*@
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="CreateArticle()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group col-lg-6">
+                                <label for="Name">@Resources.Article.TxtName</label>
+                                <input class="form-control" type="text" required name="Name" id="Name" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.Article.TxtStatus</label>
+                                @Html.DropDownList("Status", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.Article.Category</label>
+                                @Html.DropDownList("Category", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.Article.CaseType</label>
+                                @Html.DropDownList("MasterLookup", null, string.Empty,
+                               new
+                               {
+                                   @class = "form-control chosen-select",
+                                   onchange = "GetLookupDetailesData(this.value,'LookupDetailesSelectList')"
+                               })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="Status">@Resources.Article.CaseDetails</label>
+                                <select class="form-control" id="LookupDetailesSelectList">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label for="Description">
+                                    @Resources.Article.TxtDescription
+                                </label>
+                                @Html.Raw(ViewBag.Editor1)
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.Article.BtnAdd</button>
+                                <button class="btn btn-secondary" id="btnCancel_Add">@Resources.Article.BtnCancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="row" style="display: none" id="EditArticle">
+                @*<div class="col-lg-4 cms-col-header">
+                        <h2>@Resources.Article.TxtUpdateArticle</h2>
+                    </div>*@
+                <div class="col-lg-8">
+                    <form method="post" onsubmit="SaveArticle()">
+                        <div class="row">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                            <div class="form-group col-lg-6">
+                                <label for="NameEdit">@Resources.Article.TxtName</label>
+                                <input class="form-control" type="text" required name="NameEdit" id="NameEdit" onInput="PreventEnterChartecherNameEdit()" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="StatusEdit">@Resources.Article.TxtStatus</label>
+                                @Html.DropDownList("StatusEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label for="CategoryEdit">@Resources.Article.Category</label>
+                                @Html.DropDownList("CategoryEdit", null, string.Empty, new { @class = "form-control chosen-select", required = "required" })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Master</label>
+                                @Html.DropDownList("MasterLookupEdit", null, string.Empty,
+                               new
+                               {
+                                   @class = "form-control chosen-select",
+                                   onchange = "GetLookupDetailesData(this.value,'LookupDetailesEditSelectList')"
+                               })
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Detailes</label>
+                                <select class="form-control" id="LookupDetailesEditSelectList"></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label for="DescriptionEdit">@Resources.Article.TxtDescription</label>
+                                @Html.Raw(ViewBag.Editor2)
+                                @* <textarea class="form-control" type="text" required name="DescriptionEdit" id="DescriptionEdit" onInput="PreventEnterChartecherNameEdit()"></textarea>*@
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.Article.BtnSave</button>
+                                <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.Article.BtnCancel" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <table id="tableArticle" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Title)
+                        </th>
+                        @*<th>
+                                @Html.DisplayNameFor(model => model.ElementAt(0).Description)
+                            </th>*@
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).CategoryTitle)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="parentArticle" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            @*<td>
+                                    @Html.Raw(item.Description)
+                                </td>*@
+                            <td>
+                                @Html.Raw(item.CategoryTitle)
+                            </td>
+                            <td>
+                                <a href="#" onclick="EditArticle(@item.Id)" class="btnEditArticle disabled" title="@Resources.Article.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                <a href="#" onclick="Delete(@item.Id)" class="btnDeleteArticle disabled" title="@Resources.Article.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                                @{
+                                    var link = Url.Content("~/ArticleDescription?articleId=" + item.Id);
+                                }
+                                @*<a title="@Resources.Article.Copy" href="#" onclick="CopyLinkToClipboard('@(link)')">
+                                    <i class="fa fa-copy"></i>
+                                </a>*@
+                            </td>
+                        </tr>
+                                    }
+                </tbody>
+            </table>
+            @if (Model.PageCount > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchText = ViewBag.SearchText }))
+                </nav>
+            }
+        </div>
+    </section>
+
+</main>
+
+<script type="text/javascript">
+
+    function GetLookupDetailesData(masterTableId,elementId) {
+        if (typeof masterTableId != typeof undefined && masterTableId != "") {
+
+            $.get("/Article/GetLookupDetailsByMasterId", { id: masterTableId }, function (data) {
+                if (data != null) {
+                    FillDetailesLookupData(data, elementId);
+                }
+            });
+        }
+        else {
+            $("#" + elementId).empty();
+        }
+    }
+
+    function FillDetailesLookupData(data, elementId) {
+        $("#" + elementId).empty();
+        var options = [];
+        options.push("<option value =''></option>");
+        $.each(data, function () {
+            var record = this;
+            options.push("<option value='" + record.Id + "'>" + record.Name + "</option>");
+        });
+        $("#" + elementId).append(options.join());
+    }
+
+    var permission = {};
+    $("#btnHebrew").click(function () {
+        $("#LanguageId").val(2);
+        EditArticle($("#IdEdit").val());
+    });
+    $("#btnArabic").click(function () {
+        $("#LanguageId").val(1);
+        EditArticle($("#IdEdit").val());
+    });
+
+    $("#btnHebrewEdit").click(function () {
+        $("#LanguageId").val(2);
+        EditArticle($("#IdEdit").val());
+    });
+    $("#btnArabicEdit").click(function () {
+        $("#LanguageId").val(1);
+        EditArticle($("#IdEdit").val());
+    });
+    $("#EditArticle").hide();
+
+    var editors = [];
+    function RichTextEditor_OnLoad(rteeditor) {
+        editors.push(rteeditor);
+    }
+
+    //function CopyLinkToClipboard(link) {
+    //    var $temp = $("<input>");
+    //    $("body").append($temp);
+    //    $temp.val(link).select();
+    //    document.execCommand("copy");
+    //    $temp.remove();
+    //    alert("copied");
+    //}
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateArticle").show();
+        $("#btnCreateArticle").hide();
+        $("#headerCreate").show();
+        $("#headerEdit").hide();
+        $("#headerIndex").hide();
+    }
+    function CreateArticle() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.Status = $("#Status").val();
+        var editor;
+        for (var i = 0; i < editors.length; i++) {
+            if (editors[i]._config.skin_div.id.indexOf(1) >= 0) {
+                editor = editors[i];
+                break;
+            }
+        }
+        obj.Description = editor.GetText();
+
+        //obj.Description = $("#Description").val();
+        obj.DefaultTemplateLanguage = $("#DefaultTemplateLang").val();
+        obj.Title = $("#Name").val();
+        obj.Category = $("#Category").val();
+        obj.LanguageId = $("#LanguageId").val();
+        obj.DetailesLookupId = $("#LookupDetailesSelectList").val();
+        obj.MasterLookupId = $("#MasterLookup").val();
+        //------------------------------------
+
+        $.ajax({
+            url: '@Url.Action("AddArticle", "Article")',
+            data: JSON.stringify(obj),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            },
+            error: function (xhr) {
+                alert("error");
+            }
+        });
+        //$.post("/Article/AddArticle",
+        //    { article: obj },
+        //    function (data) {
+        //        if (data != null) {
+        //            location.reload(true);
+        //        } else {
+        //            alert("Error");
+        //        }
+        //    });
+    }
+
+    function EditArticle(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var languageId = $("#LanguageId").val();
+        $.get("/Article/EditArticle", { id: id, languageId: languageId }, function (result) {
+            if (result != null && result.article != null) {
+                var data = result.article;
+                var detailesLookupData = result.detailesLookupData;
+                if (typeof detailesLookupData != typeof undefined && detailesLookupData != null
+                    && detailesLookupData.length > 0) {
+                    FillDetailesLookupData(detailesLookupData,"LookupDetailesEditSelectList");
+                }
+                else {
+                    $("#LookupDetailesSelectList").empty();
+                }
+
+                $("#CreateArticle").hide();
+                $("#EditArticle").show();
+                $("#btnCreateArticle").hide();
+                $("#headerCreate").hide();
+                $("#headerEdit").show();
+                $("#headerIndex").hide();
+
+
+                $("#StatusEdit").val(data.Status);
+                $("#CategoryEdit").val(data.Category)
+                $("#LookupDetailesEditSelectList").val(data.DetailesLookupId);
+                $("#MasterLookupEdit").val(data.MasterLookupId);
+                $('#StatusEdit').trigger("chosen:updated");
+
+                var editor;
+                for (var i = 0; i < editors.length; i++) {
+                    if (editors[i]._config.skin_div.id.indexOf(2) >= 0) {
+                        editor = editors[i];
+                        break;
+                    }
+                }
+                editor.SetText(data.Description);
+
+
+                //$("#DescriptionEdit").val(data.Description);
+                $("#DefaultTemplateLangEdit").val(data.DefaultTemplateLanguage);
+                $("#NameEdit").val(data.Title);
+                //$("#LanguageId").val(data.LanguageId);
+                $("#IdEdit").val(id);
+            }
+        });
+    }
+
+
+
+    function SaveArticle() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.Category = $("#CategoryEdit").val();
+        var editor;
+        for (var i = 0; i < editors.length; i++) {
+            if (editors[i]._config.skin_div.id.indexOf(2) >= 0) {
+                editor = editors[i];
+                break;
+            }
+        }
+
+        obj.Description = editor.GetText();
+
+        obj.DetailesLookupId = $("#LookupDetailesEditSelectList").val();
+        obj.MasterLookupId = $("#MasterLookupEdit").val();
+
+        //obj.Description = $("#DescriptionEdit").val();
+        obj.DefaultTemplateLanguage = $("#DefaultTemplateLangEdit").val();
+        obj.Title = $("#NameEdit").val();
+        obj.LanguageId = $("#LanguageId").val();
+
+        $.ajax({
+            url: '@Url.Action("EditArticle", "Article")',
+            data: JSON.stringify(obj),
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            },
+            error: function (xhr) {
+                alert("error");
+            }
+        });
+        //$.post("/Article/EditArticle",
+        //    { Article: obj },
+        //    function (data) {
+        //        if (data != null) {
+        //            location.reload();
+        //        } else {
+        //            alert("Error");
+        //        }
+        //    });
+    }
+
+    $("#btnCancel").click(function () {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            $("#CreateArticle").hide();
+            $("#btnCreateArticle").show();
+            $("#EditArticle").hide();
+            return;
+        }
+        $("#CreateArticle").show();
+        $("#EditArticle").hide();
+    });
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.Article.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/Article/DeleteArticle", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+
+    }
+
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Article", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreate").removeClass("disabled");
+                        $("#btnCreateArticle").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditArticle").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteArticle").removeClass("disabled");
+                    }
+
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+
+
+</script>
+
+
+
+<script>
+    var sel = $('.sel'),
+   txt = $('.txt'),
+   options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateArticle").hide();
+        $("#EditArticle").hide();
+
+        $("#tableArticle").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateArticle").show();
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreateArticle").hide();
+        $("#EditArticle").hide();
+
+        $("#tableArticle").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateArticle").show();
+    });
+</script>
+
+
+
+
+

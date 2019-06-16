@@ -1,0 +1,252 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Core
+@using CRM.Web.Models
+
+
+@*@model CRM.DataEntity.Models.Lead*@
+@model CRM.Web.Models.LeadViewModel
+
+@{
+    ViewBag.Title = "LeadInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var campaign = LookupHelper.GetCampaigns(Request.Cookies["_culture"]);
+}
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<style type="text/css">
+    .successMsg {
+        color: forestgreen;
+    }
+</style>
+@{
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+    var align = "";
+    // var mob = "";
+}
+@if (websiteCulture == "ar")
+{
+
+    align = "left";
+
+}
+else
+{
+
+    align = "right";
+
+}
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title d-flex">@Resources.Home.Profile</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+    <div class="row">
+        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+            <div class="card-box text-center">
+                @*@if (!string.IsNullOrWhiteSpace(Model.ProfilePath))
+                    {
+                        <img class="rounded-circle avatar-lg img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
+                    }
+                    else
+                    {
+                        <img class="rounded-circle avatar-lg img-thumbnail" src="~/Content/assets/img/profile.png" />
+                    }*@
+                <h4 class="mb-0">@Model.Name</h4>
+
+                <div class=" mt-3">
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.Email :</strong> <span class="ml-2">
+                            @Model.Email
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.Mobile :</strong> <span class="ml-2">
+                            @Model.Phone_Number
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.Status :</strong><span class="ml-2">
+                            @Model.Status
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.Address :</strong> <span class="ml-2">
+                            @Model.Address
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Campaign.Name :</strong> <span class="ml-2">
+                            @Model.CampaignName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.AssigneeUser :</strong> <span class="ml-2">
+                            @Model.AssigneeName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.Notes :</strong><span class="ml-2">
+                            @Model.Notes
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13 d-flex">
+                        <strong>@Resources.Home.CreatedDate :</strong><span class="ml-2">
+                            @Model.Created_Date
+                        </span>
+                    </p>
+
+                </div>
+            </div> <!-- end card-box -->
+        </div>
+        <!-- Tabs Section -->
+        <div class="col-lg-8 col-xl-8">
+            <div class="card-box">
+                <ul class="nav nav-pills navtab-bg nav-justified">
+                    <li class="nav-item">
+                        <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                            @Resources.Home.AccountSettings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#SMS" data-toggle="tab" aria-expanded="false" class="nav-link">
+                            @Resources.Home.SMS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#activities" data-toggle="tab" aria-expanded="false" class="nav-link">
+                            @Resources.Home.AddActivity
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+
+                    <!-- setting tab -->
+                    <div class="tab-pane active" id="settings">
+                        @using (Html.BeginForm("LeadInfo", "Home", new { id = Model.Id }, FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(r => r.Id)
+
+                            <h4 class="successMsg" @*style="display:none;"*@> @ViewBag.message</h4>
+
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Name, new { @for = "Name", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @required = "true" })
+                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Status, new { @for = "list", @class = "d-flex" })
+                                    @Html.EnumDropDownListFor(m => m.Status, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Address, new { @for = "Addess", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Phone_Number, new { @for = "Phone_Number", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.Phone_Number, new { @class = "form-control userMob", @required = "true" })
+                                    @Html.ValidationMessageFor(m => m.Phone_Number, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Email, new { @for = "Email", @class = "d-flex" })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", TextMode = "Email", type = "email" })
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.Notes, new { @for = "Notes", @class = "d-flex" })
+                                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", type = "TextArea" })
+                                    @Html.ValidationMessageFor(m => m.Notes, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.CampaignId, new { @for = "CampaignId", @class = "d-flex" })
+                                    @Html.DropDownList("CampaignId", new SelectList(campaign, "Id", "Name"), Resources.Campaign.SelectCampaign, new { @class = "form-control chosen-select" , @required = "true" })
+                                    @Html.ValidationMessageFor(m => m.CampaignId, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    @Html.LabelFor(m => m.AssigneeId, new { @for = "AssigneeId", @class = "d-flex" })
+                                    @Html.DropDownList("AssigneeId", new SelectList(users, "Id", "FullName"), Resources.Campaign.SelectUser, new { @class = "form-control chosen-select" })
+                                    @Html.ValidationMessageFor(m => m.AssigneeId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-12" style="text-align:@align">
+                                <button type="submit" class="btn btn-primary">@Resources.Home.Save</button>
+                                @*<button class="btn btn-secondary" type="button" onclick="window.location='@Url.Action("Index", "Home")'">@Resources.Home.Back</button>*@
+                            </div>
+                        }
+                    </div>
+                    <div class="tab-pane" id="SMS">
+                        <h4 class="successMsg" @*style="display:none;"*@> @ViewBag.SMSmessage</h4>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="d-flex">@Resources.Home.Mobile</label>
+                                <input type="text" class="form-control" id="SmsMob" disabled />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label class="d-flex">@Resources.Home.msgTxt</label>
+                                <textarea rows="3" id="msgText" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="text-align:@align">
+                            <button type="button" id="SendSMSBtn" class="btn btn-primary">@Resources.Home.Send</button>
+                            @*<button class="btn btn-secondary" type="button" onclick="window.location='@Url.Action("Index", "Home")'">@Resources.Home.Back</button>*@
+                        </div>
+                    </div>
+                    <div id="activities" class="tab-pane">
+                        @Html.Action("CreateLeadActivity", "Home")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-lg-12 col-md-12 col-sm-12">
+
+            @Html.Action("LeadActivities", "Home")
+
+        </div>
+    </div>
+</div>
+@{
+    var LeadId = (int)ViewBag.Lead_ID;
+}
+<script type="text/javascript">
+        $(document).ready(
+            function () {
+                mob = $(".userMob").val();
+                $("#SmsMob").val(mob);
+                $("#Lead_ID").val(@LeadId);
+                $("#SendSMSBtn").click(function () {
+                    SendSMSToLead($("#msgText").val(), $("#SmsMob").val());
+                });
+                @*$.Get("Home/LeadActivities",
+                    {id:@LeadId}
+                )*@
+            }
+        );
+        function SendSMSToLead(text, mobile) {
+            //var Obj = {};
+            //Obj.mobile = mobile;
+            //obj.text = text
+            console.log("inside func" + mobile)
+            $.post("/Home/SendSMS",
+                { text: text, mobile: mobile },
+                function (data) {
+                    if (data != null) {
+                        //  location.reload();
+                    } else {
+                        alert("Error");
+                    }
+                });
+        }
+</script>

@@ -1,0 +1,1550 @@
+﻿@using CRM.Core.SystemEnums
+@using CRM.Web.Helpers
+@using CRM.Core
+@model PagedList.IPagedList<CRM.Web.Models.CaseViewModel>
+@using PagedList.Mvc
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isCitizen = User.IsInRole(Constants.Roles.Citizen);
+    int fileTypeNo = (int)GeneralEnums.FileEnum.File;
+
+    var statuses = LookupHelper.GetStatuses(Request.Cookies["_culture"]);
+    var users = LookupHelper.GetEmployees(Request.Cookies["_culture"]);
+    var severities = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CaseSeverity, Request.Cookies["_culture"]);
+    var complaintCategories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CaseCategory, Request.Cookies["_culture"]);
+    var emergencyCategories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.EmergencyCategories, Request.Cookies["_culture"]);
+    var formCategories = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.FormCategories, Request.Cookies["_culture"]);
+    var priorities = LookupHelper.GetLookupDetailsByMasterId((int)GeneralEnums.MasterLookupEnums.CasePriority, Request.Cookies["_culture"]);
+    var typeId = ViewBag.typeId;
+    int stringType = int.Parse(typeId?.ToString() ?? "1");
+    var categories = complaintCategories;
+    var masterLookupStatesId = (int)GeneralEnums.MasterLookupEnums.WorkFlowStates;
+    var articleId = 0;
+
+    switch (stringType)
+    {
+        case (int)GeneralEnums.CasesType.Complaints:
+            ViewBag.Title = Resources.Layout.Complaints;
+            categories = complaintCategories;
+            articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Master, (int)GeneralEnums.MasterLookupEnums.CaseCategory);
+            break;
+        case (int)GeneralEnums.CasesType.Emergency:
+            ViewBag.Title = Resources.Layout.Emergency;
+            categories = emergencyCategories;
+            articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Master, (int)GeneralEnums.MasterLookupEnums.EmergencyCategories);
+            break;
+        case (int)GeneralEnums.CasesType.Froms:
+            ViewBag.Title = Resources.Layout.Froms;
+            categories = formCategories;
+            articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Master, (int)GeneralEnums.MasterLookupEnums.FormCategories);
+            break;
+    }
+}
+
+<style>
+    /*for send email modal*/
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 100; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-footer {
+        /*display: initial !important;*/
+        text-align: right;
+    }
+
+    .modal-backdrop.show {
+        opacity: 0 !important;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto !important;
+        border: 1px solid #888 !important;
+        height: 400px !important;
+        overflow: no-display !important;
+    }
+
+    .horizontal-center {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .vertical-center-chart {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 300px;
+    }
+
+    .Export-Icon {
+        cursor: pointer;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<main>
+    <section class="section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex">
+                        <h2 class="section-title">
+                            @ViewBag.Title &nbsp;&nbsp;
+                            @{
+                                if (articleId > 0 && !isCitizen && typeId == (int)GeneralEnums.CasesType.Complaints)
+                                {
+                                    <a onmouseover="ArticleDescriptionData('@(articleId)', this)"
+                                       data-toggle="tooltip" data-placement="left" title=""
+                                       target="_blank" href="@Url.Action("Index","ArticleDescription", new { articleId = articleId })">
+                                        <i class="fa fa-eye text-success"></i>
+                                    </a>
+                                }
+                            }
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-md-4">&nbsp;</div>
+                <div class="col-md-4">
+                    <div class="header-form" id="divAddNew_Search">
+                        <button class="btn btn-default" onclick="$('#AdvanceSearchForm').toggle('slow')">
+                            <i class="fa fa-search"></i> @Resources.Home.AdvanceSearch
+                        </button>&nbsp;&nbsp;&nbsp;
+                        @if (!User.IsInRole(Constants.Roles.Citizen))
+                        {
+                            <a id="btnCreateCase" onclick="ShowCreateForm()" class="btn btn-primary ml-2 disabled" href="#">@Resources.SystemCases.TxtAddNewCase</a>
+                            using (Html.BeginForm())
+                            {
+                                @Html.Hidden("resetTo", 1)
+
+                                @Html.TextBox("searchText", null, new { placeholder = Resources.Layout.TxtSearchFor })
+                                <button class="btn btn-secondary" type="submit"><span class="icon-search"></span></button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerEdit" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.SystemCases.TxtUpdateCase</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrewEdit" type="button" class="btn btn-secondary">@Resources.SystemCases.HebrewContent</button>
+                            <button id="btnArabicEdit" type="button" class="btn btn-primary">@Resources.SystemCases.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <header class="section-header justify-content-between flex-wrap" id="headerCreate" style="display:none">
+                <div class="d-flex">
+                    <button class="ml-2 sidebar-toggle d-lg-none"><i class="fa fa-bars"></i></button>
+                    <h2 class="section-title">@Resources.SystemCases.TxtAddNewCase</h2>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="ml-2">لغة المحتوى</span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button id="btnHebrew" type="button" class="btn btn-secondary">@Resources.SystemCases.HebrewContent</button>
+                            <button id="btnArabic" type="button" class="btn btn-primary">@Resources.SystemCases.ArabicContent</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <input type="hidden" id="LanguageId" name="LanguageId" value="1" />
+            <input type="hidden" id="CategoryImageUrl" name="CategoryImageUrl" value="" />
+
+            @if (!isCitizen)
+            {
+                <div id="CreateCase" style="display: none" class="row">
+                    <div class="col-lg-4 cms-col-header">
+                        <h2>
+                            @Resources.SystemCases.TxtAddNewCase
+                        </h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form method="post" onsubmit="CreateCase()">
+                            <iv class="row">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <input type="hidden" value="@typeId" id="TypeId">
+                                <div class="form-group col-lg-6">
+                                    <label for="UniqueId">@Resources.SystemCases.UniqueId</label>
+                                    <input disabled="disabled" class="form-control" type="text" required name="UniqueId" id="UniqueId" onInput="PreventEnterChartecherName()" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="Tags">@Resources.SystemCases.Tags</label>
+                                    <input class="form-control" type="text" required name="Tags" id="Tags" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="Title">@Resources.SystemCases.Title</label>
+                                    <input class="form-control" type="text" required name="Title" id="Title" />
+                                </div>
+                                @if (stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="Address">@Resources.SystemCases.Address</label>
+                                        <input class="form-control" type="text" required name="Address" id="Address" />
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="Location">@Resources.SystemCases.Location</label>
+                                        <input class="form-control" type="text" required name="Location" id="Location" />
+                                    </div>
+                                }
+                                <div class="form-group col-lg-6">
+                                    <label for="CategoryId">@Resources.SystemCases.CategoryName</label>
+                                    @Html.DropDownList("CategoryId", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+                                @if (stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="SeverityId">@Resources.SystemCases.SeverityName</label>
+                                        @Html.DropDownList("SeverityId", new SelectList(severities, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="PriorityId">@Resources.SystemCases.PriorityName</label>
+                                        @Html.DropDownList("PriorityId", new SelectList(priorities, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                }
+                                @if (stringType != (int)GeneralEnums.CasesType.Jobs)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="PriorityId">@Resources.SystemCases.AssigneeUserName</label>
+                                        @Html.DropDownList("AssigneeId", new SelectList(users, "Id", "FullName"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                }
+                                <div class="form-group col-lg-6">
+                                    <label for="Status">@Resources.SystemCases.TxtStatus</label>
+                                    @Html.DropDownList("Status", new SelectList(statuses, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="Status">
+                                        @Resources.SystemCases.TxtUploadFile
+                                        <i class="material-icons">add_a_photo</i>
+                                    </label>
+                                    <input name="UploadFile" id="UploadFile" type="file" onchange="previewFile()" multiple>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="Description">@Resources.SystemCases.TxtDescription</label>
+                                    <textarea class="form-control" required name="Description" id="Description"></textarea>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <button class="btn btn-primary" type="submit" id="btnCreate">@Resources.SystemCases.BtnAdd</button>
+                                    <button class="btn btn-secondary" id="btnCancel_Add">@Resources.SystemCases.BtnCancel</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="display: none" id="EditCase">
+                    <div class="col-lg-4 cms-col-header">
+                        <h2>@Resources.SystemCases.TxtUpdateCase</h2>
+                    </div>
+                    <div class="col-lg-8">
+                        <form method="post" onsubmit="SaveCase()">
+                            <div class="row">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <input type="hidden" id="IdEdit" name="IdEdit" />
+
+                                <div class="form-group col-lg-6">
+                                    <label for="UniqueIdEdit">@Resources.SystemCases.UniqueId</label>
+                                    <input disabled="disabled" class="form-control" type="text" required name="UniqueIdEdit" id="UniqueIdEdit" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="TagsEdit">@Resources.SystemCases.Tags</label>
+                                    <input class="form-control" type="text" required name="TagsEdit" id="TagsEdit" />
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="TitleEdit">@Resources.SystemCases.Title</label>
+                                    <input class="form-control" type="text" required name="TitleEdit" id="TitleEdit" />
+                                </div>
+                                @if (stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="AddressEdit">@Resources.SystemCases.Address</label>
+                                        <input class="form-control" type="text" required name="AddressEdit" id="AddressEdit" />
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="LocationEdit">@Resources.SystemCases.Location</label>
+                                        <input class="form-control" type="text" required name="LocationEdit" id="LocationEdit" />
+                                    </div>
+                                }
+                                <div class="form-group col-lg-6">
+                                    <label for="CategoryIdEdit">@Resources.SystemCases.CategoryName</label>
+                                    @Html.DropDownList("CategoryIdEdit", new SelectList(categories, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+                                @if (stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="SeverityIdEdit">@Resources.SystemCases.SeverityName</label>
+                                        @Html.DropDownList("SeverityIdEdit", new SelectList(severities, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="PriorityIdEdit">@Resources.SystemCases.PriorityName</label>
+                                        @Html.DropDownList("PriorityIdEdit", new SelectList(priorities, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                }
+                                @if (stringType != (int)GeneralEnums.CasesType.Jobs)
+                                {
+                                    <div class="form-group col-lg-6">
+                                        <label for="PriorityIdEdit">@Resources.SystemCases.AssigneeUserName</label>
+                                        @Html.DropDownList("AssigneeIdEdit", new SelectList(users, "Id", "FullName"), new { @class = "form-control chosen-select", required = "required" })
+                                    </div>
+                                }
+                                <div class="form-group col-lg-6">
+                                    <label for="StatusEdit">@Resources.SystemCases.TxtStatus</label>
+                                    @Html.DropDownList("StatusEdit", new SelectList(statuses, "Id", "Name"), new { @class = "form-control chosen-select", required = "required" })
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="UploadFileEdit">
+                                        @Resources.SystemCases.TxtUploadFile
+                                        <i class="material-icons">add_a_photo</i>
+                                    </label>
+                                    <input name="UploadFileEdit" id="UploadFileEdit" type="file" onchange="previewFile()" multiple>
+                                    <div id="caseAttachments"></div>
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <label for="DescriptionEdit">@Resources.SystemCases.TxtDescription</label>
+                                    <textarea class="form-control" required name="DescriptionEdit" id="DescriptionEdit"></textarea>
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <button type="submit" class="btn btn-primary" id="btnSaveEdit">@Resources.SystemCases.BtnSave</button>
+                                    <input type="button" class="btn btn-secondary" id="btnCancel_Edit" value="@Resources.SystemCases.BtnCancel" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+            <br />
+            @{
+                var display = (ViewBag.FromAdvanceSearch != null && ViewBag.FromAdvanceSearch) ? "normal" : "none";
+                var citizens = LookupHelper.GetCitizens(Request.Cookies["_culture"]);
+
+                var states = LookupHelper.GetLookupDetailsByMasterId(masterLookupStatesId, Request.Cookies["_culture"]);
+                var uniqueIdTitle = string.Empty; var TypeTitle = string.Empty;
+                <form id="AdvanceSearchForm" method="get" style="display:@display" action="@Url.Action("Index", "ManageCases")">
+                    <input type="hidden" value="true" name="FromAdvanceSearch" />
+                    @Html.Hidden("resetTo", 1)
+                    @Html.Hidden("type", stringType)
+                    @{
+                        switch (stringType)
+                        {
+                            case (int)GeneralEnums.CasesType.Complaints:
+                                uniqueIdTitle = Resources.SystemCases.ComplaintId;
+                                TypeTitle = Resources.SystemCases.ComplaintTitle;
+                                break;
+                            case (int)GeneralEnums.CasesType.Emergency:
+                                uniqueIdTitle = Resources.SystemCases.EmergencyId;
+                                TypeTitle = Resources.SystemCases.EmergencyTitle;
+                                break;
+                            case (int)GeneralEnums.CasesType.Froms:
+                                uniqueIdTitle = Resources.SystemCases.FormId;
+                                TypeTitle = Resources.SystemCases.FormTitle;
+                                break;
+                        }
+                    }
+                    <div class="row">
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ComplainId", string.Empty, new { type = "number", @class = "form-control General-Search-txt", placeholder = uniqueIdTitle })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("TitleSearch", string.Empty, new { @class = "form-control General-search-txt", placeholder = TypeTitle })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.DropDownList("CategoryIdSearch", new SelectList(categories, "Id", "Name"), Resources.SystemCases.CategoryName, new { @class = "form-control General-Search-txt chosen-select" })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.DropDownList("EmployeeIdSearch", new SelectList(users, "Id", "FullName"), Resources.SystemCases.AssigneeUserName, new { @class = "form-control General-Search-txt chosen-select" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("FromDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.FromDate })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span class="input-group-text"> @Resources.Home.FromTime </span>
+                                </div>
+                                @Html.TextBox("FromTime", string.Empty, new { type = "time", @class = "form-control timepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.FromTime })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ToDate", string.Empty, new { @class = "form-control datepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.ToDate })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span class="input-group-text"> @Resources.Home.ToTime </span>
+                                </div>
+                                @Html.TextBox("ToTime", string.Empty, new { type = "time", @class = "form-control timepicker General-Search-txt", autocomplete = "off", placeholder = Resources.Home.ToTime })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if ((stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency) && !isCitizen)
+                        {
+                            <div class="form-group col-md-3 col-sm-6">
+                                @Html.DropDownList("SeverityIdSearch", new SelectList(severities, "Id", "Name"), Resources.SystemCases.SeverityName, new { @class = "form-control General-Search-txt chosen-select" })
+                            </div>
+                            <div class="form-group col-md-3 col-sm-6">
+                                @Html.DropDownList("PriorityIdSearch", new SelectList(priorities, "Id", "Name"), Resources.SystemCases.PriorityName, new { @class = "form-control General-Search-txt chosen-select" })
+                            </div>
+                        }
+
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("CitizenSearch", string.Empty, new { @class = "form-control timepicker General-Search-txt", placeholder = Resources.SystemCases.CitizenSearch })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.DropDownList("StatusId", new SelectList(states, "Id", "Name"), Resources.SystemCases.TxtStatus, new { @class = "form-control General-Search-txt chosen-select" })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ElapseTimeFrom", string.Empty, new { placeholder = Resources.Home.ElapseTimeFrom, @type = "number", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-3 col-sm-6">
+                            @Html.TextBox("ElapseTimeTo", string.Empty, new { placeholder = Resources.Home.ElapseTimeTo, @type = "number", @class = "form-control" })
+                        </div>
+                        @if ((stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency) && !isCitizen)
+                        {
+                            <div class="form-group col-md-3 col-sm-6">
+                                @Html.TextBox("TagsSearch", string.Empty, new { placeholder = Resources.SystemCases.Tags, @class = "form-control" })
+                            </div>
+                        }
+                    </div>
+                    @if (!((stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency) && !isCitizen))
+                    {
+                        <div class="row">
+                            <div class="form-group col-md-3 col-sm-6">
+                                @Html.TextBox("TagsSearch", string.Empty, new { placeholder = Resources.SystemCases.Tags, @class = "form-control" })
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group col-lg-2 float-right">
+                        <input class="btn btn-primary" type="submit" value="@Resources.Layout.BtnSearch" />
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            }
+
+            <br />
+            <table id="tableCases" class="c-table mb-4">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ElementAt(0).CategoryName)
+                        </th>
+                        @if ((stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency) && !isCitizen)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.ElementAt(0).PriorityName)
+                            </th>
+                        }
+                        @if (!isCitizen)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => model.ElementAt(0).AssigneeName)
+                            </th>
+                        }
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        var color = string.Empty;
+                        if (item.CurrentStatus == (int)GeneralEnums.StateEnum.New || item.CurrentStatus == 0)
+                        {
+                            color = "style=color:red";
+                        }
+                        <tr id="TableData" @color>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CategoryName)
+                            </td>
+                            @if ((stringType == (int)GeneralEnums.CasesType.Complaints
+|| stringType == (int)GeneralEnums.CasesType.Emergency) && !isCitizen)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PriorityName)
+                                </td>
+                            }
+                            @if (!isCitizen)
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssigneeName)
+                                </td>
+                            }
+
+                            <td>
+                                @if (!isCitizen)
+                                {
+                                    <a href="#" onclick="EditCase(@item.Id)" class="btn btn-default btnEditCase disabled" title="@Resources.SystemCases.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                    <a href="#" onclick="Delete(@item.Id)" class="btn btn-default btnDeleteCase disabled" title="@Resources.SystemCases.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                                    <a href="@Url.Action("Details", new {id = item.Id})" class="btn btn-default btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                                    <a href="#" onclick="AddSendReportAsEmailModal(@item.Id)" class="btn btn-default btnSendCaseEmail disabled"><i class="fa fa-envelope"></i></a>
+                                    articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Detailes, item.CategoryId.GetValueOrDefault());
+                                    if (articleId > 0 && typeId == (int)GeneralEnums.CasesType.Complaints)
+                                    {
+                                        <a onmouseover="ArticleDescriptionData('@(articleId)', this)"
+                                           data-toggle="tooltip" data-placement="left" title="" class="btn btn-default"
+                                           target="_blank" href="@Url.Action("Index","ArticleDescription", new { articleId = articleId })">
+                                            <i class="fa fa-book"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Details", new {id = item.Id})" class="btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.PageCount > 0 && Model.Count > 0)
+            {
+                <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new
+               {
+                   type = ViewBag.typeId,
+                   page,
+                   ViewBag.searchText,
+                   CategoryIdSearch = ViewBag.AdvanceSearchFilters?.CategoryIdSearch,
+                   PriorityIdSearch = ViewBag.AdvanceSearchFilters?.PriorityIdSearch,
+                   EmployeeIdSearch = ViewBag.AdvanceSearchFilters?.EmployeeIdSearch,
+                   TitleSearch = ViewBag.AdvanceSearchFilters.TitleSearch,
+                   SeverityIdSearch = ViewBag.AdvanceSearchFilters?.SeverityIdSearch,
+                   FromAdvanceSearch = ViewBag.AdvanceSearchFilters?.FromAdvanceSearch,
+                   ComplainId = ViewBag.AdvanceSearchFilters?.ComplainId,
+                   CitizenSearch = ViewBag.AdvanceSearchFilters?.CitizenSearch,
+                   StatusId = ViewBag.AdvanceSearchFilters?.StatusId,
+                   FromDate = ViewBag.AdvanceSearchFilters?.FromDate,
+                   ToDate = ViewBag.AdvanceSearchFilters?.ToDate,
+                   FromTime = ViewBag.AdvanceSearchFilters?.FromTime,
+                   ToTime = ViewBag.AdvanceSearchFilters?.ToTime,
+                   TagsSearch = ViewBag.AdvanceSearchFilters.TagsSearch,
+                   ElapseTimeFrom = ViewBag.AdvanceSearchFilters?.ElapseTimeFrom,
+                   ElapseTimeTo = ViewBag.AdvanceSearchFilters?.ElapseTimeTo
+               }))
+
+                </nav>
+            }
+
+        </div>
+    </section>
+</main>
+
+<div id="SendReportAsEmailModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-title">
+            <h3>
+                <span class="close" onclick="CloseModal('SendReportAsEmailModal')">&times;</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                @Resources.Home.SendReportAsEmail
+            </h3>
+        </div>
+        <div class="modal-body">
+            <input type="hidden"  id="CaseByEmailId"/>
+            <div class="row">
+                <div class="col-md-1">
+                    @Resources.Home.Emails
+                </div>
+                <div class="col-md-10">
+                    <input type="text" id="emailsText" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-6">
+                    * @Resources.Home.PleaseWriteEmailsSeparatedWithComma
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1">
+                    @Resources.Home.TxtDescription
+                </div>
+                <div class="col-md-10">
+                    <textarea id="emailDescription" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="button" onclick="CloseModal('SendReportAsEmailModal')" class="btn btn-default">@Resources.Home.Close</button>
+            <button type="button" class="btn btn-primary" onclick="SendCaseAsEmail(this)">@Resources.Home.Send</button>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var permission = {};
+    var addImagesList = [];
+    var editImagesList = [];
+    $("#EditCase").hide();
+
+    $(".datepicker").datepicker({
+        dateFormat: 'dd/mm/yy',
+        changeMonth: true,
+        changeYear: true,
+    });
+
+    // When the user clicks on the button, open the modal
+    function AddSendReportAsEmailModal(Id) {
+        if (!permission.AllowedPermissonsList.includes("SendByEmail")) {
+            return;
+        }
+        if(Id > 0){
+            var modal = document.getElementById('SendReportAsEmailModal');
+            $("#CaseByEmailId").val(Id);
+            $("#emailsText").val('');
+            $("#emailDescription").val('');
+            modal.style.display = "block";
+        }
+        else{
+            alert("error");
+        }
+    }
+
+    function CloseModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "none";
+    }
+
+    
+    function SendCaseAsEmail(element) {
+        if (!permission.AllowedPermissonsList.includes("SendByEmail")) {
+            return;
+        }
+        var emails = $("#emailsText").val();
+        var caseByEmailId = $("#CaseByEmailId").val();
+        var emailDescription = $("#emailDescription").val();
+        if (typeof emails != typeof undefined && emails != "" && typeof caseByEmailId != typeof undefined && caseByEmailId != ""
+             && typeof emailDescription != typeof undefined && emailDescription != "") {
+            $(element).prop("disabled", true);
+
+            $.ajax({
+                url: "@Url.Action("SendCaseAsEmail", "ManageCases")",
+                type: "POST",
+                data: { caseId: caseByEmailId, emails: emails, emailDescription: emailDescription },
+            success: function (data) {
+                if (data != null) {
+                    if (data.result == "Success") {
+                        alert("@Resources.Home.SentSuccessfully");
+                    }
+                    else {
+                        alert("@Resources.Home.Error");
+                    }
+                }
+                else {
+                    alert("@Resources.Home.Error");
+                }
+            },
+            error: function () { alert("@Resources.Home.Error"); },
+            complete: function () {
+                $(element).prop("disabled", false);
+            }
+        })
+        }
+    else {
+            alert("@Resources.Home.PleaseAddEmails");
+    }
+    }
+
+
+    function ShowCreateForm() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        $("#CreateCase").show();
+        $("#btnCreateCase").hide();
+    }
+
+    function ArticleDescriptionData(articleId, element) {
+        if ($(element).attr("data-title-loaded") != "1") {
+            $.ajax({
+                url: "@Url.Action("GetArticleDataForMouseHover", "ArticleDescription")",
+                data: { articleId: articleId },
+                type: 'GET',
+                success: function (data) {
+                    $(element).attr('data-original-title', data.Title).tooltip('show');
+                    $(element).attr("data-title-loaded", 1);
+                },
+                error: function () {
+                    alert("error");
+                },
+            });
+        }
+    }
+
+
+    function CreateCase() {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            return;
+        }
+        var obj = {};
+        obj.Status = $("#Status").val();
+        obj.CategoryId = $("#CategoryId").val();
+        obj.TypeId = $("#TypeId").val();
+        if ($("#SeverityId").val()) {
+            obj.SeverityId = $("#SeverityId").val();
+        }
+        if ($("#PriorityId").val()) {
+            obj.PriorityId = $("#PriorityId").val();
+        }
+        obj.AssigneeId = $("#AssigneeId").val();
+        obj.Description = $("#Description").val();
+        obj.Title = $("#Title").val();
+        obj.Tags = $("#Tags").val();
+        if ($("#Address").val()) {
+            obj.Address = $("#Address").val();
+        }
+        if ($("#Location").val()) {
+            obj.Location = $("#Location").val();
+        }
+        obj.UniqueId = $("#UniqueId").val();
+        obj.Files = addImagesList;
+        $.post("/ManageCases/AddCase",
+                                { sysCase: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+
+    function EditCase(id) {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        $.get("/ManageCases/EditCase", { id: id }, function (data) {
+            if (data != null) {
+                $("#CreateCase").hide();
+                $("#EditCase").show();
+                $("#btnCreateCase").hide();
+
+                $("#StatusEdit").val(data.Status);
+                $('#StatusEdit').trigger("chosen:updated");
+                $("#CategoryIdEdit").val(data.CategoryId);
+                $('#CategoryIdEdit').trigger("chosen:updated");
+                $("#SeverityIdEdit").val(data.SeverityId);
+                $('#SeverityIdEdit').trigger("chosen:updated");
+                $("#PriorityIdEdit").val(data.PriorityId);
+                $('#PriorityIdEdit').trigger("chosen:updated");
+                $("#AssigneeIdEdit").val(data.AssigneeId);
+                $('#AssigneeIdEdit').trigger("chosen:updated");
+                $("#DescriptionEdit").val(data.Description);
+                $("#TitleEdit").val(data.Title);
+                $("#TagsEdit").val(data.Tags);
+                $("#AddressEdit").val(data.Address);
+                $("#LocationEdit").val(data.Location);
+                $("#UniqueIdEdit").val(id);
+                $("#IdEdit").val(id);
+                var content = "";
+                for (var i = 0; i < data.Files.length; i++) {
+                    var filex = data.Files[i];
+                    content += "<a  target='_blank' href='" + filex.FileUrl + "' class='btn btn-success btn-simple'><i class='fa fa-paperclip'></i></a>";
+                }
+                $('#caseAttachments').html("");
+                $('#caseAttachments').append(content);
+                $('.main-panel').animate({ scrollTop: 0 }, 'slow');
+            }
+        });
+    }
+
+
+
+    function SaveCase() {
+        if (!permission.AllowedPermissonsList.includes("Edit")) {
+            return;
+        }
+        var obj = {};
+        obj.Id = $("#IdEdit").val();
+        obj.Status = $("#StatusEdit").val();
+        obj.CategoryId = $("#CategoryIdEdit").val();
+        if ($("#SeverityIdEdit").val()) {
+            obj.SeverityId = $("#SeverityIdEdit").val();
+        }
+        if ($("#PriorityIdEdit").val()) {
+            obj.PriorityId = $("#PriorityIdEdit").val();
+        }
+        obj.AssigneeId = $("#AssigneeIdEdit").val();
+        obj.Description = $("#DescriptionEdit").val();
+        obj.Title = $("#TitleEdit").val();
+        obj.Tags = $("#TagsEdit").val();
+        if ($("#AddressEdit").val()) {
+            obj.Address = $("#AddressEdit").val();
+        }
+        if ($("#LocationEdit").val()) {
+            obj.Location = $("#LocationEdit").val();
+        }
+        obj.UniqueId = $("#UniqueIdEdit").val();
+        obj.Files = editImagesList;
+        $.post("/ManageCases/EditCase",
+            { sysCase: obj },
+            function (data) {
+                if (data != null) {
+                    location.reload();
+                } else {
+                    alert("Error");
+                }
+            });
+    }
+    $("#btnCancel").click(function () {
+        if (!permission.AllowedPermissonsList.includes("Create")) {
+            $("#CreateCase").hide();
+            $("#btnCreateCase").show();
+            $("#EditCase").hide();
+            return;
+        }
+        $("#CreateCase").show();
+        $("#EditCase").hide();
+    });
+    function Delete(id) {
+        if (!permission.AllowedPermissonsList.includes("Delete")) {
+            return;
+        }
+        var confirmed = confirm("@Resources.SystemCases.TxtDeleteConfirmationMessage");
+        if (confirmed === true) {
+            $.post("/ManageCases/DeleteCase", { id: id }, function (data) {
+                if (data != null) {
+                    location.reload();
+                }
+                else {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
+    $('#UploadFile').on('change', function (e) {
+        addImagesList = [];
+        var files = e.target.files;
+        if (files.length > 0) {
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@fileTypeNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var i;
+                        for (i = 0; i < result.length; i++) {
+                            addImagesList.push(result[i]);
+                        }
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+    $('#UploadFileEdit').on('change', function (e) {
+        editImagesList = [];
+        var files = e.target.files;
+        if (files.length > 0) {
+            $("#UploaderImg").show();
+            if (window.FormData !== undefined) {
+                var data = new FormData();
+                for (var x = 0; x < files.length; x++) {
+                    data.append("file" + x, files[x]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/file/uploadfile/@fileTypeNo',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var i;
+                        for (i = 0; i < result.length; i++) {
+                            editImagesList.push(result[i]);
+                        }
+                        $("#UploaderImg").hide();
+                    },
+                    error: function (xhr, status, p3, p4) {
+                        var err = "Error " + " " + status + " " + p3 + " " + p4;
+                        if (xhr.responseText && xhr.responseText[0] === "{")
+                            err = JSON.parse(xhr.responseText).Message;
+                        console.log(err);
+                        $("#UploaderImg").hide();
+                    }
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
+
+    $(function () {
+        $.get("/api/accountpermission/IsAccessAllowed?page=Cases", function (data) {
+            if (data != null) {
+                if (data.HasAccess === true) {
+                    permission = data;
+                    if (data.AllowedPermissonsList.includes("Create")) {
+                        $("#btnCreateCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Edit")) {
+                        $(".btnEditCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Delete")) {
+                        $(".btnDeleteCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("Comment")) {
+                        $(".btnCommentCase").removeClass("disabled");
+                    }
+
+                    if (data.AllowedPermissonsList.includes("SendByEmail")) {
+                        $(".btnSendCaseEmail").removeClass("disabled");
+                    }
+                }
+            }
+        }).fail(function (data) {
+            alert("Error while validating user permission");
+        });
+    });
+
+
+    $("#btnCancel_Edit").click(function (event) {
+        event.preventDefault();
+        $("#CreateCase").hide();
+        $("#EditCase").hide();
+
+        $("#tableCases").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateCase").show();
+
+
+    });
+    $("#btnCancel_Add").click(function (event) {
+        event.preventDefault();
+        $("#CreateCase").hide();
+        $("#EditCase").hide();
+
+        $("#tableCases").show();
+        $("#divAddNew_Search").show();
+        $("#divPageing").show();
+        $("#headerCreate").hide();
+        $("#headerEdit").hide();
+        $("#headerIndex").show();
+        $("#btnCreateCase").show();
+    });
+</script>
+
+<script>
+    var sel = $('.sel'),
+        txt = $('.txt'),
+        options = $('.options');
+    viewIcon = $("#viewIcon");
+    viewIconEdit = $("#viewIconEdit");
+    sel.click(function (e) {
+
+        e.stopPropagation();
+        viewIcon.show();
+        viewIconEdit.show();
+
+
+    });
+
+    $('body').click(function (e) {
+
+        viewIcon.hide();
+        viewIconEdit.hide();
+    });
+
+    viewIcon.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIcon.hide();
+
+        var Id = $('#divIcon .options .selected').attr('id');
+        $('#iconHidden').val(Id);
+    });
+
+
+    viewIconEdit.children('div').click(function (e) {
+        e.stopPropagation();
+        txt.text($(this).text());
+        $(this).addClass('selected').siblings('div').removeClass('selected');
+        viewIconEdit.hide();
+        var Id = $('#divIconEdit .options .selected').attr('id');
+        $('#iconHiddenEdit').val(Id);
+    });
+
+</script>
+
+@*<style>
+        .kanban-centered {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+            .kanban-centered:before, .kanban-centered:after {
+                content: " ";
+                display: table;
+            }
+
+            .kanban-centered:after {
+                clear: both;
+            }
+
+            .kanban-centered:before, .kanban-centered:after {
+                content: " ";
+                display: table;
+            }
+
+            .kanban-centered:after {
+                clear: both;
+            }
+
+            .kanban-centered:before {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 2px;
+                /*background: #f5f5f6;*/
+                top: 20px;
+                bottom: 20px;
+                /*margin-left: 18px;*/
+            }
+
+            .kanban-centered .kanban-entry {
+                position: relative;
+                /*width: 50%;
+                    float: right;*/
+                margin: 10px 8px;
+                clear: both;
+                border-radius: 4px;
+                -webkit-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.5);
+                -moz-box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.5);
+                box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.5);
+            }
+
+                .kanban-centered .kanban-entry:before, .kanban-centered .kanban-entry:after {
+                    content: " ";
+                    display: table;
+                }
+
+                .kanban-centered .kanban-entry:after {
+                    clear: both;
+                }
+
+                .kanban-centered .kanban-entry:before, .kanban-centered .kanban-entry:after {
+                    content: " ";
+                    display: table;
+                }
+
+                .kanban-centered .kanban-entry:after {
+                    clear: both;
+                }
+
+                .kanban-centered .kanban-entry.begin {
+                    margin-bottom: 0;
+                }
+
+                .kanban-centered .kanban-entry.left-aligned {
+                    float: left;
+                }
+
+                    .kanban-centered .kanban-entry.left-aligned .kanban-entry-inner {
+                        margin-left: 0;
+                        margin-right: -18px;
+                    }
+
+                        .kanban-centered .kanban-entry.left-aligned .kanban-entry-inner .kanban-time {
+                            left: auto;
+                            right: -100px;
+                            text-align: left;
+                        }
+
+                        .kanban-centered .kanban-entry.left-aligned .kanban-entry-inner .kanban-icon {
+                            float: right;
+                        }
+
+                        .kanban-centered .kanban-entry.left-aligned .kanban-entry-inner .kanban-label {
+                            margin-left: 0;
+                            margin-right: 70px;
+                        }
+
+                            .kanban-centered .kanban-entry.left-aligned .kanban-entry-inner .kanban-label:after {
+                                left: auto;
+                                right: 0;
+                                margin-left: 0;
+                                margin-right: -9px;
+                                -moz-transform: rotate(180deg);
+                                -o-transform: rotate(180deg);
+                                -webkit-transform: rotate(180deg);
+                                -ms-transform: rotate(180deg);
+                                transform: rotate(180deg);
+                            }
+
+                .kanban-centered .kanban-entry .kanban-entry-inner {
+                    position: relative;
+                    /*margin-left: -24px;*/
+                }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner:before, .kanban-centered .kanban-entry .kanban-entry-inner:after {
+                        content: " ";
+                        display: table;
+                    }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner:after {
+                        clear: both;
+                    }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner:before, .kanban-centered .kanban-entry .kanban-entry-inner:after {
+                        content: " ";
+                        display: table;
+                    }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner:after {
+                        clear: both;
+                    }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-time {
+                        position: absolute;
+                        left: -100px;
+                        text-align: right;
+                        padding: 10px;
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                    }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-time > span {
+                            display: block;
+                        }
+
+                            .kanban-centered .kanban-entry .kanban-entry-inner .kanban-time > span:first-child {
+                                font-size: 15px;
+                                font-weight: bold;
+                            }
+
+                            .kanban-centered .kanban-entry .kanban-entry-inner .kanban-time > span:last-child {
+                                font-size: 12px;
+                            }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon {
+                        background: #fff;
+                        color: #737881;
+                        display: block;
+                        width: 25px;
+                        height: 25px;
+                        -webkit-background-clip: padding-box;
+                        -moz-background-clip: padding;
+                        background-clip: padding-box;
+                        -webkit-border-radius: 20px;
+                        -moz-border-radius: 20px;
+                        border-radius: 20px;
+                        text-align: center;
+                        -moz-box-shadow: 0 0 0 4px #f5f5f6;
+                        -webkit-box-shadow: 0 0 0 4px #f5f5f6;
+                        box-shadow: 0 0 0 4px #f5f5f6;
+                        float: left;
+                        margin-top: 6px;
+                    }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-primary {
+                            background-color: #303641;
+                            color: #fff;
+                        }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-secondary {
+                            background-color: #ee4749;
+                            color: #fff;
+                        }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-success {
+                            background-color: #00a651;
+                            color: #fff;
+                        }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-info {
+                            background-color: #21a9e1;
+                            color: #fff;
+                        }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-warning {
+                            background-color: #fad839;
+                            color: #fff;
+                        }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-icon.bg-danger {
+                            background-color: #cc2424;
+                            color: #fff;
+                        }
+
+                    .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label {
+                        position: relative;
+                        background: #f5f5f6;
+                        padding: 0.75em;
+                        /*margin-left: 50px;*/
+                        -webkit-background-clip: padding-box;
+                        -moz-background-clip: padding;
+                        background-clip: padding-box;
+                        -webkit-border-radius: 3px;
+                        -moz-border-radius: 3px;
+                        border-radius: 3px;
+                    }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2, .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label p {
+                            color: #737881;
+                            font-family: "Noto Sans",sans-serif;
+                            font-size: 12px;
+                            margin: 0;
+                            line-height: 1.428571429;
+                        }
+
+                            .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label p + p {
+                                margin-top: 15px;
+                            }
+
+                        .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2 {
+                            font-size: 16px;
+                            margin-bottom: 10px;
+                        }
+
+                            .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2 a {
+                                color: #303641;
+                            }
+
+                            .kanban-centered .kanban-entry .kanban-entry-inner .kanban-label h2 span {
+                                -webkit-opacity: .6;
+                                -moz-opacity: .6;
+                                opacity: .6;
+                                -ms-filter: alpha(opacity=60);
+                                filter: alpha(opacity=60);
+                            }
+
+        .kanban-col {
+            width: 300px;
+            /*margin-right: 20px;
+            float: left;*/
+        }
+
+        .panel-body {
+            padding: 15px 0 0 0;
+            overflow-y: auto;
+        }
+
+
+
+        /*.panel-heading {
+                cursor: -moz-grab;
+                cursor: -webkit-grab;
+                cursor: grab;
+            }*/
+
+        .grab {
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+        }
+
+        .grabbing {
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+
+        .panel-heading {
+            cursor: context-menu;
+        }
+
+            .panel-heading i {
+                cursor: pointer;
+            }
+
+        body {
+            -webkit-user-select: none; /* Chrome/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
+            /* Rules below not implemented in browsers yet */
+            user-select: none;
+        }
+    </style>*@
+
+<!------ Include the above in your HEAD tag ---------->
+@*@{
+        var x = ExtensionHelper.splitList(states, 4);
+        var dataGroupedByCurrentStatus = Model.GroupBy(t => t.CurrentStatus).ToList();
+    }
+    @foreach (var a in x)
+    {
+        <div class="row">
+            @foreach (var data in a)
+            {
+                if (data.Id != (int)GeneralEnums.StateEnum.Na)
+                {
+                    <div class="col-md-3">
+                        <div class="panel panel-primary kanban-col">
+                            <div class="panel-heading">
+                                @data.Name
+                                @{
+                                    var statusRecords = dataGroupedByCurrentStatus.Where(t => t.Key == data.Id).ToList();
+                                }
+                                <span class="pull-right"> العدد الكلي = @statusRecords.Count</span>
+                                <i class="fa fa-2x fa-plus-circle pull-right"></i>
+                            </div>
+                            <div class="panel-body" style="display:none">
+                                <div id="Status@(data.Id)" data-status-title="@data.Name"
+                                     data-status-Id="@data.Id" class="kanban-centered">
+                                    @{
+                                        foreach (var record in statusRecords)
+                                        {
+                                            foreach (var value in record)
+                                            {
+                                                <article class="kanban-entry grab" id="Case@(value.Id)" data-case-Id="@value.Id" draggable="true">
+                                                    <div class="kanban-entry-inner">
+                                                        <div class="kanban-label">
+                                                            <h2><a href="#">@value.Title</a>&nbsp; (@value.CategoryName)</h2>
+                                                            <b>
+                                                                @value.CreatedOn.ToString().AsDateTime().ToString("dd/MM/yyyy")
+                                                            </b>
+                                                            <p><strong>@value.AssigneeName</strong>&nbsp; (@value.PriorityName)</p>
+                                                            <p>
+                                                                <a href="#" onclick="EditCase(@value.Id)" class="btn btn-default btnEditCase disabled" title="@Resources.SystemCases.BtnEdit"><i class="fa fa-edit text-dark"></i></a>
+                                                                <a href="#" onclick="Delete(@value.Id)" class="btn btn-default btnDeleteCase disabled" title="@Resources.SystemCases.BtnDelete"><i class="fa fa-trash text-danger"></i></a>
+                                                                <a href="@Url.Action("Details", new { id = value.Id })" class="btn btn-default btnCommentCase disabled" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                                                                @{
+                                                                    articleId = ArticleHelper.GetArticleMappingData((int)GeneralEnums.Mapping_Article_Type.Detailes, value.CategoryId.GetValueOrDefault());
+                                                                    if (articleId > 0 && typeId == (int)GeneralEnums.CasesType.Complaints)
+                                                                    {
+                                                                        <a onmouseover="ArticleDescriptionData('@(articleId)', this)"
+                                                                           data-toggle="tooltip" data-placement="left" title="" class="btn btn-default"
+                                                                           target="_blank" href="@Url.Action("Index","ArticleDescription", new { articleId = articleId })">
+                                                                            <i class="fa fa-book"></i>
+                                                                        </a>
+                                                                    }
+                                                                }
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                                                        }
+                                                                    }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                                        }
+
+                                                                    }
+        </div>
+                                                                }*@
+
+@*@if (Model.PageCount > 0 && Model.Count > 0)
+                {
+        <nav aria-label="Page navigation example" id="divPageing" class="text-center">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new
+                   {
+                       type = ViewBag.typeId,
+                       page,
+                       ViewBag.searchText,
+                       CategoryIdSearch = ViewBag.AdvanceSearchFilters?.CategoryIdSearch,
+                       PriorityIdSearch = ViewBag.AdvanceSearchFilters?.PriorityIdSearch,
+                       EmployeeIdSearch = ViewBag.AdvanceSearchFilters?.EmployeeIdSearch,
+                       TitleSearch = ViewBag.AdvanceSearchFilters.TitleSearch,
+                       SeverityIdSearch = ViewBag.AdvanceSearchFilters?.SeverityIdSearch,
+                       FromAdvanceSearch = ViewBag.AdvanceSearchFilters?.FromAdvanceSearch,
+                       ComplainId = ViewBag.AdvanceSearchFilters?.ComplainId,
+                       CitizenSearch = ViewBag.AdvanceSearchFilters?.CitizenSearch,
+                       StatusId = ViewBag.AdvanceSearchFilters?.StatusId,
+                       FromDate = ViewBag.AdvanceSearchFilters?.FromDate,
+                       ToDate = ViewBag.AdvanceSearchFilters?.ToDate,
+                       FromTime = ViewBag.AdvanceSearchFilters?.FromTime,
+                       ToTime = ViewBag.AdvanceSearchFilters?.ToTime,
+                       TagsSearch = ViewBag.AdvanceSearchFilters.TagsSearch,
+                       ElapseTimeFrom = ViewBag.AdvanceSearchFilters?.ElapseTimeFrom,
+                       ElapseTimeTo = ViewBag.AdvanceSearchFilters?.ElapseTimeTo
+                   }))
+        </nav>
+    }*@
+
+@*<script type="text/javascript">
+        $(function () {
+            var kanbanCol = $('.panel-body');
+
+            kanbanCol.css('max-height', (window.innerHeight - 150) + 'px');
+            //var kanbanColCount = parseInt(kanbanCol.length);
+            //$('.container-fluid').css('min-width', (kanbanColCount * 350) + 'px');
+
+            draggableInit();
+
+            $('.panel-heading').click(function () {
+                var $panelBody = $(this).parent().children('.panel-body');
+                $panelBody.slideToggle();
+            });
+        });
+
+        function draggableInit() {
+            var sourceId; var caseId;
+            var oldSourceTitle;
+            var stateFromId;
+            $('[draggable=true]').bind('dragstart', function (event) {
+                caseId = $(this).attr("data-case-Id");
+                sourceId = $(this).parent().attr('id');
+                oldSourceTitle = $(this).parent().attr("data-status-title");
+                stateFromId = $(this).parent().attr("data-status-Id")
+                event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
+            });
+
+            $('.panel').bind('dragover', function (event) {
+                event.preventDefault();
+            });
+
+            $('.panel').bind('drop', function (event) {
+                var children = $(this).find(".panel-body").children();
+                var targetId = children.attr('id');
+                var newSourceTitle = children.attr("data-status-title");
+                var stateToId = children.attr("data-status-Id");
+                if (sourceId != targetId) {
+                    var _result = confirm("هل تريد نقل الطلب من " + oldSourceTitle + " الى " + newSourceTitle);
+                    if (_result == true) {
+                        var elementId = event.originalEvent.dataTransfer.getData("text/plain");
+                        var element = document.getElementById(elementId);
+
+                        $("body").addClass("loading");
+
+                        $.ajax({
+                            url: "@Url.Action("ChangeStateKampanPanel", "ManageCases")",
+                            type: "POST",
+                            data: { caseId: caseId, stateId: stateToId, prevState: stateFromId },
+                            success: function (data) {
+                                if(data != null && data == "Success"){
+                                    //children.prepend(element);
+                                    location.reload();
+                                }
+                            },
+                            error: function () { alert("error"); },
+                            complete: function () { $("body").addClass("loading"); }
+                        });
+
+                        //// Post data
+                        //setTimeout(function () {
+
+                        //}, 1000);
+                    }
+                }
+
+
+                event.preventDefault();
+            });
+        }
+
+    </script>*@
+
+@*<style>
+        /* Start by setting display:none to make this hidden.
+       Then we position it in relation to the viewport window
+       with position:fixed. Width, height, top and left speak
+       for themselves. Background we set to 80% white with
+       our animation centered, and no-repeating */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba( 255, 255, 255, .8 ) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+
+        /* When the body has the loading class, we turn
+       the scrollbar off with overflow:hidden */
+        body.loading .modal {
+            overflow: hidden;
+        }
+
+        /* Anytime the body has the loading class, our
+       modal element will be visible */
+        body.loading .modal {
+            display: block;
+        }
+    </style>*@
+
+@*<div class="modal"><!-- Place at bottom of page --></div>*@
+

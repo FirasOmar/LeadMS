@@ -1,0 +1,121 @@
+﻿@model IEnumerable<CRM.Web.Models.CampaignViewModel>
+@using CRM.Web.Helpers
+@{
+    ViewBag.Title = "Campaings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+@{
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
+    var floating = "";
+    var floating_opposite = "";
+}
+@if (websiteCulture == "ar")
+{
+
+    floating = "float-right";
+    floating_opposite = "float-left";
+
+}
+else
+{
+
+    floating = "float-left";
+    floating_opposite = "float-right";
+
+}
+<style type="text/css">
+    #Title_Row {
+        margin-top: 10px;
+    }
+
+    tr:nth-child(even) {
+        background: #FFF
+    }
+
+    #buttons_Row {
+        margin-bottom: 10px;
+        padding-right: 11px;
+        padding-left: 11px;
+    }
+    .center {
+        text-align: center;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row" id="Title_Row">
+        <div class="col-md-4 col-lg-4 col-sm-4">
+            <div class="d-flex">
+                <h4 class="section-title">@Resources.Campaign.Campaigns</h4>
+            </div>
+        </div><br>
+    </div>
+    <div class="row" id="buttons_Row">
+
+        <div id="btnContainer" class="group">
+            <button type="button" class="btn switch btn-light " data-toggle="modal" data-target="#NewCampaignModal"><i class="fa fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <table class="table-borderless"
+                   data-toggle="table"
+                   data-page-size="10"
+                   data-pagination="true">
+                <thead class="card-header" data-background-color="purple">
+                    <tr>
+                        <th data-sortable="true" class="center">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th data-sortable="true" class="center">
+                            @Html.DisplayNameFor(model => model.StartDate)
+                        </th>
+                        <th data-sortable="true" class="center">
+                            @Html.DisplayNameFor(model => model.EndDate)
+                        </th>
+                        <th class="center"></th>
+                    </tr>
+                </thead>
+                <tbody class="ts">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EndDate)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Details", new {id = item.Id})" id="DetailsId_@item.Id" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-secondary"></i></a>
+                              
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal add new Campaign -->
+    <div id="NewCampaignModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title d-flex">@Resources.Campaign.AddCampaign</h4>
+                </div>
+                <div class="modal-body d-flex">
+                    <!---->
+                    @Html.Action("Create", "Campaigns")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
