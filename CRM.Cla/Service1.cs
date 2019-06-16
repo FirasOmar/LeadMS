@@ -21,12 +21,12 @@ namespace CRM.Cla
 
         protected override void OnStop()
         {
-            SlaHelper.WriteToFile("Service is stopped at " + DateTime.Now);
+          //  SlaHelper.WriteToFile("Service is stopped at " + DateTime.Now);
         }
         private void OnElapsedTime(object source, ElapsedEventArgs e)
         {
-            SlaHelper.WriteToFile("Service is recall at " + DateTime.Now);
-            SlaHelper.SendNotificationEmails();
+          //  SlaHelper.WriteToFile("Service is recall at " + DateTime.Now);
+          //  SlaHelper.SendNotificationEmails();
         }                
     }
 }
