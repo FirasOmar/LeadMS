@@ -81,6 +81,9 @@
     <Compile Include="Models\CommunicationLog.cs">
       <DependentUpon>CrmEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Company.cs">
+      <DependentUpon>CrmEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CrmEntity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

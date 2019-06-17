@@ -18,5 +18,7 @@ namespace CRM.Web.Models
         [Display(ResourceType = typeof(Campaign), Name = "EndDate")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> EndDate { get; set; }
+       // [Display(ResourceType = typeof(Campaign), Name = "CompanyId")]
+        public int CompanyId { get; set; }
     }
 }

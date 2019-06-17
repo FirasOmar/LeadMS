@@ -73,6 +73,9 @@
         <AssociationConnector Association="CrmSystemModel.FK_UserProfileHolidays_UserProfile" />
         <AssociationConnector Association="CrmSystemModel.FK_UserProfileOffDays_UserProfile" />
         <AssociationConnector Association="CrmSystemModel.FK_UserProfileTranslation_UserProfile" />
+        <EntityTypeShape EntityType="CrmSystemModel.Company" Width="1.5" PointX="0.75" PointY="19.75" />
+        <AssociationConnector Association="CrmSystemModel.FK__Campaigns__Compa__1B9317B3" />
+        <AssociationConnector Association="CrmSystemModel.FK__UserProfi__Compa__1C873BEC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -49,6 +49,7 @@ namespace CRM.DataEntity.Models
         public Nullable<int> PreferedLanguageId { get; set; }
         public string Email { get; set; }
         public string StatusEditDescription { get; set; }
+        public Nullable<int> CompanyId { get; set; }
     
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -66,5 +67,6 @@ namespace CRM.DataEntity.Models
         public virtual ICollection<UserProfileOffDay> UserProfileOffDays { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserProfileTranslation> UserProfileTranslations { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

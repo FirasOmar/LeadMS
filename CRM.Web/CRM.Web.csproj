@@ -559,6 +559,7 @@
     <Compile Include="Models\CategoryViewModel.cs" />
     <Compile Include="Models\CitizenProfileViewModel.cs" />
     <Compile Include="Models\CommentsViewModel.cs" />
+    <Compile Include="Models\CompanyViewModel.cs" />
     <Compile Include="Models\ContactUsViewModel.cs" />
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\DetailsLookupViewModel.cs" />

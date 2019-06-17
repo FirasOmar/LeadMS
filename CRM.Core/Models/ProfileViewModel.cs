@@ -88,6 +88,8 @@ namespace CRM.Core.Models
         public string ProvinceCode { get; set; }
         public string GenderCode { get; set; }
         public string MartialStatusCode { get; set; }
+      
+        public int CompanyId { get; set; }
     }
 
 }

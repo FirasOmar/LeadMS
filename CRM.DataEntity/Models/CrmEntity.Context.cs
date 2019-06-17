@@ -63,5 +63,6 @@ namespace CRM.DataEntity.Models
         public virtual DbSet<UserProfileHoliday> UserProfileHolidays { get; set; }
         public virtual DbSet<UserProfileOffDay> UserProfileOffDays { get; set; }
         public virtual DbSet<UserProfileTranslation> UserProfileTranslations { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
     }
 }

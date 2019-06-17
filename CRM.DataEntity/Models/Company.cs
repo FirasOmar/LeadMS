@@ -12,22 +12,21 @@ namespace CRM.DataEntity.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Campaign
+    public partial class Company
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Campaign()
+        public Company()
         {
-            this.Leads = new HashSet<Lead>();
+            this.Campaigns = new HashSet<Campaign>();
+            this.UserProfiles = new HashSet<UserProfile>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public Nullable<int> CompanyId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Lead> Leads { get; set; }
-        public virtual Company Company { get; set; }
+        public virtual ICollection<Campaign> Campaigns { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserProfile> UserProfiles { get; set; }
     }
 }

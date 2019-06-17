@@ -66,6 +66,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
+          <Property Name="CompanyId" Type="int" />
         </EntityType>
         <EntityType Name="CasesByEmail">
           <Key>
@@ -112,6 +113,13 @@
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DeletedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -434,6 +442,7 @@
           <Property Name="PreferedLanguageId" Type="int" />
           <Property Name="Email" Type="nvarchar" MaxLength="256" />
           <Property Name="StatusEditDescription" Type="nvarchar" MaxLength="300" />
+          <Property Name="CompanyId" Type="int" />
         </EntityType>
         <EntityType Name="UserProfileHolidays">
           <Key>
@@ -473,6 +482,18 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="100" />
           <Property Name="Address" Type="nvarchar" MaxLength="300" />
         </EntityType>
+        <Association Name="FK__Campaigns__Compa__1B9317B3">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Campaigns" Type="Self.Campaigns" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaigns">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Lead_Acti__Lead___0B5CAFEA">
           <End Role="Leads" Type="Self.Leads" Multiplicity="0..1" />
           <End Role="Lead_Activity" Type="Self.Lead_Activity" Multiplicity="*" />
@@ -506,6 +527,18 @@
             </Principal>
             <Dependent Role="Leads">
               <PropertyRef Name="CampaignId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserProfi__Compa__1C873BEC">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="CompanyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -852,6 +885,7 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CategoryTranslation" EntityType="Self.CategoryTranslation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CommunicationLogs" EntityType="Self.CommunicationLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmentTranslation" EntityType="Self.DepartmentTranslation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetailsLookup" EntityType="Self.DetailsLookup" Schema="dbo" store:Type="Tables" />
@@ -880,6 +914,10 @@
           <EntitySet Name="UserProfileHolidays" EntityType="Self.UserProfileHolidays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfileOffDays" EntityType="Self.UserProfileOffDays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserProfileTranslation" EntityType="Self.UserProfileTranslation" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Campaigns__Compa__1B9317B3" Association="Self.FK__Campaigns__Compa__1B9317B3">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Campaigns" EntitySet="Campaigns" />
+          </AssociationSet>
           <AssociationSet Name="FK__Lead_Acti__Lead___0B5CAFEA" Association="Self.FK__Lead_Acti__Lead___0B5CAFEA">
             <End Role="Leads" EntitySet="Leads" />
             <End Role="Lead_Activity" EntitySet="Lead_Activity" />
@@ -891,6 +929,10 @@
           <AssociationSet Name="FK__Leads__CampaignI__0880433F" Association="Self.FK__Leads__CampaignI__0880433F">
             <End Role="Campaigns" EntitySet="Campaigns" />
             <End Role="Leads" EntitySet="Leads" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserProfi__Compa__1C873BEC" Association="Self.FK__UserProfi__Compa__1C873BEC">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="UserProfile" EntitySet="UserProfile" />
           </AssociationSet>
           <AssociationSet Name="FK_CategoryTranslation_Category" Association="Self.FK_CategoryTranslation_Category">
             <End Role="Category" EntitySet="Category" />
@@ -1164,6 +1206,15 @@
             <End Role="UserProfile" EntitySet="UserProfiles" />
             <End Role="UserProfileTranslation" EntitySet="UserProfileTranslations" />
           </AssociationSet>
+          <EntitySet Name="Companies" EntityType="CrmSystemModel.Company" />
+          <AssociationSet Name="FK__Campaigns__Compa__1B9317B3" Association="CrmSystemModel.FK__Campaigns__Compa__1B9317B3">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Campaign" EntitySet="Campaigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserProfi__Compa__1C873BEC" Association="CrmSystemModel.FK__UserProfi__Compa__1C873BEC">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="AspNetRole">
           <Key>
@@ -1236,6 +1287,8 @@
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Leads" Relationship="CrmSystemModel.FK__Leads__CampaignI__0880433F" FromRole="Campaign" ToRole="Lead" />
+          <Property Name="CompanyId" Type="Int32" />
+          <NavigationProperty Name="Company" Relationship="CrmSystemModel.FK__Campaigns__Compa__1B9317B3" FromRole="Campaign" ToRole="Company" />
         </EntityType>
         <EntityType Name="CasesByEmail">
           <Key>
@@ -1651,6 +1704,8 @@
           <NavigationProperty Name="UserProfileHolidays" Relationship="CrmSystemModel.FK_UserProfileHolidays_UserProfile" FromRole="UserProfile" ToRole="UserProfileHoliday" />
           <NavigationProperty Name="UserProfileOffDays" Relationship="CrmSystemModel.FK_UserProfileOffDays_UserProfile" FromRole="UserProfile" ToRole="UserProfileOffDay" />
           <NavigationProperty Name="UserProfileTranslations" Relationship="CrmSystemModel.FK_UserProfileTranslation_UserProfile" FromRole="UserProfile" ToRole="UserProfileTranslation" />
+          <Property Name="CompanyId" Type="Int32" />
+          <NavigationProperty Name="Company" Relationship="CrmSystemModel.FK__UserProfi__Compa__1C873BEC" FromRole="UserProfile" ToRole="Company" />
         </EntityType>
         <EntityType Name="UserProfileHoliday">
           <Key>
@@ -2061,6 +2116,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Campaigns" Relationship="CrmSystemModel.FK__Campaigns__Compa__1B9317B3" FromRole="Company" ToRole="Campaign" />
+          <NavigationProperty Name="UserProfiles" Relationship="CrmSystemModel.FK__UserProfi__Compa__1C873BEC" FromRole="Company" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK__Campaigns__Compa__1B9317B3">
+          <End Type="CrmSystemModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.Campaign" Role="Campaign" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaign">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserProfi__Compa__1C873BEC">
+          <End Type="CrmSystemModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="CrmSystemModel.UserProfile" Role="UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2126,6 +2214,7 @@
           <EntitySetMapping Name="Campaigns">
             <EntityTypeMapping TypeName="CrmSystemModel.Campaign">
               <MappingFragment StoreEntitySet="Campaigns">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2504,6 +2593,7 @@
           <EntitySetMapping Name="UserProfiles">
             <EntityTypeMapping TypeName="CrmSystemModel.UserProfile">
               <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="StatusEditDescription" ColumnName="StatusEditDescription" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="PreferedLanguageId" ColumnName="PreferedLanguageId" />
@@ -2567,6 +2657,14 @@
                 <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="CrmSystemModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
