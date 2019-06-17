@@ -229,6 +229,14 @@ namespace CRM.Web.Controllers
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         try
                         {
+
+                            var companyObj = new Company()
+                            {
+                                Name = model.CompanyName
+                            };
+                            _db.Companies.Add(companyObj);
+                            _db.SaveChanges();
+
                             var userProfile = new UserProfile
                             {
                                 Birthday = model.BirthDay,
@@ -245,7 +253,8 @@ namespace CRM.Web.Controllers
                                 RegionId = model.RegionId,
                                 CityId = model.CityId,
                                 PreferedLanguageId = model.PrefferdLanguage,
-                                Email = model.Email
+                                Email = model.Email,
+                                CompanyId= companyObj.Id,
                             };
                             _db.UserProfiles.Add(userProfile);
                             _db.SaveChanges();

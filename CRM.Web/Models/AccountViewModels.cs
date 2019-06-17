@@ -72,6 +72,9 @@ namespace CRM.Web.Models
         [Display(ResourceType = typeof(Register), Name = "TxtEmail")]
         public string Email { get; set; }
 
+        public int CompanyId { get; set; }
+        [Display(ResourceType = typeof(Register), Name = "LblCompanyName")]
+        public string CompanyName { get; set; }
         //[Required(ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = "Required")]
         [Display(ResourceType = typeof(Register), Name = "TxtIdNumber")]
         public string IdNumber { get; set; }
