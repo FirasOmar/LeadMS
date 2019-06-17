@@ -3,208 +3,378 @@
 @{
     ViewBag.Title = Resources.Register.ProfileTitle;
     int imageNo = (int)GeneralEnums.FileEnum.ProfileImage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+<div class="container-fluid">
 
-<section class="section profile" id="sectionProfile">
-    <header class="profile-header">
-        <div class="container">
-            <div class="user">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Profile</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- end title-->
+    <div class="row">
+        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+            <div class="card-box text-center">
                 @if (!string.IsNullOrWhiteSpace(Model.ProfilePath))
                 {
-                    <img class="profile-img img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
+                    <img class="rounded-circle avatar-lg img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
                 }
                 else
                 {
-                    <img class="profile-img img-thumbnail" src="~/Content/assets/img/profile.png" />
+                    <img class="rounded-circle avatar-lg img-thumbnail" src="~/Content/assets/img/profile.png" />
                 }
-                <div>
-                    <h2>@Model.FullName</h2>
-                    <p>@Model.Address</p>
+                <h4 class="mb-0">@Model.FullName</h4>
+                <p class="text-muted">@Model.Address</p>
+                <div class=" mt-3">
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.UserProfile.PrefferdLanguage :</strong> <span class="ml-2">
+                            @Model.PrefferdLanguageName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtEmail :</strong> <span class="ml-2">
+                            @Model.Email
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtIdNumber :</strong><span class="ml-2">
+                            @Model.IdNumber
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtMobile :</strong><span class="ml-2">
+                            @Model.Mobile
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtPhoneNumber :</strong><span class="ml-2">
+                            @Model.PhoneNumber
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtGenderLookupId :</strong> <span class="ml-2">
+                            @Model.GenderLookupName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtMartialStatusLookupId :</strong> <span class="ml-2">
+                            @Model.MartialStatusLookupName
+                        </span>
+                    </p>
+                    <p class="text-muted mb-2 font-13">
+                        <strong>@Resources.Register.TxtAddress :</strong> <span class="ml-2">
+                            @Model.Address
+                        </span>
+                    </p>
                 </div>
-            </div>
-            <div>
-                <a onclick="ShowManageProfile()" class="btn btn-default">إعدادات الحساب</a>
-            </div>
+            </div> <!-- end card-box -->
         </div>
-    </header>
-
-    <div class="container">
-        <div class="profile-info">
-            <div class="profile-info-content">
-                
-                <div class="profile-info-item color-5">
-                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
-                    <div>
-                        <h3>@Resources.UserProfile.PrefferdLanguage </h3>
-                        <p> @Model.PrefferdLanguageName</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-5">
-                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtEmail </h3>
-                        <p> @Model.Email</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-1">
-                    <div class="icon-wrapper"><i class="icon icon-card"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtIdNumber</h3>
-                        <p>@Model.IdNumber</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-2">
-                    <div class="icon-wrapper"><i class="icon icon-mobile"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtMobile</h3>
-                        <p>@Model.Mobile</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-3">
-                    <div class="icon-wrapper"><i class="icon icon-contact"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtPhoneNumber  </h3>
-                        <p>@Model.PhoneNumber</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-4">
-                    <div class="icon-wrapper"><i class="icon icon-time"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtGenderLookupId</h3>
-                        <p>@Model.GenderLookupName</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-5">
-                    <div class="icon-wrapper"><i class="icon icon-sex"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtMartialStatusLookupId  </h3>
-                        <p>@Model.MartialStatusLookupName</p>
-                    </div>
-                </div>
-                <div class="profile-info-item color-5">
-                    <div class="icon-wrapper"><i class="icon icon-location"></i></div>
-                    <div>
-                        <h3>@Resources.Register.TxtAddress </h3>
-                        <p> @Model.Address</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-@if (TempData["UpdateProfileResult"] != null)
-{
-    <div class="text-success">@TempData["UpdateProfileResult"]</div>
-}
-
-@if (TempData["SendFormToCRMStatus"] != null && TempData["SendFormToCRMStatus"].ToString() == "Susccess")
-{
-    <div class="text-success">تم ارسال النموذج بنجاح</div>
-}
-
-<section class="section" id="userProfileEdit" style="display:none">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="d-flex">
-                    <h2 class="section-title">اعدادات الحساب</h2>
-                </div>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-lg-4 cms-col-header">
-                <h2>معلومات عامة</h2>
-            </div>
-            <div class="col-lg-8">
-                @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.HiddenFor(r => r.Id)
-                    <div class="row">
-
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
-                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
-                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
-                            @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control" })
-                        </div>
+        <!-- Tabs Section -->
+        <div class="col-lg-8 col-xl-8">
+            <div class="card-box">
+                <ul class="nav nav-pills navtab-bg nav-justified">
+                    <li class="nav-item">
+                        <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                            اعدادات الحساب
+                        </a>
+                    </li>                
+                </ul>
+                <div class="tab-content">
+                    <!-- setting tab -->
+                    <div class="tab-pane active" id="settings">
                         
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
-                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
-                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.IdNumber, new { @for = "IdNumber" })
-                            @Html.TextBoxFor(m => m.IdNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthIdNumber()" })
-                            @Html.ValidationMessageFor(m => m.IdNumber, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.PhoneNumber, new { @for = "PhoneNumber" })
-                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthPhone()" })
-                            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.Mobile, new { @for = "Mobile" })
-                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
-                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.BirthDay, new { @for = "BirthDay" })
-                            @Html.TextBoxFor(m => m.BirthDay, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
-                            @Html.ValidationMessageFor(m => m.BirthDay, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
-                            @Html.DropDownList("GenderLookupId", null, new { @class = "form-control" })
-                        </div>
+                            @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(r => r.Id)
+                                <div class="row">
 
 
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.MartialStatusLookupId, new { @for = "MartialStatusLookupId" })
-                            @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control" })
-                        </div>
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                                        @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.IdNumber, new { @for = "IdNumber" })
+                                        @Html.TextBoxFor(m => m.IdNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthIdNumber()" })
+                                        @Html.ValidationMessageFor(m => m.IdNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.PhoneNumber, new { @for = "PhoneNumber" })
+                                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthPhone()" })
+                                        @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.Mobile, new { @for = "Mobile" })
+                                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
+                                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.BirthDay, new { @for = "BirthDay" })
+                                        @Html.TextBoxFor(m => m.BirthDay, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
+                                        @Html.ValidationMessageFor(m => m.BirthDay, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                                        @Html.DropDownList("GenderLookupId", null, new { @class = "form-control" })
+                                    </div>
+
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.MartialStatusLookupId, new { @for = "MartialStatusLookupId" })
+                                        @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control" })
+                                    </div>
 
 
 
 
-                        <div class="form-group col-lg-6">
-                            @Html.HiddenFor(m => m.ProfilePath)
-                            <label for="MainImageUrlEdit">
-                                @Resources.Register.TxtProfilePath
-                            </label>
+                                    <div class="form-group col-lg-6">
+                                        @Html.HiddenFor(m => m.ProfilePath)
+                                        <label for="MainImageUrlEdit">
+                                            @Resources.Register.TxtProfilePath
+                                        </label>
 
-                            <input name="MainImageUrl" id="MainImageUrlEdit" type="file" onchange="previewFile()" class="form-control-file">
-                        </div>
+                                        <input name="MainImageUrl" id="MainImageUrlEdit" type="file" onchange="previewFile()" class="form-control-file">
+                                    </div>
 
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <button type="submit" class="btn btn-primary">@Resources.Register.BtnSave</button>
+                                    <button class="btn btn-secondary" onclick="HideManageProfile()">إلغاء</button>
+                                </div>
+                                <small>
+                                    <a href="@Url.Action("ChangePassword")">@Resources.ChangePassword.LinkChangePassword</a>
+                                </small>
+
+                            }
+                        
                     </div>
-
-                    <div class="form-group col-lg-12">
-                        <button type="submit" class="btn btn-primary">@Resources.Register.BtnSave</button>
-                        <button class="btn btn-secondary" onclick="HideManageProfile()">إلغاء</button>
-                    </div>
-                    <small>
-                        <a href="@Url.Action("ChangePassword")">@Resources.ChangePassword.LinkChangePassword</a>
-                    </small>
-
-                }
+                </div>
             </div>
-        </div>      
-    </div>
-</section>
+        </div>
+                </div>
+            </div>
+            @*<section class="section profile" id="sectionProfile">
+                <header class="profile-header">
+                    <div class="container">
+                        <div class="user">
+                            @if (!string.IsNullOrWhiteSpace(Model.ProfilePath))
+                            {
+                                <img class="profile-img img-thumbnail" alt="@Model.FullName" src="@Model.ProfilePath" />
+                            }
+                            else
+                            {
+                                <img class="profile-img img-thumbnail" src="~/Content/assets/img/profile.png" />
+                            }
+                            <div>
+                                <h2>@Model.FullName</h2>
+                                <p>@Model.Address</p>
+                            </div>
+                        </div>
+                        <div>
+                            <a onclick="ShowManageProfile()" class="btn btn-default">إعدادات الحساب</a>
+                        </div>
+                    </div>
+                </header>
 
-<script>
+                <div class="container">
+                    <div class="profile-info">
+                        <div class="profile-info-content">
+
+                            <div class="profile-info-item color-5">
+                                <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                                <div>
+                                    <h3>@Resources.UserProfile.PrefferdLanguage </h3>
+                                    <p> @Model.PrefferdLanguageName</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-5">
+                                <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtEmail </h3>
+                                    <p> @Model.Email</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-1">
+                                <div class="icon-wrapper"><i class="icon icon-card"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtIdNumber</h3>
+                                    <p>@Model.IdNumber</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-2">
+                                <div class="icon-wrapper"><i class="icon icon-mobile"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtMobile</h3>
+                                    <p>@Model.Mobile</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-3">
+                                <div class="icon-wrapper"><i class="icon icon-contact"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtPhoneNumber  </h3>
+                                    <p>@Model.PhoneNumber</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-4">
+                                <div class="icon-wrapper"><i class="icon icon-time"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtGenderLookupId</h3>
+                                    <p>@Model.GenderLookupName</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-5">
+                                <div class="icon-wrapper"><i class="icon icon-sex"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtMartialStatusLookupId  </h3>
+                                    <p>@Model.MartialStatusLookupName</p>
+                                </div>
+                            </div>
+                            <div class="profile-info-item color-5">
+                                <div class="icon-wrapper"><i class="icon icon-location"></i></div>
+                                <div>
+                                    <h3>@Resources.Register.TxtAddress </h3>
+                                    <p> @Model.Address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            @if (TempData["UpdateProfileResult"] != null)
+            {
+                <div class="text-success">@TempData["UpdateProfileResult"]</div>
+            }
+
+            @if (TempData["SendFormToCRMStatus"] != null && TempData["SendFormToCRMStatus"].ToString() == "Susccess")
+            {
+                <div class="text-success">تم ارسال النموذج بنجاح</div>
+            }
+
+            <section class="section" id="userProfileEdit" style="display:none">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <h2 class="section-title">اعدادات الحساب</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-lg-4 cms-col-header">
+                            <h2>معلومات عامة</h2>
+                        </div>
+                        <div class="col-lg-8">
+                            @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(r => r.Id)
+                                <div class="row">
+
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                                        @Html.DropDownList("PrefferdLanguage", null, string.Empty, new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", onInput = "PreventEnterChartecherName()" })
+                                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.IdNumber, new { @for = "IdNumber" })
+                                        @Html.TextBoxFor(m => m.IdNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthIdNumber()" })
+                                        @Html.ValidationMessageFor(m => m.IdNumber, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.PhoneNumber, new { @for = "PhoneNumber" })
+                                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthPhone()" })
+                                        @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.Mobile, new { @for = "Mobile" })
+                                        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", onInput = "checkLengthMobile()" })
+                                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.BirthDay, new { @for = "BirthDay" })
+                                        @Html.TextBoxFor(m => m.BirthDay, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "Date" })
+                                        @Html.ValidationMessageFor(m => m.BirthDay, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                                        @Html.DropDownList("GenderLookupId", null, new { @class = "form-control" })
+                                    </div>
+
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.LabelFor(m => m.MartialStatusLookupId, new { @for = "MartialStatusLookupId" })
+                                        @Html.DropDownList("MartialStatusLookupId", null, string.Empty, new { @class = "form-control" })
+                                    </div>
+
+
+
+
+                                    <div class="form-group col-lg-6">
+                                        @Html.HiddenFor(m => m.ProfilePath)
+                                        <label for="MainImageUrlEdit">
+                                            @Resources.Register.TxtProfilePath
+                                        </label>
+
+                                        <input name="MainImageUrl" id="MainImageUrlEdit" type="file" onchange="previewFile()" class="form-control-file">
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <button type="submit" class="btn btn-primary">@Resources.Register.BtnSave</button>
+                                    <button class="btn btn-secondary" onclick="HideManageProfile()">إلغاء</button>
+                                </div>
+                                <small>
+                                    <a href="@Url.Action("ChangePassword")">@Resources.ChangePassword.LinkChangePassword</a>
+                                </small>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </section>*@
+
+            <script>
 
     function ShowManageProfile()
     {
@@ -363,5 +533,5 @@
         }
 
     }
-</script>
+            </script>
 
