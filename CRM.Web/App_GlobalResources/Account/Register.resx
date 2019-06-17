@@ -126,6 +126,12 @@
   <data name="ForgetPasswordLink" xml:space="preserve">
     <value>نسيت كلمة المرور</value>
   </data>
+  <data name="LblCompanyInfo" xml:space="preserve">
+    <value>معلومات الشركة</value>
+  </data>
+  <data name="LblCompanyName" xml:space="preserve">
+    <value>اسم الشركة</value>
+  </data>
   <data name="LblEmailAndPassword" xml:space="preserve">
     <value>البريد و كلمه المرور</value>
   </data>

@@ -157,7 +157,28 @@ namespace CRM.Web.Controllers
             }
         }
 
-        //
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult AddCompany(CompanyViewModel c)
+        {
+            try
+            {
+                var Company = new Company()
+                {
+                    Name = c.Name
+                };
+                _db.Companies.Add(Company);
+                _db.SaveChanges();
+                return Json(Company, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                LogHelper.LogException("", ex, "Error While register new Company!");
+                return null;
+            }
+
+           
+        }
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()

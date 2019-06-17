@@ -19,7 +19,7 @@ namespace CRM.Web.App_GlobalResources.Account {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Register {
@@ -84,6 +84,24 @@ namespace CRM.Web.App_GlobalResources.Account {
         public static string ForgetPasswordLink {
             get {
                 return ResourceManager.GetString("ForgetPasswordLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to معلومات الشركة.
+        /// </summary>
+        public static string LblCompanyInfo {
+            get {
+                return ResourceManager.GetString("LblCompanyInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to اسم الشركة.
+        /// </summary>
+        public static string LblCompanyName {
+            get {
+                return ResourceManager.GetString("LblCompanyName", resourceCulture);
             }
         }
         
@@ -320,5 +338,7 @@ namespace CRM.Web.App_GlobalResources.Account {
                 return ResourceManager.GetString("TxtUsername", resourceCulture);
             }
         }
+
+       
     }
 }

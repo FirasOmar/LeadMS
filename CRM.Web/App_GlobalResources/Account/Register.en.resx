@@ -126,6 +126,12 @@
   <data name="ForgetPasswordLink" xml:space="preserve">
     <value>Forget Password</value>
   </data>
+  <data name="LblCompanyInfo" xml:space="preserve">
+    <value>Company Info</value>
+  </data>
+  <data name="LblCompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
   <data name="LblEmailAndPassword" xml:space="preserve">
     <value>Email and Password</value>
   </data>
