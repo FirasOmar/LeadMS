@@ -89,7 +89,7 @@ namespace CRM.Core.Models
         public string GenderCode { get; set; }
         public string MartialStatusCode { get; set; }
       
-        public int CompanyId { get; set; }
+        public int? CompanyId { get; set; }
     }
 
 }

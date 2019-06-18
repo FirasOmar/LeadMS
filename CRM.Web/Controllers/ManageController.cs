@@ -97,6 +97,7 @@ namespace CRM.Web.Controllers
                 ProvinceId = userProfile.ProvinceId,
                 RegionId = userProfile.RegionId,
                 CityId = userProfile.CityId,
+           //     CompanyId=userProfile.CompanyId
                  
             };
 

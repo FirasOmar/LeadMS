@@ -46,6 +46,14 @@ namespace CRM.Web.Controllers
         public ActionResult Index(int? page, string searchText, int resetTo = 0)
         {
 
+
+            if(!SessionHelper.CheckSessionCompanyId())
+            {
+                //logout
+            }
+
+            var companyId = SessionHelper.GetCompanyId();
+
             if (resetTo == 1)
             {
                 page = 1;
@@ -79,14 +87,14 @@ namespace CRM.Web.Controllers
             var currentLanguageId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
 
             var userProfilesForcurrentLan = _db.UserProfileTranslations
-                                  .Where(r => (r.LanguageId == currentLanguageId) &&
+                                  .Where(r => (r.LanguageId == currentLanguageId) && r.UserProfile.CompanyId==companyId && 
                                  r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted).Select(c => c.UserProfileId);
             var userProfiles = _db.UserProfileTranslations
                           .Where(r => (r.IsDefault) &&
-                         r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && !userProfilesForcurrentLan.Contains(r.UserProfileId))
+                         r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && !userProfilesForcurrentLan.Contains(r.UserProfileId) && r.UserProfile.CompanyId==companyId)
                          .Union(
                             _db.UserProfileTranslations
-                          .Where(r => r.LanguageId == currentLanguageId && r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && userProfilesForcurrentLan.Contains(r.UserProfileId)))
+                          .Where(r => r.LanguageId == currentLanguageId && r.UserProfile.CompanyId == companyId && r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && userProfilesForcurrentLan.Contains(r.UserProfileId)))
                          .ToList();
 
             if (!searchText.IsNullOrWhiteSpace())
@@ -122,7 +130,8 @@ namespace CRM.Web.Controllers
                        ManagerName = x.UserProfile?.ManagerId != null ? LanguageFallbackHelper.GetUserProfile((int)x.UserProfile.ManagerId, currentLanguageId)?.FullName : string.Empty,
                        Department = x.UserProfile.DepartmentId,
                        DepartmentName = x.UserProfile?.DepartmentId != null ? LanguageFallbackHelper.GetDepartment((int)x.UserProfile.DepartmentId, currentLanguageId)?.Name : string.Empty,
-                       PrefferdLanguage = x.UserProfile.PreferedLanguageId
+                       PrefferdLanguage = x.UserProfile.PreferedLanguageId,
+                       CompanyId=x.UserProfile.CompanyId,
                    });
 
             int pageSize = int.Parse(SettingHelper.GetOrCreate(Core.Constants.SystemSettings.ControlPanelPageSize, "10").Value);
@@ -135,7 +144,7 @@ namespace CRM.Web.Controllers
         [CustomAuthentication(PageName = "Users", PermissionKey = "Create")]
         public JsonResult AddProfile(ProfileViewModel profile)
         {
-            var account = _db.UserProfiles.FirstOrDefault(r => r.Username != profile.Email && r.Status == (int)GeneralEnums.StatusEnum.Deleted);
+            var account = _db.UserProfiles.FirstOrDefault(r => r.Username != profile.Email && r.Status == (int)GeneralEnums.StatusEnum.Deleted && profile.CompanyId== SessionHelper.GetCompanyId());
             if (account != null && account.Status == (int)GeneralEnums.StatusEnum.Deactive)
             {
                 string Msg = "تم تعطيل هذا الحساب من قبل المسؤول ";
@@ -170,7 +179,8 @@ namespace CRM.Web.Controllers
                         PreferedLanguageId = profile.PrefferdLanguage,
                         Status = (int)GeneralEnums.StatusEnum.Active,
                         Username = profile.Username,
-                        Email = profile.Email
+                        Email = profile.Email,
+                        CompanyId=SessionHelper.GetCompanyId(),
                     };
                     _db.UserProfiles.Add(profil);
                     _db.SaveChanges();
@@ -199,7 +209,18 @@ namespace CRM.Web.Controllers
                     }
 
                     _db.SaveChanges();
-
+                    string roleId = "5";
+                    // var userProfile = _db.UserProfiles.Find(UserId);
+                    var aspUser = _db.AspNetUsers.FirstOrDefault(r => r.UserName == profil.Username);
+                    if (!_db.AspNetUserRoles.Any(r => r.UserId == aspUser.Id && r.RoleId == roleId))
+                    {
+                        _db.AspNetUserRoles.Add(new AspNetUserRole()
+                        {
+                            RoleId = roleId,
+                            UserId = aspUser.Id
+                        });
+                        _db.SaveChanges();
+                    }
                     return Json(profile, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception ex)

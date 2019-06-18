@@ -96,6 +96,7 @@ namespace CRM.Web.Controllers
                 return View(model);
             }
 
+            SessionHelper.SetCompanyId(userProfile.CompanyId.Value);
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -237,6 +238,8 @@ namespace CRM.Web.Controllers
                             _db.Companies.Add(companyObj);
                             _db.SaveChanges();
 
+                           
+
                             var userProfile = new UserProfile
                             {
                                 Birthday = model.BirthDay,
@@ -259,6 +262,7 @@ namespace CRM.Web.Controllers
                             _db.UserProfiles.Add(userProfile);
                             _db.SaveChanges();
 
+                           
                             var userProfileTrans = new UserProfileTranslation()
                             {
                                 FullName = model.FullName,
@@ -282,6 +286,21 @@ namespace CRM.Web.Controllers
                                 _db.UserProfileTranslations.Add(userProfileTrans1);
                             }
                             _db.SaveChanges();
+
+
+                            SessionHelper.SetCompanyId(companyObj.Id);
+                            string roleId = "5";
+                           // var userProfile = _db.UserProfiles.Find(UserId);
+                            var aspUser = _db.AspNetUsers.FirstOrDefault(r => r.UserName == userProfile.Username);
+                            if (!_db.AspNetUserRoles.Any(r => r.UserId == aspUser.Id && r.RoleId == roleId))
+                            {
+                                _db.AspNetUserRoles.Add(new AspNetUserRole()
+                                {
+                                    RoleId = roleId,
+                                    UserId = aspUser.Id
+                                });
+                                _db.SaveChanges();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -294,6 +313,8 @@ namespace CRM.Web.Controllers
                         var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+
+                        
                         return RedirectToAction("Index", "Home");
                     }
                     AddErrors(result);

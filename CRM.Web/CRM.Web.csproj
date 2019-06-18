@@ -549,6 +549,7 @@
     <Compile Include="Helpers\MimeTypeMap.cs" />
     <Compile Include="Helpers\ReportHelper.cs" />
     <Compile Include="Helpers\RichEditorHelper.cs" />
+    <Compile Include="Helpers\SessionHelper.cs" />
     <Compile Include="Helpers\UrlEncryptionHelper.cs" />
     <Compile Include="Helpers\WorkflowHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />

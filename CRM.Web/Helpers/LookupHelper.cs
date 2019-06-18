@@ -357,18 +357,19 @@ namespace CRM.Web.Helpers
                         languageId = CultureHelper.MapLanguage(languageName);
                     }
 
+                    var companyId = SessionHelper.GetCompanyId();
                     var employees = db.AspNetUserRoles.Where(r => r.AspNetRole.Name != Constants.Roles.Citizen)
                         .Select(r => r.AspNetUser.UserName).ToList();
 
                     var profilesForcurrentLan = db.UserProfileTranslations
-                       .Where(r => (r.LanguageId == languageId) && employees.Contains(r.UserProfile.Username) &&
-                      r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted).Select(c => c.UserProfileId);
+                       .Where(r => (r.LanguageId == languageId) && employees.Contains(r.UserProfile.Username) && r.UserProfile.CompanyId == companyId && 
+                      r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted ).Select(c => c.UserProfileId);
                     var profiles = db.UserProfileTranslations
-                                  .Where(r => (r.IsDefault) && employees.Contains(r.UserProfile.Username) &&
+                                  .Where(r => (r.IsDefault) && employees.Contains(r.UserProfile.Username) && r.UserProfile.CompanyId==companyId&&
                                  r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && !profilesForcurrentLan.Contains(r.UserProfileId))
                                  .Union(
                                     db.UserProfileTranslations
-                                  .Where(r => r.LanguageId == languageId && employees.Contains(r.UserProfile.Username) && r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && profilesForcurrentLan.Contains(r.UserProfileId)))
+                                  .Where(r => r.LanguageId == languageId && r.UserProfile.CompanyId == companyId && employees.Contains(r.UserProfile.Username) && r.UserProfile.Status != (int)GeneralEnums.StatusEnum.Deleted && profilesForcurrentLan.Contains(r.UserProfileId)))
                                  .ToList().Select(x => new ProfileViewModel()
                                  {
                                      Id = x.UserProfileId,
