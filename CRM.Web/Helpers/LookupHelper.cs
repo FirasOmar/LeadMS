@@ -416,13 +416,14 @@ namespace CRM.Web.Helpers
             {
                 try
                 {
+                    var companyId = SessionHelper.GetCompanyId();
                     int languageId = (int)GeneralEnums.LanguageEnum.Arabic;
                     if (cookie != null)
                     {
                         var languageName = CultureHelper.GetCultureName(cookie);
                         languageId = CultureHelper.MapLanguage(languageName);
                     }
-                    var campaigns = db.Campaigns.ToList().Select(x => new CampaignViewModel()
+                    var campaigns = db.Campaigns.Where(r=>r.CompanyId== companyId).ToList().Select(x => new CampaignViewModel()
                     {
                         Id=x.Id,
                         Name=x.Name

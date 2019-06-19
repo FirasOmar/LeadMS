@@ -20,8 +20,11 @@ namespace CRM.Web.Controllers
         // GET: Campaigns
         public ActionResult Index()
         {
+            var companyId = SessionHelper.GetCompanyId();
             var currentLanguageId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
-            var CampaignList = _db.Campaigns.ToList();
+            //var CampaignList = _db.Campaigns.ToList();
+            var CampaignList = _db.Campaigns.Where(r=>r.CompanyId==companyId).ToList();
+
             var CampaginVM = CampaignList.Select(r => new CampaignViewModel()
             {
                 Id=r.Id,
@@ -61,11 +64,13 @@ namespace CRM.Web.Controllers
         [HttpPost]
         public void Create(CampaignViewModel c)
         {
+            var companyId = SessionHelper.GetCompanyId();
             var campData = new Campaign()
             {
                 Name = c.Name,
                 StartDate=c.StartDate,
-                EndDate=c.EndDate
+                EndDate=c.EndDate,
+                CompanyId=companyId
       
 
             };

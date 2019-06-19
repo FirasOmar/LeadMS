@@ -37,12 +37,14 @@ namespace CRM.Web.Controllers
         [CustomAuthentication(PageName = "Home", PermissionKey = "View")]
         public ActionResult Index(int? campaignNo)
         {
+            var companyId = SessionHelper.GetCompanyId();
+            var  CampaignList = _db.Campaigns.Where(r => r.CompanyId == companyId).Select(r=>r.Id).ToList();
             int NewLeads;
             int QualifiedLeads;
             int WonLeads;
             int LostLeads;
             var currentLanguageId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
-            var LeadList = _db.Leads.ToList();
+            var LeadList = _db.Leads.Where(r=> CampaignList.Contains(r.CampaignId.Value)).ToList();
             if (campaignNo != null)
             {
                  LeadList = _db.Leads.Where(x => x.CampaignId == campaignNo).ToList();
@@ -64,20 +66,20 @@ namespace CRM.Web.Controllers
                  CampaignName=LanguageFallbackHelper.GetCampaigns(r.Campaign.Id,currentLanguageId).Name
              }
              
-           );
+           ).ToList();
             if (campaignNo != null)
             {
-                 NewLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.New && C.CampaignId == campaignNo).Count();
-                 QualifiedLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Qualified && C.CampaignId == campaignNo).Count();
-                 WonLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Won && C.CampaignId == campaignNo).Count();
-                 LostLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Lost && C.CampaignId == campaignNo).Count();
+                 NewLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.New && r.CampaignId == campaignNo);
+                 QualifiedLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Qualified && r.CampaignId == campaignNo);
+                WonLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Won && r.CampaignId == campaignNo);
+                LostLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Lost && r.CampaignId == campaignNo);
             }
             else
             {
-                NewLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.New).Count();
-                QualifiedLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Qualified).Count();
-                WonLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Won).Count();
-                LostLeads = _db.Leads.Where(C => C.Status == (int)LeadStatusEnum.Lost).Count();
+                NewLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.New);
+                QualifiedLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Qualified);
+                WonLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Won);
+                LostLeads = LeadList_result.Count(r => r.Status == LeadStatusEnum.Lost);
             }
             
             ViewData["NewLeads"] = NewLeads;
