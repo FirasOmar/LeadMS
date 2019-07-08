@@ -132,6 +132,9 @@
   <data name="EndDate" xml:space="preserve">
     <value>End Date</value>
   </data>
+  <data name="Id" xml:space="preserve">
+    <value>Campaign No</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Campaign Name</value>
   </data>

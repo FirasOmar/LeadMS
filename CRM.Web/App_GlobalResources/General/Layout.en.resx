@@ -223,7 +223,7 @@
     <value>גלריית תמונות</value>
   </data>
   <data name="LinkHome" xml:space="preserve">
-    <value>ראשי</value>
+    <value>Home</value>
   </data>
   <data name="LinkJobs" xml:space="preserve">
     <value>משרות</value>
@@ -244,7 +244,7 @@
     <value>עריכת דף ראשי</value>
   </data>
   <data name="LinkMenu" xml:space="preserve">
-    <value>טבלה</value>
+    <value>Menu</value>
   </data>
   <data name="LinkPages" xml:space="preserve">
     <value>עמודים</value>
@@ -280,7 +280,7 @@
     <value>אחוז מצבים פתורים</value>
   </data>
   <data name="PersonInformation" xml:space="preserve">
-    <value>מידע על אזרח</value>
+    <value>Profile</value>
   </data>
   <data name="ReportCharts" xml:space="preserve">
     <value>גרפים</value>
@@ -331,10 +331,10 @@
     <value>דף</value>
   </data>
   <data name="TxtSearch" xml:space="preserve">
-    <value>חיפוש</value>
+    <value>...</value>
   </data>
   <data name="TxtSearchFor" xml:space="preserve">
-    <value>חיפוש אחרי...</value>
+    <value>...</value>
   </data>
   <data name="TxtSmsm" xml:space="preserve">
     <value>Oyoun Media</value>
@@ -355,7 +355,7 @@
     <value>Personal Account</value>
   </data>
   <data name="GoToHome" xml:space="preserve">
-    <value>חזרה לדף ראשי</value>
+    <value>Home</value>
   </data>
   <data name="CasesSentByEmail" xml:space="preserve">
     <value>מקרים שנשלחו בדוא"ל</value>

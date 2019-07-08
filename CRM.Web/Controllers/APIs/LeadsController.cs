@@ -38,6 +38,7 @@ namespace CRM.Web.Controllers.APIs
                     Status = (int)LeadStatusEnum.New,                    
                     Phone_Number = lead.Phone_Number,
                     Notes = lead.Notes,
+                    CampaignId=lead.CampaignId,
                     Created_Date = DateTime.Now
                 };
                 _db.Leads.Add(data);

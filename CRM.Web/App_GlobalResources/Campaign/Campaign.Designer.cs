@@ -106,6 +106,15 @@ namespace CRM.Web.App_GlobalResources.Campaign {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to رقم الحملة.
+        /// </summary>
+        public static string Id {
+            get {
+                return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to اسم الحملة.
         /// </summary>
         public static string Name {

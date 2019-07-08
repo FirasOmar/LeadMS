@@ -132,6 +132,9 @@
   <data name="EndDate" xml:space="preserve">
     <value>تاريخ النهاية</value>
   </data>
+  <data name="Id" xml:space="preserve">
+    <value>رقم الحملة</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>اسم الحملة</value>
   </data>

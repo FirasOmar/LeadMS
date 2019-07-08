@@ -9,6 +9,7 @@ namespace CRM.Web.Models
 {
     public class CampaignViewModel
     {
+        [Display(ResourceType = typeof(Campaign), Name = "Id")]
         public int Id { get; set; }
         [Display(ResourceType = typeof(Campaign), Name = "Name")]
         public string Name { get; set; }
