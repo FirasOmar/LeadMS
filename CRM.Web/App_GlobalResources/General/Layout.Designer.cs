@@ -781,7 +781,7 @@ namespace CRM.Web.App_GlobalResources.General {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to نظام الشكاوي.
+        ///   Looks up a localized string similar to نظام ادارة الزبائن.
         /// </summary>
         public static string WebsiteName {
             get {

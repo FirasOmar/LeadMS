@@ -229,10 +229,10 @@
     <value>משרות</value>
   </data>
   <data name="LinkLogin" xml:space="preserve">
-    <value>כניסה</value>
+    <value>Login</value>
   </data>
   <data name="LinkLogOff" xml:space="preserve">
-    <value>יציאה</value>
+    <value>Log off</value>
   </data>
   <data name="LinkLookup" xml:space="preserve">
     <value>הגדרות</value>
@@ -337,7 +337,7 @@
     <value>חיפוש אחרי...</value>
   </data>
   <data name="TxtSmsm" xml:space="preserve">
-    <value>סמסם</value>
+    <value>Oyoun Media</value>
   </data>
   <data name="TxtSubmissionOfTheApplication" xml:space="preserve">
     <value>הגשת בקשה</value>
@@ -346,13 +346,13 @@
     <value>הגדרות אתר</value>
   </data>
   <data name="TxtWelcome" xml:space="preserve">
-    <value>שלום</value>
+    <value>Welcome</value>
   </data>
   <data name="WebsiteName" xml:space="preserve">
-    <value>מערכת פניות</value>
+    <value>Lead Management System</value>
   </data>
   <data name="PersonalAccount" xml:space="preserve">
-    <value>צפה בפרופיל</value>
+    <value>Personal Account</value>
   </data>
   <data name="GoToHome" xml:space="preserve">
     <value>חזרה לדף ראשי</value>

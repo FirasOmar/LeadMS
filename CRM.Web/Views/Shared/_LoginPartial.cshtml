@@ -5,7 +5,11 @@
     var langId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
     var userInfo = AuthenticationHelper.GetUserInfo(User, langId);
 }
-
+<style>
+    .login-par{
+        margin-top:18px!important;
+    }
+</style>
 @if (Request.IsAuthenticated)
 {
 
@@ -45,7 +49,7 @@
         {
         @Html.AntiForgeryToken()
         }
-        }
+}
         else
         {
         <a class="btn btn-secondary ml-2 login-par" href="@Url.Action("Login", "Account")"> @Resources.Layout.LinkLogin</a>

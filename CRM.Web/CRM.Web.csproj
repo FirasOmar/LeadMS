@@ -345,10 +345,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Layout.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\General\Layout.he.designer.cs">
+    <Compile Include="App_GlobalResources\General\Layout.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Layout.he.resx</DependentUpon>
+      <DependentUpon>Layout.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\General\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2189,6 +2189,7 @@
     <Content Include="Views\Campaigns\Details.cshtml" />
     <Content Include="Views\Campaigns\Index.cshtml" />
     <Content Include="Views\Campaigns\_Create.cshtml" />
+    <Content Include="Views\Shared\_LayoutDefault.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2480,9 +2481,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\General\Layout.he.resx">
+    <EmbeddedResource Include="App_GlobalResources\General\Layout.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Layout.he.designer.cs</LastGenOutput>
+      <LastGenOutput>Layout.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
