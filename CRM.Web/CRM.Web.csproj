@@ -899,6 +899,7 @@
     <Content Include="Content\assets\img\news2.jpg" />
     <Content Include="Content\assets\img\newsletter.svg" />
     <Content Include="Content\assets\img\no-results.svg" />
+    <Content Include="Content\assets\img\oyounlogo.png" />
     <Content Include="Content\assets\img\profile.png" />
     <Content Include="Content\assets\img\quote.jpg" />
     <Content Include="Content\assets\img\quote.svg" />

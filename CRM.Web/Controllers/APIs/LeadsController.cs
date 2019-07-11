@@ -30,21 +30,33 @@ namespace CRM.Web.Controllers.APIs
         {
             try
             {
-                var data = new Lead()
+                var record = _db.Leads.Where(r=>r.Phone_Number==lead.Phone_Number).ToList();
+                
+                var rr = 121;
+                if (record.Count() == 0)
                 {
-                    Name = lead.Name,
-                    Email = lead.Email,
-                    Address = lead.Address,
-                    Status = (int)LeadStatusEnum.New,                    
-                    Phone_Number = lead.Phone_Number,
-                    Notes = lead.Notes,
-                    CampaignId=lead.CampaignId,
-                    Created_Date = DateTime.Now
-                };
-                _db.Leads.Add(data);
-                _db.SaveChanges();
-                var msg = Request.CreateResponse(HttpStatusCode.Created, data);
-                return msg;
+                    var data = new Lead()
+                    {
+                        Name = lead.Name,
+                        Email = lead.Email,
+                        Address = lead.Address,
+                        Status = (int)LeadStatusEnum.New,
+                        Phone_Number = lead.Phone_Number,
+                        Notes = lead.Notes,
+                        CampaignId = lead.CampaignId,
+                        Created_Date = DateTime.Now
+                    };
+                    _db.Leads.Add(data);
+                    _db.SaveChanges();
+                    var msg = Request.CreateResponse(HttpStatusCode.Created, data);
+                    return msg;
+                }
+                else
+                {
+                    var msg2 = Request.CreateResponse(HttpStatusCode.Found);
+                    return msg2;
+                }
+               
             }
             catch(Exception ex)
             {
