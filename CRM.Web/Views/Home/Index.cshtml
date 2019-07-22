@@ -93,6 +93,9 @@
             <button type="button" class="btn switch btn-light " onclick="KanbanView();"><i class="fa fa-th-large"></i></button>
             <button type="button" class="btn switch btn-light" onclick="TableView();"><i class="fa fa-bars"></i></button>
             <button type="button" class="btn switch btn-light " data-toggle="modal" data-target="#NewLeadModal"><i class="fa fa-plus"></i></button>
+            <button type="button" onclick="ExportDataAsExcel()" class="btn switch btn-light">
+                <i class="fa fa-file-export"></i>
+            </button>
         </div>
         <div class="frmContainer">
             @using (Html.BeginForm("SearchLeads", "Home", FormMethod.Post, new { role = "form" }))
@@ -109,11 +112,11 @@
             }
         </div>
         <div class="frmContainer">
-            @using (Html.BeginForm("Index", "Home",FormMethod.Get))
+            @using (Html.BeginForm("Index", "Home", FormMethod.Get))
             {
                 <div class="form-group">
                     @Html.DropDownList("CampaignNo", new SelectList(campaign, "Id", "Name"), @Resources.Campaign.AllCampaigns, new { @class = "form-control chosen-select", @required = "true" })
-                  
+
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-secondary" id="searchCamp"><i class="fa fa-filter"></i></button>
@@ -235,23 +238,23 @@
                     {
                         if (item.Status == GeneralEnums.LeadStatusEnum.New)
                         {
-                    <li class="kanban_item">
-                        <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
-                            <span class="fa fa-eye"></span>
-                        </a>
+                            <li class="kanban_item">
+                                <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
+                                    <span class="fa fa-eye"></span>
+                                </a>
 
-                        <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
-                        <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
+                                <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
+                                <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
 
-                        <div class="clearfix"></div>
-                        <div class="row ">
-                            <div class="col d-flex">
-                                <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
-                            </div>
-                        </div>
-                    </li>
+                                <div class="clearfix"></div>
+                                <div class="row ">
+                                    <div class="col d-flex">
+                                        <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
+                                    </div>
+                                </div>
+                            </li>
                         }
                     }
                 </ul>
@@ -266,23 +269,23 @@
                     {
                         if (item.Status == GeneralEnums.LeadStatusEnum.Qualified)
                         {
-                    <li class="kanban_item">
-                        <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
-                            <span class="fa fa-eye"></span>
-                        </a>
+                            <li class="kanban_item">
+                                <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
+                                    <span class="fa fa-eye"></span>
+                                </a>
 
-                        <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
-                        <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
+                                <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
+                                <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
 
-                        <div class="clearfix"></div>
-                        <div class="row ">
-                            <div class="col d-flex">
-                                <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
-                            </div>
-                        </div>
-                    </li>
+                                <div class="clearfix"></div>
+                                <div class="row ">
+                                    <div class="col d-flex">
+                                        <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
+                                    </div>
+                                </div>
+                            </li>
                         }
                     }
                 </ul>
@@ -297,23 +300,23 @@
                     {
                         if (item.Status == GeneralEnums.LeadStatusEnum.Won)
                         {
-                    <li class="kanban_item">
-                        <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
-                            <span class="fa fa-eye"></span>
-                        </a>
+                            <li class="kanban_item">
+                                <a href="@Url.Action("LeadInfo", "Home", new { id = item.Id })" class="@floating_opposite btn btn-sm btn-success text-success btn-link font-13">
+                                    <span class="fa fa-eye"></span>
+                                </a>
 
-                        <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
-                        <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
-                        <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
+                                <h5 class="d-flex"> @Html.DisplayFor(modelItem => item.Name)</h5>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.Phone_Number)</p>
+                                <p class="d-flex">@Html.DisplayFor(modelItem => item.AssigneeName)</p>
+                                <h4 class="lead_Id" style="display:none;">@Html.DisplayFor(modelItem => item.Id)</h4>
 
-                        <div class="clearfix"></div>
-                        <div class="row ">
-                            <div class="col d-flex">
-                                <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
-                            </div>
-                        </div>
-                    </li>
+                                <div class="clearfix"></div>
+                                <div class="row ">
+                                    <div class="col d-flex">
+                                        <p class="font-13 mt-2 mb-0"><i class="mdi mdi-calendar"></i> @Html.DisplayFor(modelItem => item.Created_Date)</p>
+                                    </div>
+                                </div>
+                            </li>
                         }
                     }
                 </ul>
@@ -330,8 +333,7 @@
                    data-search="true"
                    data-toggle="table"
                    data-page-size="10"
-                   data-pagination="true"
-                   >
+                   data-pagination="true">
                 <thead class="card-header" data-background-color="purple">
                     <tr>
                         <th data-sortable="true" class="center">
@@ -364,40 +366,41 @@
                 <tbody class="ts">
                     @foreach (var item in Model)
                     {
-                    <tr class="personInfo" id="TableData">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Phone_Number)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CampaignName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AssigneeName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Created_Date)
-                        </td>
-                        <td>
-                            <a href="@Url.Action("LeadInfo", new {id = item.Id})" class="btnCommentCase" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
-                        </td>
-                    </tr>
+                        <tr class="personInfo" id="TableData">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone_Number)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CampaignName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AssigneeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created_Date)
+                            </td>
+                            <td>
+                                <a href="@Url.Action("LeadInfo", new {id = item.Id})" class="btnCommentCase" title="@Resources.SystemCases.BtnDetails"><i class="fa fa-eye text-success"></i></a>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
+    <a id="ExportChartDataToExcelAnchor" style="display:none" href="" target="_blank"></a>
     <!-- Modal add new lead -->
     <div id="NewLeadModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
@@ -429,6 +432,16 @@
 </script>*@
 <script type="text/javascript">
     var item_id;
+    function ExportDataAsExcel() {    
+        //console.log("exeecell eeee");
+        var href = "";        
+        href = "@Url.Action("ExportAdvanceSearchAllFieldsToExcel", "Home")";
+        //var advanceSearch = $("#AdvanceSearchForm").serialize();
+      //  var params = advanceSearch;
+       // href = href + "?" + params;
+        $("#ExportChartDataToExcelAnchor").attr("href", href);
+        $("#ExportChartDataToExcelAnchor")[0].click();        
+    }
     $(document).ready(
         function () {
 

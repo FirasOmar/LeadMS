@@ -243,4 +243,7 @@
   <data name="AssigneeUser" xml:space="preserve">
     <value>الموظف المسؤول</value>
   </data>
+  <data name="ExportAllFields" xml:space="preserve">
+    <value>تنزيل اكسل</value>
+  </data>
 </root>

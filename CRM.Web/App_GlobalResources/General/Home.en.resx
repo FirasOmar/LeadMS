@@ -243,4 +243,7 @@
   <data name="AssigneeUser" xml:space="preserve">
     <value>Assign To</value>
   </data>
+  <data name="ExportAllFields" xml:space="preserve">
+    <value>Export Excel</value>
+  </data>
 </root>

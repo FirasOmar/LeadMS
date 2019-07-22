@@ -28,6 +28,7 @@ using PagedList;
 using Crm.Sms;
 using static CRM.Core.SystemEnums.GeneralEnums;
 using Crm.Sms.Requests;
+using CRM.Web.Helpers;
 
 namespace CRM.Web.Controllers
 {
@@ -402,6 +403,35 @@ namespace CRM.Web.Controllers
                 LogHelper.LogException(User.Identity.Name, ex, "Error While Sending SMS to Lead (Post)");
                 return null;
             }
+        }
+
+        public ActionResult ExportAdvanceSearchAllFieldsToExcel()
+        {
+            var lead = _db.Leads.AsQueryable();
+
+            var langId = CultureHelper.GetCurrentLanguageId(Request.Cookies["_culture"]);
+
+            //cases = AdvanceSearchCasesData(filters, cases);
+            var list = lead.ToList().Select(x =>
+                   new LeadViewModel()
+                   {
+                       Id = x.Id,
+                       Name = x.Name,
+                       Address = x.Address,
+                       Email=x.Email,                     
+                       Phone_Number=x.Phone_Number,
+                       Notes=x.Notes,
+                       Created_Date=x.Created_Date,
+                       CampaignId=x.CampaignId,
+                       AssigneeId=x.AssigneeId,
+                       AssigneeName= LanguageFallbackHelper.GetUserProfile((x.UserProfile?.Id ?? 0), langId)?.FullName,
+                       CampaignName = LanguageFallbackHelper.GetCampaigns(x.Campaign.Id, langId).Name
+
+                   });
+            var result = ReportHelper.WriteCsvToMemory(list);
+            var memoryStream = new MemoryStream(result);
+            return new FileStreamResult(memoryStream, "text/csv") { FileDownloadName = $"FullLeadReport-{DateTime.Now}.csv" };
+
         }
     }
 }
