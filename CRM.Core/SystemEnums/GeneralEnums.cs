@@ -237,5 +237,16 @@ namespace CRM.Core.SystemEnums
             Tenders = 4,
             Froms = 5
         }
+
+
+        public enum Role
+        {
+            Administrator=1,
+            User=2,
+            Citizen=3,
+            CrmEmployer=4,
+            DepartmentManager=5,
+            DepartmentTeam=6,
+        }
     }
 }

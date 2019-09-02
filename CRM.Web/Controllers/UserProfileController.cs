@@ -144,7 +144,8 @@ namespace CRM.Web.Controllers
         [CustomAuthentication(PageName = "Users", PermissionKey = "Create")]
         public JsonResult AddProfile(ProfileViewModel profile)
         {
-            var account = _db.UserProfiles.FirstOrDefault(r => r.Username != profile.Email && r.Status == (int)GeneralEnums.StatusEnum.Deleted && profile.CompanyId== SessionHelper.GetCompanyId());
+            var companyId = SessionHelper.GetCompanyId();
+            var account = _db.UserProfiles.FirstOrDefault(r => r.Username != profile.Email && r.Status == (int)GeneralEnums.StatusEnum.Deleted && profile.CompanyId==companyId);
             if (account != null && account.Status == (int)GeneralEnums.StatusEnum.Deactive)
             {
                 string Msg = "تم تعطيل هذا الحساب من قبل المسؤول ";
@@ -209,7 +210,9 @@ namespace CRM.Web.Controllers
                     }
 
                     _db.SaveChanges();
-                    string roleId = "5";
+
+                    profile.Id = profil.Id;
+                    string roleId = ((int)GeneralEnums.Role.User).ToString();
                     // var userProfile = _db.UserProfiles.Find(UserId);
                     var aspUser = _db.AspNetUsers.FirstOrDefault(r => r.UserName == profil.Username);
                     if (!_db.AspNetUserRoles.Any(r => r.UserId == aspUser.Id && r.RoleId == roleId))
