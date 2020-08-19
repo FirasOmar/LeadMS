@@ -6,46 +6,8 @@
     Layout = null;
     var currentUrl = Request.Url.AbsoluteUri;
     var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
-
+   /* CultureHelper.GetCurrentCulture();*/
 }
-
-@*<div class="container" style="width:100%;padding:0px;margin:0px">
-        <div class="hero no-grad">
-            <img src="@imagePage" alt="">
-        </div>
-        <div class="login-box">
-            <header style="padding:5px;">
-                <h2>@Resources.Login.Title</h2>
-            </header>
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
-                {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-
-                    @Html.LabelFor(m => m.Email, new { @for = "Email" })
-                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-
-                    @Html.LabelFor(m => m.Password, new { @for = "Password" })
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-
-                    <a href="@Url.Action("ForgotPassword", "Account")"> @Resources.Login.ForgotPasswordLink </a>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">@Resources.Login.LoginBtn</button>
-                </div>
-            }
-            <hr>
-            <footer>
-
-                <p>@Resources.Login.DontHaveAccount <a href="@Url.Action("Register", "Account")"> @Resources.Login.RegisterLink</a></p>
-            </footer>
-        </div>
-    </div>*@
 
 
 <!DOCTYPE html>
@@ -57,7 +19,28 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/Content/assets-new/images/logogold.png">
+
+    <!-- App css -->
+    <link href="~/Content/assets-new/css/droidarabickufi.css" rel="stylesheet" />
+    <link href="~/Content/assets-new/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .validation-summary-errors {
+            color: #ca5c5c;
+        }
+        .active{
+            color:white;
+            font-weight:bold;
+            text-decoration:underline;
+        }
+        li>a{
+            color:gray;
+        }
+    </style>
+    @*<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/Ilut_css/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/Ilut_css/bootstrap/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
@@ -67,9 +50,151 @@
     <link href="~/Content/assets/Ilut_css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/assets/Ilut_css/components-rtl.min.css" rel="stylesheet" id="style_components" type="text/css" />
     <link href="~/Content/assets/Ilut_css/plugins-rtl.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/assets/Ilut_css/login.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets/Ilut_css/login.css" rel="stylesheet" type="text/css" />*@
 </head>
-<body class="login">
+<body class="authentication-bg">
+    @{
+        var activeArabicMenu = "";
+        var activeHebrewMenu = "";
+        var floating = "";
+        var direction = "";
+    }
+    @if (websiteCulture == "ar")
+    {
+        activeArabicMenu = "active";
+        floating = "right";
+        direction = "rtl";
+    }
+    else
+    {
+        activeHebrewMenu = "active";
+        floating = "left";
+        direction = "ltr";
+    }
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-pattern">
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <a href="#">
+                                    <span>
+                                        <img src="~/Content/assets-new/images/logogold.png" style="width: 77%; height: 25%; border-radius: 36px;" alt="" height="22">
+                                    </span>
+                                </a>
+                                <p class="text-muted mb-4 mt-3">@Resources.Layout.WebsiteName</p>
+                            </div>
+
+                            @using (Ajax.BeginForm("login", "Account", new AjaxOptions
+                            {
+                                HttpMethod = "Post",
+
+                            }))
+                            {@Html.AntiForgeryToken()
+
+                                <div>
+                                    <strong>@Html.ValidationSummary(true)</strong>
+                                </div>
+
+
+                                <div class="form-group mb-3 "  style="direction:@direction" >
+                                    <label  style="float:@floating" for="emailaddress">@Resources.Login.TxtEmail</label>
+                                    <input class="form-control" name="Email" type="email" id="emailaddress" required="" placeholder="@Resources.Login.TxtEmail">
+                                </div>
+
+                                <div class="form-group mb-3 "  style="direction:@direction" >
+                                    <label for="password" style="float:@floating">@Resources.Login.TxtPassword</label>
+                                    <input class="form-control" name="Password" type="password" required="" id="password" placeholder="@Resources.Login.TxtPassword">
+                                </div>
+
+                                <div class="form-group mb-3 " style="direction:@direction"  >
+                                    <div class="custom-control custom-checkbox" >
+                                        <input type="checkbox" class="custom-control-input" id="checkbox-signin" checked>
+                                        <label class="custom-control-label"style="float:@floating"for="checkbox-signin">@Resources.Login.TxtRememberMe </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-0 text-center">
+                                    <button class="btn btn-primary btn-block" type="submit"> @Resources.Login.LoginBtn </button>
+                                </div>
+                              
+                                    }
+                        <br />
+                            <div class="form-group mb-0 text-center">
+                                <a href="@Url.Action("Register", "Account")" id="newAccount" class="btn btn-secondary btn-block">
+                                    @Resources.Login.RegisterLink
+                                </a>
+                            </div>
+                                    @*<div class="text-center">
+                                            <h5 class="mt-3 text-muted">Sign in with</h5>
+                                            <ul class="social-list list-inline mt-3 mb-0">
+                                                <li class="list-inline-item">
+                                                    <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github-circle"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>*@
+
+                                </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <div class="row" style="display:flex;align-content:center;justify-content:center">
+                                <ul class="list-inline">
+                                   
+                                    <li class="list-inline-item">
+                                        <a class="@activeArabicMenu" href="@Url.Action("SetCulture", "Home", new {culture = "ar", currentUrl = currentUrl})">عربي</a>
+                                    </li>
+                                    <li class="list-inline-item separator">
+                                        <span class="separator"></span>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="@activeHebrewMenu" href="@Url.Action("SetCulture", "Home", new {culture = "en", currentUrl = currentUrl})">English</a>
+                                    </li>
+                                </ul>
+                            </div>
+                           
+                            @*<p> <a href="pages-recoverpw.html" class="text-white-50 ml-1">نسيت كلمة المرور?</a></p>*@
+                            @*  <p class="text-white-50">Don't have an account? <a href="pages-register.html" class="text-white ml-1"><b>Sign Up</b></a></p>*@
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
+
+
+    <footer class="footer footer-alt">
+        2020 &copy; CaseMaster <a href="" class="text-white-50"></a>
+    </footer>
+
+    <!-- Vendor js -->
+    <script src="~/Content/assets-new/js/vendor.min.js"></script>
+
+    <!-- App js -->
+    <script src="~/Content/assets-new/js/app.min.js"></script>
+
+</body>
+
+@*<body class="login">
     <div class="user-login-5">
         <div class="row bs-reset">
             <div class="col-md-6 bs-reset">
@@ -78,7 +203,7 @@
             </div>
             <div class="col-md-6 login-container bs-reset">
                 <div class="login-content">
-                    <div align="center"><img class="login-logo2" src="~/Content/assets/img/oyounlogo.png" /></div>
+                    <div align="center"><img class="login-logo2" src="~/Content/assets/img/lmlogo.png" /></div>
                     <h1 align="center">@Resources.Layout.WebsiteName</h1>
                     <div class="row" style="display:flex;align-content:center;justify-content:center" >
                         <ul class="nav navbar-nav pull-right">
@@ -137,8 +262,7 @@
                                 <div class="col-sm-4">
                                     <div class="rem-password">
                                         <label>
-                                            @*<input type="checkbox" class="rem-checkbox" />
-                                                تذكرني*@
+                                        
                                         </label>
                                     </div>
                                 </div>
@@ -160,7 +284,7 @@
                         <div class="col-xs-12 bs-reset">
                             <div class="login-copyright text-center">
                                 <p>
-                                    Oyoun Media ©
+                                    CaseMaster ©
                                     <script type="text/javascript">
                                         document.write(new Date().getFullYear());
                                     </script>
@@ -186,5 +310,5 @@
     <script src="~/Content/assets/Ilut_js/jquery.backstretch.min.js" type="text/javascript"></script>
     <script src="~/Content/assets/Ilut_js/app.js" type="text/javascript"></script>
     <script src="~/Content/assets/Ilut_js/login.js" type="text/javascript"></script>
-</body>
+</body>*@
 </html>

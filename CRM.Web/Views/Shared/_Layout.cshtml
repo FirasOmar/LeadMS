@@ -17,7 +17,7 @@
 <html @*lang="ar"*@ @*dir="rtl"*@>
 <head>
     <meta charset="utf-8">
-    <title>@ViewBag.Title - @*@Resources.Layout.WebsiteName*@ Lead Management</title>
+    <title> @Resources.Layout.WebsiteName</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -30,6 +30,7 @@
     <meta itemprop="image" content="@ViewBag.Image" />
     <meta name="twitter:image:src" content="@ViewBag.Image" /><!--<h1>Place this directly belowyour Header 1 Tag, facebook looks for this</h1>-->
     <meta property="og:image" content="@ViewBag.Image" />
+    <link rel="shortcut icon" href="~/Content/assets-new/images/logogold.png">
     @{ 
         var floatingLogin = "";
     }
@@ -121,7 +122,7 @@
                     <div class="logo-box">
                         <a href="@Url.Action("index", "home")" class="logo text-center">
                             <span class="logo-lg">
-                                <img src="~/Content/assets/img/oyounlogo.png" alt="" height="64">
+                                <img src="~/Content/assets-new/images/logogold.png" alt="" height="64">
                                 <span class="title_name"> @*Lead Management*@ @*@Resources.Layout.WebsiteName*@</span>
                                 <!-- <span class="logo-lg-text-light">UBold</span> -->
                             </span>
