@@ -221,6 +221,7 @@
     <Content Include="Data\DatabaseScript\2019.01.14.01 Tenders and Jobs Updates.sql" />
     <Content Include="Data\DatabaseScript\2019.01.22.01 Control Panel Pages.sql" />
     <Content Include="Data\DatabaseScript\2019.01.27.01 Administrator Pages Permissions.sql" />
+    <Content Include="Data\DatabaseScript\2020.08.19.01 Lead_Schema_Script.sql" />
     <Content Include="Data\DatabaseScript\2019.06.19.01 DBScript.sql" />
     <Content Include="Data\DatabaseScript\2019.06.16.01 AddPermission for Home Page.sql" />
     <Content Include="Data\DatabaseScript\2019.05.15.02 LeadManagementDBUpdated.sql" />
