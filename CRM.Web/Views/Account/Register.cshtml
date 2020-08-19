@@ -2,200 +2,246 @@
 @model CRM.Web.Models.RegisterViewModel
 @{
     ViewBag.Title = Resources.Register.Title;
-    Layout = "~/Views/Shared/_LayoutDefault.cshtml";
+    Layout = null;
+    var currentUrl = Request.Url.AbsoluteUri;
+    var websiteCulture = System.Threading.Thread.CurrentThread.CurrentUICulture.Name.ToLowerInvariant();
 }
+@{
+    var activeArabicMenu = "";
+    var activeHebrewMenu = "";
+    var floating = "";
+    var direction = "";
+}
+@if (websiteCulture == "ar")
+{
+    activeArabicMenu = "active";
+    floating = "right";
+    direction = "rtl";
+}
+else
+{
+    activeHebrewMenu = "active";
+    floating = "left";
+    direction = "ltr";
+}
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>LoginPage</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/Content/assets-new/images/logogold.png">
 
-<section class="section">
-    <div class="container">
-        @*<header class="section-header justify-content-between flex-wrap">
-            <div class="d-flex">
-                <h2 class="section-title">@Resources.Register.Title</h2>
-            </div>
-        </header>*@
-        <div class="row">
-            <div class="col-md-4">
-                <div class="d-flex">
-                    <h2 class="section-title">@Resources.Register.Title</h2>
-                </div>
+    <!-- App css -->
+    <link href="~/Content/assets-new/css/droidarabickufi.css" rel="stylesheet" />
+    <link href="~/Content/assets-new/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/assets-new/css/app-rtl.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .validation-summary-errors {
+            color: #ca5c5c;
+        }
+
+        .active {
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        li > a {
+            color: gray;
+        }
+        label{
+            float:@floating;
+        }
+        .form-group{
+        direction:@direction;
+        }
+    </style>
+
+</head>
+<body class="authentication-bg">
+
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-pattern">
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <a href="#">
+                                    <span>
+                                        <img src="~/Content/assets-new/images/logogold.png" style="width: 77%; height: 25%; border-radius: 36px;" alt="" height="22">
+                                    </span>
+                                </a>
+                                <p class="text-muted mb-4 mt-3">@Resources.Layout.WebsiteName</p>
+                            </div>
+                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+            {
+                              
+
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
+                                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required", onInput = "PreventEnterChartecherName()" })
+                                                @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.CompanyName, new { @for = "CompanyName" })
+                                                @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", required = "required" })
+                                                @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            @*<div class="form-group">
+                                                @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
+                                                @Html.DropDownList("GenderLookupId", null, new { @class = "form-control", required = "required" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
+                                                @Html.DropDownList("PrefferdLanguage", null, new { @class = "form-control", required = "required" })
+                                            </div>*@
+                                     
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Email, new { @for = "Email" })
+                                                @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", required = "required" })
+                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.Password, new { @for = "Password" })
+                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required", placeholder = "(e.g. P@ssw0rd1)" })
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(m => m.ConfirmPassword, new { @for = "ConfirmPassword"  })
+                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", required = "required" })
+                                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                            </div>
+
+
+                                            <div class="form-group mb-0 text-center">
+                                                <button type="submit" class="btn btn-primary btn-block">@Resources.Register.BtnRegister</button>
+                                            </div>
+                        
+                            }
+                              
+                        </div> <!-- end card-body -->
+                    </div>
+                    </div>
             </div>
         </div>
+    </div>
+                  
 
-            @*<div class="form-group col-lg-12">
-                <button type="button" class="btn btn-primary" onclick="AddCompany();">@Resources.Register.BtnRegister</button>
-            </div>*@
-            <hr/>
-        
-        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
-        {
-            <div class="row mb-4">
-                <div class="col-lg-3 cms-col-header">
-                    <h2>@Resources.Register.LblInformation </h2>
-                </div>
-                <div class="col-lg-9">
+                    <script type="text/javascript">
+        //function AddCompany() {
+        //    var name = document.getElementById("companyName").value;
+        //    console.log(name+"=====");
+        //    var Company = {};
+        //    Company.Name = name;
 
+        //    $.post("/Account/AddCompany",
+        //        { c: Company },
+        //        function (data) {
+        //            if (data != null) {
+        //                //  location.reload();
+        //            } else {
+        //                alert("Error");
+        //            }
+        //        });
+        //}
+        function isNumberKey(evt) {
 
-                    <div class="row">
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
 
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary("", new { @class = "text-danger" })
-
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.FullName, new { @for = "FullName" })
-                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required", onInput = "PreventEnterChartecherName()" })
-                            @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.CompanyName, new { @for = "CompanyName" })
-                            @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", required = "required" })
-                            @Html.ValidationMessageFor(m => m.CompanyName, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.GenderLookupId, new { @for = "GenderLookupId" })
-                            @Html.DropDownList("GenderLookupId", null, new { @class = "form-control", required = "required" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.PrefferdLanguage, new { @for = "PrefferdLanguage" })
-                            @Html.DropDownList("PrefferdLanguage", null, new { @class = "form-control", required = "required" })
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-4">
-                <div class="col-lg-3 cms-col-header">
-                    <h2>@Resources.Register.LblEmailAndPassword</h2>
-                </div>
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.Email, new { @for = "Email" })
-                            @Html.TextBoxFor(m => m.Email, new { @type = "email", @class = "form-control", required = "required" })
-                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.Password, new { @for = "Password" })
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = "required", placeholder = "(e.g. P@ssw0rd1)" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            @Html.LabelFor(m => m.ConfirmPassword, new { @for = "ConfirmPassword" })
-                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", required = "required" })
-                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-                        </div>
-
-
-                        <div class="form-group col-lg-12">
-                            <button type="submit"  class="btn btn-primary pull-right">@Resources.Register.BtnRegister</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        }
-
-    </div> 
-
-</section>
-
-<script type="text/javascript">
-    //function AddCompany() {
-    //    var name = document.getElementById("companyName").value;
-    //    console.log(name+"=====");
-    //    var Company = {};
-    //    Company.Name = name;
-       
-    //    $.post("/Account/AddCompany",
-    //        { c: Company },
-    //        function (data) {
-    //            if (data != null) {
-    //                //  location.reload();
-    //            } else {
-    //                alert("Error");
-    //            }
-    //        });
-    //}
-    function isNumberKey(evt) {
-
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-
-        return true;
-    }
-    function checkLengthIdNumber() {
-
-
-        var fieldLength = $("#IdNumber").val().length;
-        if (fieldLength <= 9) {
             return true;
         }
-        else {
-            var str = $("#IdNumber").val();
-            str = str.substring(0, str.length - 1);
-            $("#IdNumber").val(str);
-        }
-    }
+        function checkLengthIdNumber() {
 
 
-    function checkLengthPhone() {
-
-        var fieldLength = $("#PhoneNumber").val().length;
-        if (fieldLength <= 10) {
-            return true;
-        }
-        else {
-            var str = $("#PhoneNumber").val();
-            str = str.substring(0, str.length - 1);
-            $("#PhoneNumber").val(str);
-        }
-    }
-
-    function checkLengthMobile() {
-
-
-        var fieldLength = $("#Mobile").val().length;
-        if (fieldLength <= 10) {
-            return true;
-        }
-        else {
-            var str = $("#Mobile").val();
-            str = str.substring(0, str.length - 1);
-            $("#Mobile").val(str);
-        }
-    }
-    function PreventEnterSpecialAddress() {
-
-        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
-        str = $("#Address").val();
-        for (var i = 0; i < str.length; i++) {
-            if (special.indexOf(str.charAt(i)) != -1) {
-
-                var str = $("#Address").val();
+            var fieldLength = $("#IdNumber").val().length;
+            if (fieldLength <= 9) {
+                return true;
+            }
+            else {
+                var str = $("#IdNumber").val();
                 str = str.substring(0, str.length - 1);
-                $("#Address").val(str);
+                $("#IdNumber").val(str);
             }
         }
 
-    }
 
+        function checkLengthPhone() {
 
-    function PreventEnterChartecherName() {
-
-        var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
-        str = $("#FullName").val();
-        for (var i = 0; i < str.length; i++) {
-            if (special.indexOf(str.charAt(i)) != -1) {
-
-                var str = $("#FullName").val();
+            var fieldLength = $("#PhoneNumber").val().length;
+            if (fieldLength <= 10) {
+                return true;
+            }
+            else {
+                var str = $("#PhoneNumber").val();
                 str = str.substring(0, str.length - 1);
-                $("#FullName").val(str);
+                $("#PhoneNumber").val(str);
             }
         }
 
-    }
-</script>
+        function checkLengthMobile() {
+
+
+            var fieldLength = $("#Mobile").val().length;
+            if (fieldLength <= 10) {
+                return true;
+            }
+            else {
+                var str = $("#Mobile").val();
+                str = str.substring(0, str.length - 1);
+                $("#Mobile").val(str);
+            }
+        }
+        function PreventEnterSpecialAddress() {
+
+            var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?";
+            str = $("#Address").val();
+            for (var i = 0; i < str.length; i++) {
+                if (special.indexOf(str.charAt(i)) != -1) {
+
+                    var str = $("#Address").val();
+                    str = str.substring(0, str.length - 1);
+                    $("#Address").val(str);
+                }
+            }
+
+        }
+
+
+        function PreventEnterChartecherName() {
+
+            var special = "!@@#$%^&*()+=-_×÷‘~’[]\\\';,./{}|\":<>?1234567890";
+            str = $("#FullName").val();
+            for (var i = 0; i < str.length; i++) {
+                if (special.indexOf(str.charAt(i)) != -1) {
+
+                    var str = $("#FullName").val();
+                    str = str.substring(0, str.length - 1);
+                    $("#FullName").val(str);
+                }
+            }
+
+        }
+                    </script>
+</body>
+
+</html>
